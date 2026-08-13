@@ -1,0 +1,14 @@
+version: 1
+project:
+  root: .
+  languages:
+    - javascript
+    - typescript
+providers: []
+mcp_servers: []
+unknowns:
+  - kind: host
+    value: develra.dev
+    confidence: possible
+    files:
+      - packages/reporters/src/index.ts

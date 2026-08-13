@@ -21,11 +21,11 @@ derive or agree with the CLI package value.
 
 ## While the repository is private
 
-- [ ] Initialize the local Git repository and set `main` as the default branch.
-- [ ] Add `https://github.com/develra-dev/develra.git` as `origin`.
-- [ ] Review `git status` and the complete first commit for private files,
+- [x] Initialize the local Git repository and set `main` as the default branch.
+- [x] Add `https://github.com/develra-dev/develra.git` as `origin`.
+- [x] Review `git status` and the complete first commit for private files,
       credentials, generated reports, and the original handoff archive.
-- [ ] Push the initial commit only after owner authorization.
+- [x] Push the initial commit only after owner authorization.
 - [ ] Confirm the full CI matrix passes on Linux, macOS, and Windows with Node
       22 and 24.
 - [ ] Run the manual **Release validation** workflow.

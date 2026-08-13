@@ -5,7 +5,6 @@ apps/cli/lib/
 .DS_Store
 *.tgz
 *.tmp
-develra.lock
 develra-report.md
 develra-graph.svg
 !examples/develra-graph.svg
