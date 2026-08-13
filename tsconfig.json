@@ -1,0 +1,14 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "baseUrl": ".",
+    "paths": {
+      "@develra/core": ["packages/core/src/index.ts"],
+      "@develra/providers": ["packages/providers/src/index.ts"],
+      "@develra/reporters": ["packages/reporters/src/index.ts"],
+      "develra": ["apps/cli/src/index.ts"]
+    }
+  },
+  "include": ["tests/**/*.ts", "vitest.config.ts"]
+}

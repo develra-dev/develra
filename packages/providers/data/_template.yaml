@@ -1,0 +1,11 @@
+version: 1
+id: example
+name: Example
+description: Replace with a factual provider description
+homepage: https://example.com
+categories: [developer-tools]
+packages:
+  npm: [example]
+imports:
+  - { language: typescript, source: example }
+domains: [api.example.com]

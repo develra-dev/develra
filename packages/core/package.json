@@ -1,0 +1,28 @@
+{
+  "name": "@develra/core",
+  "version": "0.0.0-private",
+  "private": true,
+  "type": "module",
+  "license": "Apache-2.0",
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "@lezer/common": "^1.2.3",
+    "@lezer/python": "^1.1.18",
+    "ajv": "^8.17.1",
+    "ajv-formats": "^3.0.1",
+    "ignore": "^7.0.5",
+    "minimatch": "^10.0.3",
+    "smol-toml": "^1.4.2",
+    "typescript": "^5.9.2",
+    "yaml": "^2.8.1"
+  }
+}

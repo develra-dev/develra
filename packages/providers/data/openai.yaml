@@ -1,0 +1,67 @@
+version: 1
+id: openai
+name: OpenAI
+description: AI model and agent APIs
+homepage: https://openai.com
+categories: [ai]
+packages:
+  npm: [openai]
+  pypi: [openai]
+imports:
+  - { language: javascript, source: openai }
+  - { language: typescript, source: openai }
+  - { language: python, source: openai }
+domains: [api.openai.com]
+operations:
+  - id: responses.create
+    matchers:
+      - {
+          language: typescript,
+          kind: member-call,
+          package: openai,
+          chain: [responses, create],
+        }
+      - {
+          language: javascript,
+          kind: member-call,
+          package: openai,
+          chain: [responses, create],
+        }
+      - {
+          language: python,
+          kind: member-call,
+          package: openai,
+          chain: [responses, create],
+        }
+      - {
+          language: any,
+          kind: http-endpoint,
+          method: POST,
+          path: /v1/responses,
+        }
+  - id: chat.completions.create
+    matchers:
+      - {
+          language: typescript,
+          kind: member-call,
+          package: openai,
+          chain: [chat, completions, create],
+        }
+      - {
+          language: javascript,
+          kind: member-call,
+          package: openai,
+          chain: [chat, completions, create],
+        }
+      - {
+          language: python,
+          kind: member-call,
+          package: openai,
+          chain: [chat, completions, create],
+        }
+      - {
+          language: any,
+          kind: http-endpoint,
+          method: POST,
+          path: /v1/chat/completions,
+        }

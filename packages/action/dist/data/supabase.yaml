@@ -1,0 +1,29 @@
+version: 1
+id: supabase
+name: Supabase
+description: Database, authentication, storage, and edge APIs
+homepage: https://supabase.com
+categories: [database]
+packages:
+  npm: ["@supabase/supabase-js"]
+  pypi: [supabase]
+imports:
+  - { language: javascript, source: "@supabase/supabase-js" }
+  - { language: typescript, source: "@supabase/supabase-js" }
+  - { language: python, source: supabase }
+domains: [supabase.co]
+operations:
+  - id: auth.signUp
+    matchers:
+      - {
+          language: typescript,
+          kind: member-call,
+          package: "@supabase/supabase-js",
+          chain: [auth, signUp],
+        }
+      - {
+          language: javascript,
+          kind: member-call,
+          package: "@supabase/supabase-js",
+          chain: [auth, signUp],
+        }

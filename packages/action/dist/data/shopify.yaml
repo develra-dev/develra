@@ -1,0 +1,14 @@
+version: 1
+id: shopify
+name: Shopify
+description: Commerce and storefront APIs
+homepage: https://www.shopify.com
+categories: [commerce]
+packages:
+  npm: ["@shopify/shopify-api"]
+  pypi: [shopifyapi]
+imports:
+  - { language: javascript, source: "@shopify/shopify-api" }
+  - { language: typescript, source: "@shopify/shopify-api" }
+  - { language: python, source: shopify }
+domains: [myshopify.com]

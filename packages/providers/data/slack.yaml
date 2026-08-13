@@ -1,0 +1,41 @@
+version: 1
+id: slack
+name: Slack
+description: Messaging and workspace APIs
+homepage: https://slack.com
+categories: [communications]
+packages:
+  npm: ["@slack/web-api"]
+  pypi: [slack-sdk]
+imports:
+  - { language: javascript, source: "@slack/web-api" }
+  - { language: typescript, source: "@slack/web-api" }
+  - { language: python, source: slack_sdk }
+domains: [slack.com]
+operations:
+  - id: chat.postMessage
+    matchers:
+      - {
+          language: typescript,
+          kind: member-call,
+          package: "@slack/web-api",
+          chain: [chat, postMessage],
+        }
+      - {
+          language: javascript,
+          kind: member-call,
+          package: "@slack/web-api",
+          chain: [chat, postMessage],
+        }
+      - {
+          language: python,
+          kind: member-call,
+          package: slack_sdk,
+          chain: [chat_postMessage],
+        }
+      - {
+          language: any,
+          kind: http-endpoint,
+          method: POST,
+          path: /api/chat.postMessage,
+        }

@@ -1,0 +1,50 @@
+{
+  "name": "develra",
+  "version": "0.1.0",
+  "description": "Local-first external-contract scanner and lockfile",
+  "type": "commonjs",
+  "license": "Apache-2.0",
+  "author": "Develra contributors",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/develra-dev/develra.git",
+    "directory": "apps/cli"
+  },
+  "homepage": "https://github.com/develra-dev/develra#readme",
+  "bugs": {
+    "url": "https://github.com/develra-dev/develra/issues"
+  },
+  "keywords": [
+    "api",
+    "cli",
+    "github-actions",
+    "lockfile",
+    "mcp",
+    "static-analysis"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "bin": {
+    "develra": "dist/index.js"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json && node ../../scripts/build-cli-bundle.mjs",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "devDependencies": {
+    "@develra/core": "workspace:*",
+    "@develra/providers": "workspace:*",
+    "@develra/reporters": "workspace:*",
+    "@vercel/ncc": "^0.38.3",
+    "commander": "^14.0.0",
+    "yaml": "^2.8.1"
+  }
+}

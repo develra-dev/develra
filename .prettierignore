@@ -1,0 +1,6 @@
+**/dist
+**/coverage
+release-artifacts
+develra-codex-handoff
+pnpm-lock.yaml
+*.lock

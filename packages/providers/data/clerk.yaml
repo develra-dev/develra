@@ -1,0 +1,28 @@
+version: 1
+id: clerk
+name: Clerk
+description: Identity and user management APIs
+homepage: https://clerk.com
+categories: [identity]
+packages:
+  npm: ["@clerk/backend"]
+imports:
+  - { language: javascript, source: "@clerk/backend" }
+  - { language: typescript, source: "@clerk/backend" }
+domains: [api.clerk.com]
+operations:
+  - id: users.getUserList
+    matchers:
+      - {
+          language: typescript,
+          kind: member-call,
+          package: "@clerk/backend",
+          chain: [users, getUserList],
+        }
+      - {
+          language: javascript,
+          kind: member-call,
+          package: "@clerk/backend",
+          chain: [users, getUserList],
+        }
+      - { language: any, kind: http-endpoint, method: GET, path: /v1/users }

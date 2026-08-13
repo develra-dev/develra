@@ -1,0 +1,68 @@
+version: 1
+id: stripe
+name: Stripe
+description: Payments and billing APIs
+homepage: https://stripe.com
+categories:
+  - payments
+
+packages:
+  npm:
+    - stripe
+  pypi:
+    - stripe
+
+imports:
+  - language: typescript
+    source: stripe
+  - language: javascript
+    source: stripe
+  - language: python
+    source: stripe
+
+domains:
+  - api.stripe.com
+
+api_versions:
+  - language: typescript
+    kind: object-property
+    key: apiVersion
+  - language: python
+    kind: assignment
+    key: stripe.api_version
+  - language: any
+    kind: header
+    key: Stripe-Version
+
+operations:
+  - id: checkout.sessions.create
+    display_name: Create Checkout Session
+    matchers:
+      - language: typescript
+        kind: member-call
+        package: stripe
+        chain:
+          - checkout
+          - sessions
+          - create
+      - language: python
+        kind: member-call
+        package: stripe
+        chain:
+          - checkout
+          - Session
+          - create
+      - language: any
+        kind: http-endpoint
+        method: POST
+        path: /v1/checkout/sessions
+
+contract_sources:
+  - type: openapi
+    url: https://example.invalid/stripe-openapi.json
+    priority: 100
+    notes: Replace with a verified official source before shipping.
+  - type: changelog
+    url: https://example.invalid/stripe-changelog
+    priority: 50
+    notes: Replace with a verified official source before shipping.

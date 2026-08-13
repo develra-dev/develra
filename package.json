@@ -1,0 +1,45 @@
+{
+  "name": "develra-workspace",
+  "private": true,
+  "type": "module",
+  "description": "Local-first external-contract scanner and lockfile",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/develra-dev/develra.git"
+  },
+  "homepage": "https://github.com/develra-dev/develra#readme",
+  "bugs": {
+    "url": "https://github.com/develra-dev/develra/issues"
+  },
+  "packageManager": "pnpm@10.15.0",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "build": "pnpm -r build",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "typecheck": "tsc -p tsconfig.json --noEmit && pnpm -r typecheck",
+    "test": "vitest run --exclude tests/fixtures/** --exclude tests/action/**",
+    "test:fixtures": "vitest run tests/fixtures",
+    "test:action": "vitest run tests/action",
+    "goldens:update": "pnpm build && node scripts/update-goldens.mjs",
+    "package:action": "pnpm build && pnpm --filter @develra/action package",
+    "smoke": "node scripts/smoke-package.mjs",
+    "release:audit": "node scripts/audit-release.mjs",
+    "release:validate": "pnpm verify && pnpm release:audit",
+    "verify": "pnpm lint && pnpm format:check && pnpm typecheck && pnpm test && pnpm test:fixtures && pnpm build && pnpm package:action && pnpm test:action && pnpm smoke"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.33.0",
+    "@types/node": "^22.17.1",
+    "eslint": "^9.33.0",
+    "eslint-config-prettier": "^10.1.8",
+    "prettier": "^3.6.2",
+    "typescript": "^5.9.2",
+    "typescript-eslint": "^8.39.1",
+    "vitest": "^3.2.4"
+  }
+}

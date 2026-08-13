@@ -1,0 +1,30 @@
+version: 1
+project:
+  root: .
+  languages:
+    - python
+providers:
+  - id: anthropic
+    confidence: confirmed
+    packages:
+      - ecosystem: pypi
+        name: anthropic
+        version: 0.68.0
+        direct: true
+    api_versions: []
+    operations:
+      - id: messages.create
+        confidence: confirmed
+        files:
+          - app/main.py
+    endpoints: []
+    files:
+      - app/main.py
+      - pyproject.toml
+mcp_servers: []
+unknowns:
+  - kind: host
+    value: hooks.example-events.com
+    confidence: possible
+    files:
+      - app/main.py

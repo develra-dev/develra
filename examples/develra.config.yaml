@@ -1,0 +1,31 @@
+version: 1
+
+scan:
+  include:
+    - src/**
+    - apps/**
+  exclude:
+    - "**/*.generated.ts"
+    - fixtures/**
+  max_file_size: 2097152
+  confidence: possible
+
+lockfile:
+  path: develra.lock
+
+policy:
+  fail_on: probable
+  fail_on_changes:
+    - provider
+    - operation
+    - endpoint
+    - mcp
+
+reporters:
+  markdown: develra-report.md
+  graph: develra-graph.svg
+  json: develra-report.json
+  sarif: develra.sarif
+
+privacy:
+  telemetry: false

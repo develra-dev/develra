@@ -1,0 +1,30 @@
+version: 1
+id: resend
+name: Resend
+description: Transactional email APIs
+homepage: https://resend.com
+categories: [communications]
+packages:
+  npm: [resend]
+  pypi: [resend]
+imports:
+  - { language: javascript, source: resend }
+  - { language: typescript, source: resend }
+  - { language: python, source: resend }
+domains: [api.resend.com]
+operations:
+  - id: emails.send
+    matchers:
+      - {
+          language: typescript,
+          kind: member-call,
+          package: resend,
+          chain: [emails, send],
+        }
+      - {
+          language: javascript,
+          kind: member-call,
+          package: resend,
+          chain: [emails, send],
+        }
+      - { language: any, kind: http-endpoint, method: POST, path: /emails }

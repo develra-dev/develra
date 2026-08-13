@@ -1,0 +1,39 @@
+version: 1
+id: github
+name: GitHub
+description: Source control, issues, and repository APIs
+homepage: https://github.com
+categories: [developer-tools]
+packages:
+  npm: ["@octokit/rest", octokit]
+  pypi: [pygithub]
+imports:
+  - { language: javascript, source: "@octokit/rest" }
+  - { language: typescript, source: "@octokit/rest" }
+  - { language: javascript, source: octokit }
+  - { language: typescript, source: octokit }
+  - { language: python, source: github }
+domains: [api.github.com]
+api_versions:
+  - { language: any, kind: header, key: X-GitHub-Api-Version }
+operations:
+  - id: issues.create
+    matchers:
+      - {
+          language: typescript,
+          kind: member-call,
+          package: "@octokit/rest",
+          chain: [rest, issues, create],
+        }
+      - {
+          language: javascript,
+          kind: member-call,
+          package: "@octokit/rest",
+          chain: [rest, issues, create],
+        }
+      - {
+          language: any,
+          kind: http-endpoint,
+          method: POST,
+          path: "/repos/{owner}/{repo}/issues",
+        }

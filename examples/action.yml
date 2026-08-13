@@ -1,0 +1,50 @@
+name: Develra External Contract Check
+description: Scan and verify a repository's external API, SDK, endpoint, webhook, and MCP contract inventory
+author: Develra
+
+branding:
+  icon: activity
+  color: purple
+
+inputs:
+  command:
+    description: scan or check
+    required: false
+    default: check
+  root:
+    description: Repository-relative scan root
+    required: false
+    default: .
+  lockfile:
+    description: Repository-relative lockfile path
+    required: false
+    default: develra.lock
+  fail-on:
+    description: none, possible, probable, or confirmed
+    required: false
+    default: probable
+  config:
+    description: Repository-relative config path
+    required: false
+  markdown:
+    description: Output path for Markdown report
+    required: false
+    default: develra-report.md
+  sarif:
+    description: Output path for SARIF report
+    required: false
+    default: develra.sarif
+
+outputs:
+  status:
+    description: ok, changed, or error
+  findings:
+    description: Number of material findings
+  report-path:
+    description: Markdown report path
+  sarif-path:
+    description: SARIF report path
+
+runs:
+  using: node24
+  main: packages/action/dist/index.js

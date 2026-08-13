@@ -1,0 +1,31 @@
+$ npx develra scan
+
+Develra scanned 3 files
+
+External contracts: 5
+
+CONFIRMED  OpenAI
+           package openai@5.4.0
+           operation responses.create
+           evidence package import
+           files package.json, src/contracts.ts
+
+POSSIBLE   Slack
+           package @slack/web-api@7.9.2
+           files package.json
+           no import plus operation evidence
+
+CONFIRMED  Stripe
+           package stripe@18.2.1
+           operation checkout.sessions.create
+           operation payment_intents.create
+           evidence package import
+           files package.json, src/contracts.ts, src/endpoints.ts
+
+UNKNOWN    api.example-analytics.com
+           host in src/contracts.ts
+
+UNKNOWN    hooks.partner-events.com
+           host in src/endpoints.ts
+
+Wrote develra.lock
