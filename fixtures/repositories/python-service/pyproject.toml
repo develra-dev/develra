@@ -1,0 +1,7 @@
+[project]
+name = "python-service-fixture"
+version = "0.0.0"
+dependencies = [
+  "anthropic==0.68.0",
+  "requests>=2.32",
+]

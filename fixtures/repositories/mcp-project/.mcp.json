@@ -1,0 +1,19 @@
+{
+  "mcpServers": {
+    "github": {
+      "command": "/usr/local/bin/npx",
+      "args": [
+        "@modelcontextprotocol/server-github",
+        "--token",
+        "never-serialize-this-secret"
+      ],
+      "env": {
+        "GITHUB_TOKEN": "never-serialize-this-environment-value"
+      }
+    },
+    "remote-tools": {
+      "transport": "sse",
+      "url": "https://mcp.example-tools.com/sse?authorization=never-serialize"
+    }
+  }
+}

@@ -1,0 +1,29 @@
+name: Bug report
+description: Report incorrect behavior or a false positive/negative
+title: "[bug] "
+labels: [bug]
+body:
+  - type: textarea
+    id: summary
+    attributes:
+      label: What happened?
+      description: Include the command, expected behavior, and actual behavior.
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Develra version
+      placeholder: npx develra --version
+    validations:
+      required: true
+  - type: textarea
+    id: fixture
+    attributes:
+      label: Minimal safe reproduction
+      description: Remove credentials and private source. A tiny synthetic fixture is ideal.
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Operating system, Node.js version, package manager, and relevant config.

@@ -1,0 +1,72 @@
+version: 1
+id: stripe
+name: Stripe
+description: Payments and billing APIs
+homepage: https://stripe.com
+categories: [payments]
+packages:
+  npm: [stripe]
+  pypi: [stripe]
+imports:
+  - { language: javascript, source: stripe }
+  - { language: typescript, source: stripe }
+  - { language: python, source: stripe }
+domains: [api.stripe.com]
+api_versions:
+  - { language: typescript, kind: object-property, key: apiVersion }
+  - { language: javascript, kind: object-property, key: apiVersion }
+  - { language: python, kind: assignment, key: stripe.api_version }
+  - { language: any, kind: header, key: Stripe-Version }
+operations:
+  - id: checkout.sessions.create
+    matchers:
+      - {
+          language: typescript,
+          kind: member-call,
+          package: stripe,
+          chain: [checkout, sessions, create],
+        }
+      - {
+          language: javascript,
+          kind: member-call,
+          package: stripe,
+          chain: [checkout, sessions, create],
+        }
+      - {
+          language: python,
+          kind: member-call,
+          package: stripe,
+          chain: [checkout, Session, create],
+        }
+      - {
+          language: any,
+          kind: http-endpoint,
+          method: POST,
+          path: /v1/checkout/sessions,
+        }
+  - id: payment_intents.create
+    matchers:
+      - {
+          language: typescript,
+          kind: member-call,
+          package: stripe,
+          chain: [paymentIntents, create],
+        }
+      - {
+          language: javascript,
+          kind: member-call,
+          package: stripe,
+          chain: [paymentIntents, create],
+        }
+      - {
+          language: python,
+          kind: member-call,
+          package: stripe,
+          chain: [PaymentIntent, create],
+        }
+      - {
+          language: any,
+          kind: http-endpoint,
+          method: POST,
+          path: /v1/payment_intents,
+        }

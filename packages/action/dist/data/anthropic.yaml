@@ -1,0 +1,64 @@
+version: 1
+id: anthropic
+name: Anthropic
+description: Claude model APIs
+homepage: https://www.anthropic.com
+categories: [ai]
+packages:
+  npm: ["@anthropic-ai/sdk"]
+  pypi: [anthropic]
+imports:
+  - { language: javascript, source: "@anthropic-ai/sdk" }
+  - { language: typescript, source: "@anthropic-ai/sdk" }
+  - { language: python, source: anthropic }
+domains: [api.anthropic.com]
+api_versions:
+  - { language: any, kind: header, key: anthropic-version }
+operations:
+  - id: messages.create
+    matchers:
+      - {
+          language: typescript,
+          kind: member-call,
+          package: "@anthropic-ai/sdk",
+          chain: [messages, create],
+        }
+      - {
+          language: javascript,
+          kind: member-call,
+          package: "@anthropic-ai/sdk",
+          chain: [messages, create],
+        }
+      - {
+          language: python,
+          kind: member-call,
+          package: anthropic,
+          chain: [messages, create],
+        }
+      - { language: any, kind: http-endpoint, method: POST, path: /v1/messages }
+  - id: messages.batches.create
+    matchers:
+      - {
+          language: typescript,
+          kind: member-call,
+          package: "@anthropic-ai/sdk",
+          chain: [messages, batches, create],
+        }
+      - {
+          language: javascript,
+          kind: member-call,
+          package: "@anthropic-ai/sdk",
+          chain: [messages, batches, create],
+        }
+      - {
+          language: python,
+          kind: member-call,
+          package: anthropic,
+          chain: [messages, batches, create],
+        }
+      - {
+          language: any,
+          kind: http-endpoint,
+          method: POST,
+          path: /v1/messages/batches,
+        }

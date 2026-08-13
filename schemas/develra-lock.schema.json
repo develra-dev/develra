@@ -1,0 +1,255 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://develra.dev/schemas/lock/v1.json",
+  "title": "Develra lockfile",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["version", "project", "providers", "mcp_servers", "unknowns"],
+  "properties": {
+    "version": {
+      "const": 1
+    },
+    "project": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["root", "languages"],
+      "properties": {
+        "root": {
+          "const": "."
+        },
+        "languages": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "enum": ["javascript", "typescript", "python"]
+          }
+        }
+      }
+    },
+    "providers": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/providerFinding"
+      }
+    },
+    "mcp_servers": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/mcpServerFinding"
+      }
+    },
+    "unknowns": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/unknownFinding"
+      }
+    }
+  },
+  "$defs": {
+    "confidence": {
+      "type": "string",
+      "enum": ["confirmed", "probable", "possible"]
+    },
+    "relativePath": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1024,
+      "pattern": "^(?!/)(?![A-Za-z]:[\\\\/])(?!.*(?:^|/)\\.\\.(?:/|$))(?!.*\\\\).+$"
+    },
+    "fileList": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/relativePath"
+      }
+    },
+    "package": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ecosystem", "name", "direct"],
+      "properties": {
+        "ecosystem": {
+          "type": "string",
+          "enum": ["npm", "pypi"]
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "version": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "direct": {
+          "type": "boolean"
+        }
+      }
+    },
+    "operation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "confidence", "files"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256,
+          "pattern": "^[A-Za-z0-9_-]+(?:\\.[A-Za-z0-9_-]+)*$"
+        },
+        "confidence": {
+          "$ref": "#/$defs/confidence"
+        },
+        "files": {
+          "$ref": "#/$defs/fileList"
+        }
+      }
+    },
+    "endpoint": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["method", "path", "confidence", "files"],
+      "properties": {
+        "method": {
+          "type": "string",
+          "pattern": "^[A-Z][A-Z0-9_-]{1,15}$"
+        },
+        "host": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 253,
+          "pattern": "^[a-z0-9.-]+$"
+        },
+        "path": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048,
+          "pattern": "^/"
+        },
+        "confidence": {
+          "$ref": "#/$defs/confidence"
+        },
+        "files": {
+          "$ref": "#/$defs/fileList"
+        }
+      }
+    },
+    "providerFinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "confidence",
+        "packages",
+        "api_versions",
+        "operations",
+        "endpoints",
+        "files"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+          "maxLength": 128
+        },
+        "confidence": {
+          "$ref": "#/$defs/confidence"
+        },
+        "packages": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/package"
+          }
+        },
+        "api_versions": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256
+          }
+        },
+        "operations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/operation"
+          }
+        },
+        "endpoints": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/endpoint"
+          }
+        },
+        "files": {
+          "$ref": "#/$defs/fileList"
+        }
+      }
+    },
+    "mcpServerFinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "transport", "confidence", "config_files"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256,
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]*$"
+        },
+        "transport": {
+          "type": "string",
+          "enum": ["stdio", "http", "sse", "unknown"]
+        },
+        "confidence": {
+          "$ref": "#/$defs/confidence"
+        },
+        "command": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256,
+          "pattern": "^[^/\\\\]+$"
+        },
+        "package": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "url_host": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 253,
+          "pattern": "^[a-z0-9.-]+$"
+        },
+        "config_files": {
+          "$ref": "#/$defs/fileList"
+        }
+      }
+    },
+    "unknownFinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "value", "confidence", "files"],
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": ["package", "import", "host", "endpoint", "mcp"]
+        },
+        "value": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "confidence": {
+          "$ref": "#/$defs/confidence"
+        },
+        "files": {
+          "$ref": "#/$defs/fileList"
+        }
+      }
+    }
+  }
+}

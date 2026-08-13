@@ -1,0 +1,20 @@
+version: 1
+project:
+  root: .
+  languages: []
+providers: []
+mcp_servers:
+  - id: github
+    transport: stdio
+    confidence: confirmed
+    command: npx
+    package: "@modelcontextprotocol/server-github"
+    config_files:
+      - .mcp.json
+  - id: remote-tools
+    transport: sse
+    confidence: confirmed
+    url_host: mcp.example-tools.com
+    config_files:
+      - .mcp.json
+unknowns: []

@@ -1,0 +1,35 @@
+version: 1
+id: twilio
+name: Twilio
+description: Communications APIs
+homepage: https://www.twilio.com
+categories: [communications]
+packages:
+  npm: [twilio]
+  pypi: [twilio]
+imports:
+  - { language: javascript, source: twilio }
+  - { language: typescript, source: twilio }
+  - { language: python, source: twilio }
+domains: [api.twilio.com]
+operations:
+  - id: messages.create
+    matchers:
+      - {
+          language: typescript,
+          kind: member-call,
+          package: twilio,
+          chain: [messages, create],
+        }
+      - {
+          language: javascript,
+          kind: member-call,
+          package: twilio,
+          chain: [messages, create],
+        }
+      - {
+          language: python,
+          kind: member-call,
+          package: twilio,
+          chain: [messages, create],
+        }

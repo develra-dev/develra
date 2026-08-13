@@ -1,0 +1,28 @@
+name: Provider request
+description: Propose a new provider or operation matcher
+title: "[provider] "
+labels: [provider]
+body:
+  - type: input
+    id: provider
+    attributes:
+      label: Provider
+    validations:
+      required: true
+  - type: textarea
+    id: packages
+    attributes:
+      label: Official packages and domains
+      description: Include ecosystem names and links to primary documentation.
+    validations:
+      required: true
+  - type: textarea
+    id: operations
+    attributes:
+      label: Operations to detect
+      description: Show small, credential-free examples and aliases where relevant.
+  - type: textarea
+    id: negatives
+    attributes:
+      label: Likely false positives
+      description: Note similarly named packages, methods, or hosts that must not match.

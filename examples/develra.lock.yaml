@@ -1,0 +1,65 @@
+version: 1
+
+project:
+  root: .
+  languages:
+    - typescript
+
+providers:
+  - id: openai
+    confidence: confirmed
+    packages:
+      - ecosystem: npm
+        name: openai
+        version: "5.4.0"
+        direct: true
+    api_versions: []
+    operations:
+      - id: responses.create
+        confidence: confirmed
+        files:
+          - src/ai/generate.ts
+    endpoints:
+      - method: POST
+        host: api.openai.com
+        path: /v1/responses
+        confidence: confirmed
+        files:
+          - src/ai/generate.ts
+    files:
+      - src/ai/client.ts
+      - src/ai/generate.ts
+
+  - id: stripe
+    confidence: confirmed
+    packages:
+      - ecosystem: npm
+        name: stripe
+        version: "18.2.1"
+        direct: true
+    api_versions:
+      - "2025-04-30"
+    operations:
+      - id: checkout.sessions.create
+        confidence: confirmed
+        files:
+          - src/billing/checkout.ts
+    endpoints: []
+    files:
+      - src/billing/checkout.ts
+
+mcp_servers:
+  - id: github
+    transport: stdio
+    confidence: confirmed
+    command: npx
+    package: "@modelcontextprotocol/server-github"
+    config_files:
+      - .mcp.json
+
+unknowns:
+  - kind: host
+    value: api.example-analytics.com
+    confidence: possible
+    files:
+      - src/analytics/client.ts

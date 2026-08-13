@@ -1,0 +1,23 @@
+node_modules/
+coverage/
+packages/action/lib/
+apps/cli/lib/
+.DS_Store
+*.tgz
+*.tmp
+develra.lock
+develra-report.md
+develra-graph.svg
+!examples/develra-graph.svg
+develra.sarif
+develra-codex-handoff.zip
+develra-codex-handoff/
+release-artifacts/
+
+# Workspace build outputs are reproducible. Only the standalone Action bundle
+# is committed so consumers can run it without installing dependencies.
+**/dist/
+
+# Action dist is a committed release artifact.
+!packages/action/dist/
+!packages/action/dist/**

@@ -1,0 +1,110 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://develra.dev/schemas/config/v1.json",
+  "title": "Develra configuration",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["version"],
+  "properties": {
+    "version": {
+      "const": 1
+    },
+    "scan": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "include": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1024
+          }
+        },
+        "exclude": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1024
+          }
+        },
+        "max_file_size": {
+          "type": "integer",
+          "minimum": 1024,
+          "maximum": 104857600
+        },
+        "confidence": {
+          "type": "string",
+          "enum": ["possible", "probable", "confirmed"]
+        }
+      }
+    },
+    "lockfile": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "path": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1024
+        }
+      }
+    },
+    "policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "fail_on": {
+          "type": "string",
+          "enum": ["none", "possible", "probable", "confirmed"]
+        },
+        "fail_on_changes": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "enum": ["any", "provider", "operation", "endpoint", "mcp"]
+          }
+        }
+      }
+    },
+    "reporters": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "markdown": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1024
+        },
+        "graph": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1024
+        },
+        "json": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1024
+        },
+        "sarif": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1024
+        }
+      }
+    },
+    "privacy": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "telemetry": {
+          "const": false
+        }
+      }
+    }
+  }
+}

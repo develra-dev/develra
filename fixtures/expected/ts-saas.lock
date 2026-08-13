@@ -1,0 +1,76 @@
+version: 1
+project:
+  root: .
+  languages:
+    - typescript
+providers:
+  - id: openai
+    confidence: confirmed
+    packages:
+      - ecosystem: npm
+        name: openai
+        version: 5.4.0
+        direct: true
+    api_versions: []
+    operations:
+      - id: responses.create
+        confidence: confirmed
+        files:
+          - src/contracts.ts
+    endpoints: []
+    files:
+      - package.json
+      - src/contracts.ts
+  - id: slack
+    confidence: possible
+    packages:
+      - ecosystem: npm
+        name: "@slack/web-api"
+        version: 7.9.2
+        direct: true
+    api_versions: []
+    operations: []
+    endpoints: []
+    files:
+      - package.json
+  - id: stripe
+    confidence: confirmed
+    packages:
+      - ecosystem: npm
+        name: stripe
+        version: 18.2.1
+        direct: true
+    api_versions:
+      - 2025-04-30
+    operations:
+      - id: checkout.sessions.create
+        confidence: confirmed
+        files:
+          - src/contracts.ts
+      - id: payment_intents.create
+        confidence: confirmed
+        files:
+          - src/endpoints.ts
+    endpoints:
+      - method: POST
+        host: api.stripe.com
+        path: /v1/payment_intents
+        confidence: confirmed
+        files:
+          - src/endpoints.ts
+    files:
+      - package.json
+      - src/contracts.ts
+      - src/endpoints.ts
+mcp_servers: []
+unknowns:
+  - kind: host
+    value: api.example-analytics.com
+    confidence: possible
+    files:
+      - src/contracts.ts
+  - kind: host
+    value: hooks.partner-events.com
+    confidence: possible
+    files:
+      - src/endpoints.ts

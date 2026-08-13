@@ -1,0 +1,40 @@
+import eslint from "@eslint/js";
+import eslintConfigPrettier from "eslint-config-prettier";
+import tseslint from "typescript-eslint";
+
+export default tseslint.config(
+  {
+    ignores: [
+      "**/dist/**",
+      "**/coverage/**",
+      "**/lib/**",
+      "develra-codex-handoff/**",
+      "fixtures/**",
+      "examples/**",
+      "eslint.config.js",
+    ],
+  },
+  eslint.configs.recommended,
+  ...tseslint.configs.recommendedTypeChecked,
+  {
+    languageOptions: {
+      parserOptions: {
+        projectService: true,
+        tsconfigRootDir: import.meta.dirname,
+      },
+    },
+    rules: {
+      "@typescript-eslint/consistent-type-imports": "error",
+      "@typescript-eslint/no-misused-promises": "error",
+    },
+  },
+  {
+    ...tseslint.configs.disableTypeChecked,
+    files: ["scripts/*.mjs"],
+    languageOptions: {
+      ...tseslint.configs.disableTypeChecked.languageOptions,
+      globals: { process: "readonly" },
+    },
+  },
+  eslintConfigPrettier,
+);

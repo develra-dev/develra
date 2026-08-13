@@ -1,0 +1,279 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://develra.dev/schemas/provider/v1.json",
+  "title": "Develra provider pack",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["version", "id", "name", "description"],
+  "properties": {
+    "version": {
+      "const": 1
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+      "maxLength": 128
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128
+    },
+    "description": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 500
+    },
+    "homepage": {
+      "type": "string",
+      "format": "uri",
+      "pattern": "^https://"
+    },
+    "categories": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+        "maxLength": 64
+      }
+    },
+    "packages": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "npm": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256
+          }
+        },
+        "pypi": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256
+          }
+        }
+      },
+      "minProperties": 1
+    },
+    "imports": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["language", "source"],
+        "properties": {
+          "language": {
+            "type": "string",
+            "enum": ["javascript", "typescript", "python"]
+          },
+          "source": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256
+          }
+        }
+      }
+    },
+    "domains": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 253,
+        "pattern": "^[a-z0-9.-]+$"
+      }
+    },
+    "api_versions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["language", "kind", "key"],
+        "properties": {
+          "language": {
+            "type": "string",
+            "enum": ["any", "javascript", "typescript", "python"]
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "object-property",
+              "assignment",
+              "header",
+              "environment-key"
+            ]
+          },
+          "key": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256
+          }
+        }
+      }
+    },
+    "operations": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/operation"
+      }
+    },
+    "contract_sources": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["type", "url", "priority"],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "openapi",
+              "json-schema",
+              "graphql",
+              "mcp",
+              "changelog",
+              "docs"
+            ]
+          },
+          "url": {
+            "type": "string",
+            "format": "uri",
+            "pattern": "^https://"
+          },
+          "priority": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 1000
+          },
+          "notes": {
+            "type": "string",
+            "maxLength": 1000
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "operation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "matchers"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256,
+          "pattern": "^[A-Za-z0-9_-]+(?:\\.[A-Za-z0-9_-]+)*$"
+        },
+        "display_name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "matchers": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "oneOf": [
+              {
+                "$ref": "#/$defs/memberCallMatcher"
+              },
+              {
+                "$ref": "#/$defs/functionCallMatcher"
+              },
+              {
+                "$ref": "#/$defs/httpEndpointMatcher"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "memberCallMatcher": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["language", "kind", "package", "chain"],
+      "properties": {
+        "language": {
+          "type": "string",
+          "enum": ["javascript", "typescript", "python"]
+        },
+        "kind": {
+          "const": "member-call"
+        },
+        "package": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "chain": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 12,
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128
+          }
+        }
+      }
+    },
+    "functionCallMatcher": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["language", "kind", "package", "function"],
+      "properties": {
+        "language": {
+          "type": "string",
+          "enum": ["javascript", "typescript", "python"]
+        },
+        "kind": {
+          "const": "function-call"
+        },
+        "package": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "function": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        }
+      }
+    },
+    "httpEndpointMatcher": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["language", "kind", "method", "path"],
+      "properties": {
+        "language": {
+          "type": "string",
+          "enum": ["any", "javascript", "typescript", "python"]
+        },
+        "kind": {
+          "const": "http-endpoint"
+        },
+        "method": {
+          "type": "string",
+          "pattern": "^[A-Z][A-Z0-9_-]{1,15}$"
+        },
+        "path": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048,
+          "pattern": "^/"
+        }
+      }
+    }
+  }
+}
