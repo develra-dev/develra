@@ -1,9 +1,8 @@
 import { cp, mkdir, rm } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { execFileSync } from "node:child_process";
 
-import { pnpmCommand } from "./commands.mjs";
+import { runPnpm } from "./commands.mjs";
 
 const repositoryRoot = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
@@ -17,8 +16,7 @@ if (!output.startsWith(`${cliRoot}${path.sep}`))
 await rm(output, { recursive: true, force: true });
 await mkdir(output, { recursive: true });
 
-execFileSync(
-  pnpmCommand,
+runPnpm(
   [
     "exec",
     "ncc",

@@ -9,12 +9,19 @@ import { afterAll, beforeAll, describe, expect, it } from "vitest";
 const execute = promisify(execFile);
 const roots: string[] = [];
 const cli = nodePath.resolve("apps/cli/dist/index.js");
-const pnpmCommand = process.platform === "win32" ? "pnpm.cmd" : "pnpm";
 
 beforeAll(() => {
-  execFileSync(pnpmCommand, ["build"], {
+  const pnpmEntry = process.env.npm_execpath;
+  const command = pnpmEntry
+    ? process.execPath
+    : process.platform === "win32"
+      ? "pnpm.cmd"
+      : "pnpm";
+  const args = pnpmEntry ? [pnpmEntry, "build"] : ["build"];
+  execFileSync(command, args, {
     cwd: nodePath.resolve("."),
     stdio: "pipe",
+    shell: !pnpmEntry && process.platform === "win32",
   });
 }, 120_000);
 
