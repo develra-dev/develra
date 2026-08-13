@@ -26,13 +26,15 @@ derive or agree with the CLI package value.
 - [x] Review `git status` and the complete first commit for private files,
       credentials, generated reports, and the original handoff archive.
 - [x] Push the initial commit only after owner authorization.
-- [ ] Confirm the full CI matrix passes on Linux, macOS, and Windows with Node
+- [x] Confirm the full CI matrix passes on Linux, macOS, and Windows with Node
       22 and 24.
-- [ ] Run the manual **Release validation** workflow.
-- [ ] Download `develra-release-candidate` and compare its manifest with the
+- [x] Run the manual **Release validation** workflow.
+- [x] Download `develra-release-candidate` and compare its manifest with the
       workflow logs.
-- [ ] Configure `main` branch protection to require the CI workflow.
-- [ ] Keep default workflow permissions read-only.
+- [ ] Configure `main` branch protection to require the CI workflow. GitHub
+      requires making this repository public or upgrading the current plan
+      before branch protection is available.
+- [x] Keep default workflow permissions read-only.
 
 Local equivalent:
 

@@ -333,6 +333,30 @@ Add entries in this format:
 - Validation run: `pnpm release:validate`; the audit installs and exercises the
   packed CLI offline, checks the committed Action bundle, validates allowlisted
   package contents, and scans artifacts for secrets and local absolute paths.
-- Known limitation: The npm name is not reserved until publication, and remote
-  CI cannot run until the owner initializes and pushes the Git repository.
-- Follow-up ticket: DVL-054 and DVL-055 after remote CI and publication review.
+- Known limitation: The npm name is not reserved until publication. Branch
+  protection is unavailable while the repository remains private on the
+  current GitHub plan.
+- Follow-up ticket: DVL-054, then DVL-055 and branch protection after the
+  repository becomes public or the GitHub plan changes.
+
+## 2026-08-12 — Private repository bootstrap and cross-platform CI hardening
+
+- Decision or implementation summary: Initialized `main`, audited and pushed
+  the source tree to the private canonical repository, committed Develra's own
+  deterministic lockfile, enforced LF checkouts, made fixture copying and
+  package-manager subprocesses cross-platform, and allowed realistic packaged
+  build time under shared-runner load.
+- Alternatives considered: Committing internal workspace build outputs was
+  rejected because CI reproduces them; only the standalone Action bundle is
+  committed. Shelling out to Unix `cp` and launching Windows `.cmd` files
+  directly were replaced with Node filesystem APIs and a constrained command
+  wrapper.
+- Validation run: GitHub Actions runs `31669754426` (CI), `31669754422`
+  (external-contract enforcement), and `31670089953` (manual release
+  validation) passed. The release artifact and committed Action checksums match
+  the downloaded manifest.
+- Known limitation: GitHub returned HTTP 403 for private-repository branch
+  protection on the current plan. No visibility change, npm publication, tag,
+  GitHub release, or Marketplace publication was performed.
+- Follow-up ticket: DVL-054; enable branch protection immediately after the
+  repository becomes public or the plan supports it.
