@@ -1,5 +1,5 @@
 import { execFile, execFileSync } from "node:child_process";
-import { mkdtemp, readFile, rm } from "node:fs/promises";
+import { cp, mkdtemp, readFile, rm } from "node:fs/promises";
 import os from "node:os";
 import nodePath from "node:path";
 import { promisify } from "node:util";
@@ -26,11 +26,9 @@ afterAll(async () => {
 async function copyFixture(name: string): Promise<string> {
   const root = await mkdtemp(nodePath.join(os.tmpdir(), "develra-cli-"));
   roots.push(root);
-  await execute("cp", [
-    "-R",
-    `${nodePath.resolve("fixtures/repositories", name)}/.`,
-    root,
-  ]);
+  await cp(nodePath.resolve("fixtures/repositories", name), root, {
+    recursive: true,
+  });
   return root;
 }
 
