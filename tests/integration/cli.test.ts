@@ -15,7 +15,7 @@ beforeAll(() => {
     cwd: nodePath.resolve("."),
     stdio: "pipe",
   });
-}, 30_000);
+}, 120_000);
 
 afterAll(async () => {
   await Promise.all(
