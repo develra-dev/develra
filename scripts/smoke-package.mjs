@@ -12,6 +12,8 @@ import path from "node:path";
 import { execFileSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 
+import { npmCommand, pnpmCommand } from "./commands.mjs";
+
 const repositoryRoot = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
   "..",
@@ -22,7 +24,7 @@ const temporary = await mkdtemp(
 
 try {
   execFileSync(
-    "pnpm",
+    pnpmCommand,
     ["--filter", "develra", "pack", "--pack-destination", temporary],
     {
       cwd: repositoryRoot,
@@ -52,7 +54,7 @@ try {
     NPM_CONFIG_CACHE: path.join(temporary, "npm-cache"),
   };
   execFileSync(
-    "npm",
+    npmCommand,
     [
       "install",
       "--ignore-scripts",

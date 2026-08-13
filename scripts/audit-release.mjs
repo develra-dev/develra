@@ -13,6 +13,8 @@ import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
+import { pnpmCommand } from "./commands.mjs";
+
 const repositoryRoot = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
   "..",
@@ -130,7 +132,7 @@ try {
   }
 
   execFileSync(
-    "pnpm",
+    pnpmCommand,
     ["--filter", "develra", "pack", "--pack-destination", artifactsRoot],
     { cwd: repositoryRoot, stdio: "pipe" },
   );

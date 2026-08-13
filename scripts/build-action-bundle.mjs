@@ -3,6 +3,8 @@ import { execFileSync } from "node:child_process";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
+import { pnpmCommand } from "./commands.mjs";
+
 const repositoryRoot = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
   "..",
@@ -16,7 +18,7 @@ await rm(output, { recursive: true, force: true });
 await mkdir(output, { recursive: true });
 
 execFileSync(
-  "pnpm",
+  pnpmCommand,
   [
     "exec",
     "ncc",

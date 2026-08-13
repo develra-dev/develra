@@ -9,9 +9,10 @@ import { afterAll, beforeAll, describe, expect, it } from "vitest";
 const execute = promisify(execFile);
 const roots: string[] = [];
 const cli = nodePath.resolve("apps/cli/dist/index.js");
+const pnpmCommand = process.platform === "win32" ? "pnpm.cmd" : "pnpm";
 
 beforeAll(() => {
-  execFileSync("pnpm", ["build"], {
+  execFileSync(pnpmCommand, ["build"], {
     cwd: nodePath.resolve("."),
     stdio: "pipe",
   });
