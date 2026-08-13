@@ -12,7 +12,7 @@ import path from "node:path";
 import { execFileSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 
-import { npmCommand, pnpmCommand } from "./commands.mjs";
+import { runNpm, runPnpm } from "./commands.mjs";
 
 const repositoryRoot = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
@@ -23,14 +23,10 @@ const temporary = await mkdtemp(
 );
 
 try {
-  execFileSync(
-    pnpmCommand,
-    ["--filter", "develra", "pack", "--pack-destination", temporary],
-    {
-      cwd: repositoryRoot,
-      stdio: "pipe",
-    },
-  );
+  runPnpm(["--filter", "develra", "pack", "--pack-destination", temporary], {
+    cwd: repositoryRoot,
+    stdio: "pipe",
+  });
   const archiveName = (await readdir(temporary)).find((entry) =>
     entry.endsWith(".tgz"),
   );
@@ -53,8 +49,7 @@ try {
     ...process.env,
     NPM_CONFIG_CACHE: path.join(temporary, "npm-cache"),
   };
-  execFileSync(
-    npmCommand,
+  runNpm(
     [
       "install",
       "--ignore-scripts",
