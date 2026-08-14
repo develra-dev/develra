@@ -87,7 +87,7 @@ npm publish release-artifacts/develra-0.1.0.tgz --access public
 - [x] Create or update the moving `v0` tag to the same commit.
 - [x] Push tags only after npm publication and owner review.
 - [x] Create the GitHub release from `docs/releases/v0.1.0.md`.
-- [ ] Verify a clean repository can run:
+- [x] Verify a clean repository can run:
 
   ```yaml
   - uses: develra-dev/develra@v0
@@ -108,7 +108,7 @@ has passed release validation. Never move an exact version tag.
 - [x] `npx develra@0.1.0 scan` works without a Develra account.
 - [x] An offline scan performs no network request.
 - [x] Repeated scans produce byte-identical `develra.lock` files.
-- [ ] `develra-dev/develra@v0` runs without installing workspace dependencies.
+- [x] `develra-dev/develra@v0` runs without installing workspace dependencies.
 - [x] The npm and GitHub release source URLs resolve to the reviewed commit.
 - [ ] Open follow-up issues for known limitations rather than silently expanding
       the first-release scope.
