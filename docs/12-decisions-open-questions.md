@@ -425,3 +425,29 @@ Add entries in this format:
   DVL-055 is not marked complete despite the successful release audit.
 - Follow-up ticket: Complete DVL-052 and DVL-054, configure trusted publishing,
   then close the remaining DVL-055 audit items.
+
+## 2026-08-13 — v0.1.1 Action security patch
+
+- Decision or implementation summary: Published `develra@0.1.1` and moved the
+  `v0` Action channel to reviewed commit `3be6fb4` after Dependabot identified
+  vulnerable `undici` 5.29.0 code in the bundled GitHub Action. Upgraded the
+  official Actions toolkit to `@actions/core` 2.0.3, which uses
+  `@actions/http-client` 3.0.2 and patched `undici` 6.28.0. Scanner behavior and
+  lockfile output are unchanged, and the npm CLI still has zero runtime
+  dependencies.
+- Alternatives considered: `@actions/core` 3.0.1 was evaluated first, but its
+  ESM-only package exports are not compatible with the current `ncc` bundling
+  path. Ignoring alerts against generated Action code was rejected because the
+  bundle is the runtime users execute.
+- Validation run: Local `pnpm release:validate`; public CI run `31772530356` on
+  Linux, macOS, and Windows with Node 22 and 24; release validation run
+  `31772539184`; and published-release smoke run `31775046736`. The audited
+  workflow artifact was published unchanged, a clean public install returned
+  version `0.1.1` and found the expected five contracts, the remote `v0` Action
+  passed, `pnpm audit --prod` found no known vulnerabilities, and GitHub marked
+  all 12 Dependabot alerts fixed.
+- Known limitation: npm trusted publishing and optional GitHub Marketplace
+  submission remain deferred. The immutable `v0.1.0` tag remains available,
+  while the moving `v0` compatibility tag now selects `v0.1.1`.
+- Follow-up ticket: Configure npm trusted publishing, then complete DVL-052 and
+  the remaining DVL-054/DVL-055 launch collateral.
