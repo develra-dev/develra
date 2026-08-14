@@ -5,6 +5,14 @@ All notable changes to Develra will be documented here. The project follows
 
 ## [Unreleased]
 
+## [0.1.1] - 2026-08-13
+
+### Security
+
+- Updated the bundled GitHub Action from `@actions/core` 1.11.1 to 2.0.3,
+  replacing vulnerable `undici` 5.29.0 with patched 6.28.0. The scanner remains
+  offline by default and does not instantiate the bundled HTTP client.
+
 ## [0.1.0] - 2026-08-12
 
 ### Added

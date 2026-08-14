@@ -9,7 +9,7 @@
     "package": "node ../../scripts/build-action-bundle.mjs"
   },
   "dependencies": {
-    "@actions/core": "^1.11.1",
+    "@actions/core": "^2.0.3",
     "@develra/core": "workspace:*",
     "@develra/providers": "workspace:*",
     "@develra/reporters": "workspace:*"

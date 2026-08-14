@@ -103,6 +103,16 @@ npm publish release-artifacts/develra-0.1.0.tgz --access public
 For subsequent compatible `0.x` releases, move `v0` only after the exact tag
 has passed release validation. Never move an exact version tag.
 
+## v0.1.1 Action security patch
+
+- [x] Upgrade the bundled Actions toolkit to patched `undici` 6.28.0.
+- [x] Confirm `pnpm audit --prod` reports no known vulnerabilities.
+- [ ] Run full local and public release validation.
+- [ ] Publish `develra@0.1.1` from the audited workflow artifact.
+- [ ] Create immutable `v0.1.1` and move `v0` to the same reviewed commit.
+- [ ] Create the GitHub release from `docs/releases/v0.1.1.md`.
+- [ ] Rerun the published npm and Action smoke workflow.
+
 ## Post-release verification
 
 - [x] `npx develra@0.1.0 scan` works without a Develra account.
