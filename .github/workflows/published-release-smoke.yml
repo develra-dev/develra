@@ -1,0 +1,34 @@
+name: Published release smoke
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  npm:
+    name: npm CLI
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22
+      - name: Verify published version
+        run: npx --yes develra@0.1.0 --version
+      - name: Scan a clean fixture without writing
+        run: npx --yes develra@0.1.0 scan --no-write
+        working-directory: fixtures/repositories/ts-saas
+
+  action:
+    name: GitHub Action
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v6
+      - uses: develra-dev/develra@v0
+        with:
+          command: check
+          fail-on: probable
