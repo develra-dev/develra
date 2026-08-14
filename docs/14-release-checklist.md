@@ -1,8 +1,9 @@
 # Release checklist
 
-This checklist is intentionally owner-driven. Validation may run automatically,
-but no workflow in this repository publishes npm packages, creates GitHub
-releases, moves tags, or changes repository visibility.
+This checklist is intentionally owner-driven. Validation may run automatically.
+The manual **Publish npm** workflow can publish an existing immutable tag after
+environment approval, but no workflow creates GitHub releases, moves tags, or
+changes repository visibility.
 
 ## Release identity
 
@@ -77,9 +78,30 @@ npm publish release-artifacts/develra-0.1.0.tgz --access public
   npx develra@0.1.0 scan --no-write
   ```
 
-- [ ] Configure npm trusted publishing for future releases.
+- [x] Add a manual, tag-validated GitHub Actions workflow that publishes the
+      audited archive through npm trusted publishing without a long-lived token.
+- [ ] In the `develra` package settings on npm, configure the trusted publisher:
+
+  ```text
+  Provider: GitHub Actions
+  Organization or user: develra-dev
+  Repository: develra
+  Workflow filename: publish-npm.yml
+  Environment name: npm
+  Allowed actions: npm publish
+  ```
+
+- [ ] Verify trusted publishing with the next intentional release by running
+      **Publish npm** from `main` with its exact existing tag.
 - [ ] After trusted publishing works, require 2FA and disallow traditional
       automation tokens; revoke obsolete publishing tokens.
+
+The publish job checks out the supplied immutable tag, requires that it exactly
+match the version in `apps/cli/package.json`, reruns the complete release audit,
+and publishes only the resulting allowlisted archive. npm CLI `11.5.1` is pinned
+because that is the minimum version supporting trusted publishing. The `npm`
+GitHub environment is also included in the npm trusted-publisher identity; add
+required reviewers to that environment before the first trusted release.
 
 ## GitHub release and Action channel
 
