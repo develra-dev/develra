@@ -85,6 +85,10 @@ function inspectMarkup(html) {
     [/<html\s+lang="en">/i, "an English document language"],
     [/<meta\s+name="viewport"/i, "a viewport meta tag"],
     [/<meta\s+name="description"/i, "a description meta tag"],
+    [
+      /<meta\s+name="robots"\s+content="index, follow, max-image-preview:large"/i,
+      "indexable robots metadata",
+    ],
     [/Content-Security-Policy/i, "a content security policy"],
     [
       /<link\s+rel="canonical"\s+href="https:\/\/www\.develra\.dev\/"/i,
@@ -104,9 +108,18 @@ function inspectMarkup(html) {
     [/MCP servers\./, "the final rotating contract type"],
     [/No account/, "the no-account product promise"],
     [/No source upload/, "the local-first product promise"],
+    [/No CLI telemetry/, "the telemetry-free CLI promise"],
     [/class="trust-icon"/, "the product-guarantee check icons"],
     [/~\/your-project/, "the example project path"],
     [/class="faq-answer"/, "animated FAQ answer wrappers"],
+    [
+      /src="\/_vercel\/insights\/script\.js"\s+defer/,
+      "the Vercel Web Analytics loader",
+    ],
+    [
+      /https:\/\/github\.com\/marketplace\/actions\/develra-external-contract-check/,
+      "the GitHub Marketplace listing",
+    ],
   ];
 
   for (const [pattern, description] of requiredPatterns) {
@@ -144,8 +157,59 @@ function inspectMarkup(html) {
   }
 }
 
+function inspectStructuredData(html) {
+  const blocks = [
+    ...html.matchAll(
+      /<script\s+type="application\/ld\+json">([\s\S]*?)<\/script>/gi,
+    ),
+  ];
+  if (blocks.length === 0) {
+    failures.push("index.html must contain JSON-LD structured data");
+    return;
+  }
+
+  const nodes = [];
+  for (const block of blocks) {
+    try {
+      const parsed = JSON.parse(block[1]);
+      if (Array.isArray(parsed?.["@graph"])) nodes.push(...parsed["@graph"]);
+      else nodes.push(parsed);
+    } catch (error) {
+      failures.push(
+        `index.html contains invalid JSON-LD: ${
+          error instanceof Error ? error.message : "unknown error"
+        }`,
+      );
+    }
+  }
+
+  const website = nodes.find((node) => node?.["@type"] === "WebSite");
+  if (
+    website?.name !== "Develra" ||
+    website?.url !== "https://www.develra.dev/"
+  ) {
+    failures.push(
+      "index.html WebSite structured data must identify the canonical Develra site",
+    );
+  }
+
+  const organization = nodes.find((node) => node?.["@type"] === "Organization");
+  const sameAs = organization?.sameAs;
+  if (
+    organization?.name !== "Develra" ||
+    !Array.isArray(sameAs) ||
+    !sameAs.includes("https://github.com/develra-dev") ||
+    !sameAs.includes("https://www.npmjs.com/package/develra")
+  ) {
+    failures.push(
+      "index.html Organization structured data must link Develra's canonical public identities",
+    );
+  }
+}
+
 function inspectSiteScript(source) {
   const requiredPatterns = [
+    [/window\.vaq/, "initialize the Vercel Web Analytics queue"],
     [
       /prefers-reduced-motion:\s*reduce/,
       "respect the reduced-motion preference",
@@ -211,8 +275,9 @@ async function inspectLocalReferences(html) {
 
   for (const reference of references) {
     if (/^(?:https:|mailto:|#)/.test(reference)) continue;
+    if (reference.startsWith("/_vercel/")) continue;
 
-    const pathname = reference.split(/[?#]/, 1)[0];
+    const pathname = reference.split(/[?#]/, 1)[0].replace(/^\//, "");
     const resolved = path.resolve(siteRoot, pathname);
     const relative = path.relative(siteRoot, resolved);
     if (relative.startsWith("..") || path.isAbsolute(relative)) {
@@ -343,11 +408,21 @@ async function inspectDeploymentConfig() {
 
   const contentSecurityPolicy = headersByName.get("Content-Security-Policy");
   if (
-    !contentSecurityPolicy?.includes("connect-src 'none'") ||
-    !contentSecurityPolicy.includes("frame-ancestors 'none'")
+    !contentSecurityPolicy?.includes("connect-src 'self'") ||
+    !contentSecurityPolicy.includes("frame-ancestors 'none'") ||
+    contentSecurityPolicy.includes("'unsafe-inline'") ||
+    contentSecurityPolicy.includes("'unsafe-eval'")
   ) {
     failures.push(
-      "vercel.json Content-Security-Policy must block connections and framing",
+      "vercel.json Content-Security-Policy must allow only same-origin analytics connections and block unsafe scripts and framing",
+    );
+  }
+
+  if (
+    headersByName.get("Referrer-Policy") !== "strict-origin-when-cross-origin"
+  ) {
+    failures.push(
+      "vercel.json Referrer-Policy must preserve origin-only acquisition data across origins",
     );
   }
 }
@@ -370,6 +445,7 @@ const html = await readFile(path.join(siteRoot, "index.html"), "utf8");
 const script = await readFile(path.join(siteRoot, "script.js"), "utf8");
 const styles = await readFile(path.join(siteRoot, "styles.css"), "utf8");
 inspectMarkup(html);
+inspectStructuredData(html);
 inspectSiteScript(script);
 inspectSiteStyles(styles);
 await inspectLocalReferences(html);

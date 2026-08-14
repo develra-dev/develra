@@ -5,17 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta
       name="description"
-      content="Develra is the open-source, local-first lockfile for external APIs, SDKs, endpoints, webhooks, and MCP servers."
+      content="Develra is an open-source, local-first scanner and lockfile for external APIs, SDKs, endpoints, webhooks, and MCP servers. Run it with npx."
     />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
     <meta name="theme-color" content="#050505" />
     <meta name="color-scheme" content="dark" />
     <meta property="og:type" content="website" />
+    <meta property="og:locale" content="en_US" />
     <meta property="og:url" content="https://www.develra.dev/" />
     <meta property="og:site_name" content="Develra" />
-    <meta property="og:title" content="Develra — Know what your code calls" />
+    <meta
+      property="og:title"
+      content="Develra — External API Scanner &amp; Lockfile"
+    />
     <meta
       property="og:description"
-      content="Scan external contracts locally. Commit a deterministic lockfile. Enforce it in CI."
+      content="Find external APIs, SDK calls, endpoints, webhooks, and MCP servers locally. Commit a deterministic lockfile and enforce it in CI."
     />
     <meta
       property="og:image"
@@ -23,15 +28,19 @@
     />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
+    <meta property="og:image:type" content="image/png" />
     <meta
       property="og:image:alt"
       content="Develra: Know what your code calls. Scan, lock, and enforce external contracts."
     />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Develra — Know what your code calls" />
+    <meta
+      name="twitter:title"
+      content="Develra — External API Scanner &amp; Lockfile"
+    />
     <meta
       name="twitter:description"
-      content="A local-first lockfile for external APIs, SDKs, endpoints, webhooks, and MCP servers."
+      content="Find external APIs, SDK calls, endpoints, webhooks, and MCP servers locally. Lock the inventory and enforce it in CI."
     />
     <meta
       name="twitter:image"
@@ -43,11 +52,46 @@
     />
     <meta
       http-equiv="Content-Security-Policy"
-      content="default-src 'self'; img-src 'self' data:; style-src 'self'; script-src 'self'; connect-src 'none'; font-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'; frame-ancestors 'none'; upgrade-insecure-requests"
+      content="default-src 'self'; img-src 'self' data:; style-src 'self'; script-src 'self'; connect-src 'self'; font-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'; frame-ancestors 'none'; upgrade-insecure-requests"
     />
-    <title>Develra — Know what your code calls</title>
+    <title>Develra — External API Scanner &amp; Lockfile</title>
     <link rel="canonical" href="https://www.develra.dev/" />
-    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+    <link
+      rel="icon"
+      href="assets/favicon.svg"
+      type="image/svg+xml"
+      sizes="any"
+    />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "WebSite",
+            "@id": "https://www.develra.dev/#website",
+            "url": "https://www.develra.dev/",
+            "name": "Develra",
+            "alternateName": "develra.dev",
+            "description": "An open-source, local-first scanner and lockfile for external APIs, SDKs, endpoints, webhooks, and MCP servers.",
+            "publisher": {
+              "@id": "https://www.develra.dev/#organization"
+            }
+          },
+          {
+            "@type": "Organization",
+            "@id": "https://www.develra.dev/#organization",
+            "name": "Develra",
+            "url": "https://www.develra.dev/",
+            "logo": "https://www.develra.dev/assets/favicon.svg",
+            "sameAs": [
+              "https://github.com/develra-dev",
+              "https://www.npmjs.com/package/develra",
+              "https://github.com/marketplace/actions/develra-external-contract-check"
+            ]
+          }
+        ]
+      }
+    </script>
     <link
       rel="preload"
       href="assets/fonts/geist-variable.woff2"
@@ -64,6 +108,7 @@
     />
     <link rel="stylesheet" href="styles.css" />
     <script src="script.js" defer></script>
+    <script src="/_vercel/insights/script.js" defer></script>
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
@@ -173,7 +218,7 @@
                 <rect x="1.5" y="1.5" width="15" height="15" rx="5" />
                 <path d="m5 9 2.2 2.2L13 5.8" />
               </svg>
-              <span>No telemetry</span>
+              <span>No CLI telemetry</span>
             </li>
           </ul>
         </div>
@@ -391,7 +436,7 @@
           </p>
           <a
             class="button button-primary"
-            href="https://github.com/develra-dev/develra#github-action"
+            href="https://github.com/marketplace/actions/develra-external-contract-check"
           >
             Add to your repository
             <svg viewBox="0 0 16 16" aria-hidden="true">
@@ -542,9 +587,14 @@
             <span>develra</span>
           </a>
           <p>A local-first lockfile for external contracts.</p>
+          <p>Cookie-free, aggregate page views via Vercel Web Analytics.</p>
         </div>
         <div class="footer-links">
           <a href="https://github.com/develra-dev/develra">GitHub</a>
+          <a
+            href="https://github.com/marketplace/actions/develra-external-contract-check"
+            >Marketplace</a
+          >
           <a href="https://github.com/develra-dev/develra#development">Docs</a>
           <a href="https://github.com/develra-dev/develra/security/policy"
             >Security</a

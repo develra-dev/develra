@@ -95,7 +95,7 @@ npm publish release-artifacts/develra-0.1.0.tgz --access public
       command: check
   ```
 
-- [ ] Optionally select **Publish this Action to the GitHub Marketplace** on the
+- [x] Select **Publish this Action to the GitHub Marketplace** on the
       release after accepting the Marketplace agreement.
 - [ ] Do not create `v1` until Develra intentionally commits to a 1.0-compatible
       Action input and behavior contract.

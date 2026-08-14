@@ -65,10 +65,10 @@ const server = createServer(async (request, response) => {
       "Cache-Control": "no-store",
       "Content-Length": details.size,
       "Content-Security-Policy":
-        "default-src 'self'; img-src 'self' data:; style-src 'self'; script-src 'self'; connect-src 'none'; font-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'; frame-ancestors 'none'",
+        "default-src 'self'; img-src 'self' data:; style-src 'self'; script-src 'self'; connect-src 'self'; font-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'; frame-ancestors 'none'",
       "Content-Type":
         contentTypes.get(path.extname(filePath)) ?? "application/octet-stream",
-      "Referrer-Policy": "no-referrer",
+      "Referrer-Policy": "strict-origin-when-cross-origin",
       "X-Content-Type-Options": "nosniff",
     });
     if (request.method === "HEAD") response.end();

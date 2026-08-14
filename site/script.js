@@ -1,3 +1,9 @@
+window.va =
+  window.va ||
+  function () {
+    (window.vaq = window.vaq || []).push(arguments);
+  };
+
 const status = document.querySelector("#copy-status");
 const headlineRotator = document.querySelector("[data-headline-rotator]");
 

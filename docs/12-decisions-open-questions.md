@@ -451,3 +451,30 @@ Add entries in this format:
   while the moving `v0` compatibility tag now selects `v0.1.1`.
 - Follow-up ticket: Configure npm trusted publishing, then complete DVL-052 and
   the remaining DVL-054/DVL-055 launch collateral.
+
+## 2026-08-13 — Website analytics and search discovery
+
+- Decision or implementation summary: Connected the static production site to
+  Vercel Web Analytics through its same-origin platform route without adding a
+  framework or package dependency. Added an explicit cookie-free aggregate
+  page-view disclosure, clarified that telemetry-free claims apply to the CLI,
+  and kept custom events out of scope. Improved search metadata with a more
+  descriptive title and summary, explicit indexing directives, complete social
+  image metadata, and JSON-LD `WebSite` and `Organization` entities linked to
+  the public GitHub, npm, and Marketplace identities. Linked the newly
+  published Marketplace Action from the site.
+- Alternatives considered: A third-party analytics loader, Google Analytics,
+  and custom conversion events were rejected to keep collection first-party,
+  minimal, and aligned with the local-first trust promise. `SoftwareApplication`
+  rich-result markup was deferred because Google requires rating or review data
+  that Develra cannot truthfully provide at launch.
+- Validation run: `pnpm site:validate`, `pnpm verify`, production header and
+  Analytics endpoint checks, structured-data parsing, and a headless production
+  render.
+- Known limitation: Search indexing and analytics data are asynchronous after
+  deployment. Google may take several days or weeks to recrawl the site, and
+  the Vercel Analytics route is created only after the first deployment made
+  after Analytics is enabled.
+- Follow-up ticket: Monitor Search Console coverage and queries without adding
+  speculative landing pages; evaluate custom events only after a separate
+  privacy and measurement decision.

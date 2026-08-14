@@ -1,9 +1,11 @@
 # Website
 
 The Develra website is a static, local-first companion to the repository. It
-has no framework, package install, analytics, cookies, hosted fonts, forms, or
-runtime network requests. Product claims should remain limited to behavior
-validated by the CLI and bundled GitHub Action.
+has no framework, package install, cookies, hosted fonts, forms, or hosted
+backend. Production uses Vercel's first-party Web Analytics route for aggregate
+page views and acquisition reporting; it does not add custom events or CLI
+telemetry. Product claims should remain limited to behavior validated by the
+CLI and bundled GitHub Action.
 
 The visual direction adapts the dark canvas, bright action color, rounded
 surfaces, and generous spacing described in the supplied
@@ -59,9 +61,23 @@ domain to `www`, which is also the canonical host in page metadata, social-card
 URLs, `robots.txt`, and `sitemap.xml`. The generated `develra.vercel.app` domain
 remains available for deployment diagnostics.
 
+Vercel Web Analytics is loaded from the same-origin
+`/_vercel/insights/script.js` platform route. The page initializes only the
+standard page-view queue; there are no custom interaction events. The content
+security policy permits same-origin connections for that route while continuing
+to reject remote scripts, unsafe inline/eval execution, and framing. The footer
+discloses aggregate, cookie-free page-view measurement, and product copy
+distinguishes website analytics from the telemetry-free CLI.
+
+Search metadata uses `https://www.develra.dev/` consistently and includes a
+descriptive title, page summary, index directives, Open Graph/Twitter cards,
+and JSON-LD `WebSite` and `Organization` entities linked to the canonical
+GitHub, npm, and Marketplace identities. Keep the sitemap limited to real,
+canonical pages and do not add synthetic SEO landing pages.
+
 Do not announce the website before the GitHub repository, npm package, and
 Action tag used by the page are publicly available. Update the repository
 website field as part of the visibility launch.
 
-Do not add analytics, forms, external scripts, or a hosted backend without an
-explicit privacy and product decision.
+Do not add custom analytics events, advertising trackers, forms, external
+scripts, or a hosted backend without an explicit privacy and product decision.
