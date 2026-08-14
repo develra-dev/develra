@@ -497,12 +497,12 @@ Add entries in this format:
   release workflow has been exercised successfully.
 - Validation run: Targeted release-workflow tests and the full local
   `pnpm verify` suite.
-- Known limitation: The npm-side trusted-publisher identity must still be bound
-  to `develra-dev/develra`, `publish-npm.yml`, and the `npm` environment through
-  the package settings. It can only be proven end to end during the next
-  intentional package release.
-- Follow-up ticket: Configure the npm package binding, verify the workflow
-  during the next release, then disallow traditional npm publishing tokens.
+- Known limitation: The owner configured the npm-side trusted-publisher identity
+  for `develra-dev/develra`, `publish-npm.yml`, and the `npm` environment on
+  2026-08-14. It can only be proven end to end during the next intentional
+  package release.
+- Follow-up ticket: Verify the workflow during the next release, then disallow
+  traditional npm publishing tokens.
 
 ## 2026-08-14 — DVL-052 Breakage Museum starter corpus
 
@@ -563,10 +563,9 @@ Add entries in this format:
   and the release archive audit. `pnpm audit --prod` reported no known
   vulnerabilities; GitHub reported zero open Dependabot and secret-scanning
   alerts.
-- Known limitation: The npm trusted-publisher form and end-to-end OIDC proof
-  remain owner steps for the next intentional release. Search indexing,
+- Known limitation: The npm trusted-publisher form is configured, but end-to-end
+  OIDC proof remains deferred to the next intentional release. Search indexing,
   analytics accumulation, and launch-post publication are external and
   asynchronous.
-- Follow-up ticket: Finish the npm trusted-publisher binding, then treat DVL-060
-  as the next optional product milestone rather than silently expanding the
-  shipped local scanner.
+- Follow-up ticket: Treat DVL-060 as the next optional product milestone rather
+  than silently expanding the shipped local scanner.

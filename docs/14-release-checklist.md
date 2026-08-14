@@ -82,7 +82,7 @@ npm publish release-artifacts/develra-0.1.0.tgz --access public
       audited archive through npm trusted publishing without a long-lived token.
 - [x] Create the `npm` GitHub environment, restrict it to protected branches,
       and require approval from the package owner before publishing.
-- [ ] In the `develra` package settings on npm, configure the trusted publisher:
+- [x] In the `develra` package settings on npm, configure the trusted publisher:
 
   ```text
   Provider: GitHub Actions
