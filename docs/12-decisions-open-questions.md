@@ -396,3 +396,32 @@ Add entries in this format:
   publicly usable.
 - Follow-up ticket: Complete the remaining DVL-054 launch artifacts, then run
   DVL-055.
+
+## 2026-08-13 — Public v0.1.0 release
+
+- Decision or implementation summary: Published the audited standalone CLI as
+  `develra@0.1.0`, made `develra-dev/develra` public, created the immutable
+  `v0.1.0` tag and moving `v0` Action channel at release commit `d56e427`, and
+  created the GitHub release from the reviewed release notes. Enabled required
+  CI checks, linear history, secret scanning, push protection, Dependabot
+  security updates, and private vulnerability reporting. Added a manual
+  published-release smoke workflow that installs the public npm package and
+  invokes `develra-dev/develra@v0` from GitHub.
+- Alternatives considered: The first npm publish used interactive 2FA because
+  trusted publishing cannot be configured until the package exists. The Linux
+  workflow artifact was published instead of rebuilding after approval. Its
+  extracted contents matched the local audited archive except for semantically
+  irrelevant ordering of three `devDependencies` keys in packed
+  `package.json`; the executable bundle and all other files were byte-identical.
+- Validation run: Local `pnpm release:validate`; public CI run `31770935750` on
+  Linux, macOS, and Windows with Node 22 and 24; release validation run
+  `31771493891`; and published-release smoke run `31772140310`. A clean npm
+  install returned version `0.1.0` and found the expected five contracts in the
+  TypeScript fixture without writing a lockfile. The remote `v0` Action bundle
+  checksum matched the audited local bundle.
+- Known limitation: npm trusted publishing, the stricter package-level
+  token policy, and optional GitHub Marketplace submission remain deferred.
+  DVL-052 and the remaining DVL-054 launch collateral are still open, so
+  DVL-055 is not marked complete despite the successful release audit.
+- Follow-up ticket: Complete DVL-052 and DVL-054, configure trusted publishing,
+  then close the remaining DVL-055 audit items.
