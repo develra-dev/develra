@@ -51,9 +51,8 @@ This produces an audited npm archive and its checksum manifest under
 - [ ] Confirm Apache-2.0 remains the intended license.
 - [ ] Confirm `develra` is still available with `npm view develra`.
 - [ ] Confirm the repository description, website, and topics are accurate.
-      The static website and Vercel configuration are prepared but the preview,
-      custom domain, and repository website field must be verified before this
-      item can be checked.
+      The Vercel deployment and canonical custom domain are verified; the
+      repository website field and topics still need final review.
 - [ ] Confirm issue templates, the security policy, and private vulnerability
       reporting are enabled.
 - [ ] Confirm no documentation claims npm, Marketplace, or hosted-service

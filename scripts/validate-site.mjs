@@ -87,8 +87,16 @@ function inspectMarkup(html) {
     [/<meta\s+name="description"/i, "a description meta tag"],
     [/Content-Security-Policy/i, "a content security policy"],
     [
-      /<link\s+rel="canonical"\s+href="https:\/\/develra\.dev\/"/i,
+      /<link\s+rel="canonical"\s+href="https:\/\/www\.develra\.dev\/"/i,
       "the canonical URL",
+    ],
+    [
+      /<meta\s+property="og:url"\s+content="https:\/\/www\.develra\.dev\/"/i,
+      "the canonical Open Graph URL",
+    ],
+    [
+      /<meta\s+property="og:image"\s+content="https:\/\/www\.develra\.dev\/assets\/social-card\.png"/i,
+      "the canonical Open Graph image",
     ],
     [/npx develra scan/, "the primary scan command"],
     [/Package lockfiles miss/, "the external-contract headline"],
@@ -344,6 +352,18 @@ async function inspectDeploymentConfig() {
   }
 }
 
+async function inspectDiscoveryFiles() {
+  const robots = await readFile(path.join(siteRoot, "robots.txt"), "utf8");
+  if (!robots.includes("Sitemap: https://www.develra.dev/sitemap.xml")) {
+    failures.push("robots.txt must advertise the canonical www sitemap URL");
+  }
+
+  const sitemap = await readFile(path.join(siteRoot, "sitemap.xml"), "utf8");
+  if (!sitemap.includes("<loc>https://www.develra.dev/</loc>")) {
+    failures.push("sitemap.xml must contain the canonical www page URL");
+  }
+}
+
 await inspectRequiredFiles();
 
 const html = await readFile(path.join(siteRoot, "index.html"), "utf8");
@@ -363,6 +383,7 @@ await inspectWebp("assets/gradient-ember.webp");
 await inspectWebp("assets/gradient-violet.webp");
 await inspectPinnedAssets();
 await inspectDeploymentConfig();
+await inspectDiscoveryFiles();
 
 if (failures.length > 0) {
   console.error("Website validation failed:");

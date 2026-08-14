@@ -390,9 +390,9 @@ Add entries in this format:
   repository before launch.
 - Validation run: `pnpm site:validate`, browser review at desktop and mobile
   widths, and `pnpm verify`.
-- Known limitation: The website and `develra.dev` domain are prepared but not
-  deployed. Vercel project import, domain attachment, and DNS remain explicit
-  owner-controlled external actions. The public domain should wait until the
-  repository, npm package, and `v0` Action tag are publicly usable.
+- Known limitation: The website is deployed at `https://www.develra.dev/`, with
+  the apex redirected to the canonical `www` host, but should remain
+  unannounced until the repository, npm package, and `v0` Action tag are
+  publicly usable.
 - Follow-up ticket: Complete the remaining DVL-054 launch artifacts, then run
   DVL-055.

@@ -21,6 +21,7 @@ const repositoryRoot = path.resolve(
 );
 const artifactsRoot = path.join(repositoryRoot, "release-artifacts");
 const expectedRepository = "git+https://github.com/develra-dev/develra.git";
+const expectedHomepage = "https://www.develra.dev/";
 const temporary = await mkdtemp(
   path.join(os.tmpdir(), "develra-release-audit-"),
 );
@@ -90,6 +91,10 @@ try {
   assert(
     cliMetadata.repository?.url === expectedRepository,
     "npm repository metadata does not identify develra-dev/develra.",
+  );
+  assert(
+    cliMetadata.homepage === expectedHomepage,
+    "npm homepage metadata does not identify the canonical website.",
   );
   assert(
     !cliMetadata.dependencies ||
@@ -190,6 +195,10 @@ try {
   assert(
     packedMetadata.repository?.url === expectedRepository,
     "Packed npm repository metadata is incorrect.",
+  );
+  assert(
+    packedMetadata.homepage === expectedHomepage,
+    "Packed npm homepage metadata is incorrect.",
   );
 
   await assertSafeTextTree(packageRoot);

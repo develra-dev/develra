@@ -45,7 +45,7 @@ pnpm site:preview
 Open `http://127.0.0.1:4173`. Set `DEVELRA_SITE_PORT` to use another local
 port. Website validation is also part of `pnpm verify`.
 
-## Deployment preparation
+## Deployment
 
 The root `vercel.json` makes the repository ready to import as a framework-free
 Vercel project. Vercel skips dependency installation, runs the zero-dependency
@@ -54,20 +54,14 @@ also applies restrictive response security headers. Git pushes will receive
 preview deployments after the repository is connected to Vercel; pushes to the
 Vercel production branch will receive production deployments.
 
-The owner can create a private preview now:
+Production is deployed at `https://www.develra.dev/`. Vercel redirects the apex
+domain to `www`, which is also the canonical host in page metadata, social-card
+URLs, `robots.txt`, and `sitemap.xml`. The generated `develra.vercel.app` domain
+remains available for deployment diagnostics.
 
-1. import `develra-dev/develra` in Vercel using the existing GitHub integration;
-2. accept the settings from `vercel.json` without adding environment variables;
-3. review the generated Vercel preview URL.
-
-When the public release is ready, verify the npm package and `v0` Action tag so
-the website examples work, then attach `develra.dev` in the Vercel project,
-follow the DNS records Vercel supplies, choose the canonical apex or `www`
-domain, and redirect the other. Update the repository website field after the
-domain resolves.
-
-Do not attach the public domain before the GitHub repository, npm package, and
-Action tag used by the page are publicly available.
+Do not announce the website before the GitHub repository, npm package, and
+Action tag used by the page are publicly available. Update the repository
+website field as part of the visibility launch.
 
 Do not add analytics, forms, external scripts, or a hosted backend without an
 explicit privacy and product decision.
