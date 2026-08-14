@@ -1,6 +1,6 @@
 {
   "name": "develra",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Local-first external-contract scanner and lockfile",
   "type": "commonjs",
   "license": "Apache-2.0",
