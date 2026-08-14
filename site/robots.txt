@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://develra.dev/sitemap.xml
+Sitemap: https://www.develra.dev/sitemap.xml
