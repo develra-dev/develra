@@ -360,3 +360,39 @@ Add entries in this format:
   GitHub release, or Marketplace publication was performed.
 - Follow-up ticket: DVL-054; enable branch protection immediately after the
   repository becomes public or the plan supports it.
+
+## 2026-08-13 — DVL-054 — Static launch website
+
+- Decision or implementation summary: Added an original, responsive one-page
+  website that demonstrates scan, lock, and Action workflows with only local
+  HTML, CSS, JavaScript, SVG, and self-hosted OFL-licensed Geist font assets.
+  Added budgeted link and asset validation, a zero-dependency local preview
+  server, a social card, and a checked-in Vercel configuration that validates
+  and deploys only the static site without installing dependencies. A later
+  visual pass removed eyebrow labels, tightened and lightened headline type,
+  and used two optimized owner-supplied GPTypo gradient crops in selected
+  geometric forms. The final hero uses an accessible, reduced-motion-safe
+  character rotation with a restrained left-to-right stagger, alternating
+  vertical directions, a two-color orange-and-mint flash, and a separate
+  screen-blended highlight layer to demonstrate the contract types package
+  lockfiles miss without layout shift or an animation dependency. Replaced the
+  terminal placeholder with a neutral project path, upgraded the hero guarantee
+  marks to custom rounded-square check icons, and progressively enhanced the
+  native FAQ disclosures with reduced-motion-safe expand and collapse
+  transitions. Production responses apply restrictive content security,
+  permissions, referrer, MIME-sniffing, and framing policies.
+- Alternatives considered: A framework, hosted font, analytics service, and
+  waitlist form were rejected because the launch page does not need a build
+  system, runtime network dependency, tracking, or backend. The supplied
+  CodeRabbit design notes informed the visual system without copying its
+  proprietary assets or font. GitHub Pages was replaced with Vercel because it
+  matches the owner's existing deployment workflow and can preview the private
+  repository before launch.
+- Validation run: `pnpm site:validate`, browser review at desktop and mobile
+  widths, and `pnpm verify`.
+- Known limitation: The website and `develra.dev` domain are prepared but not
+  deployed. Vercel project import, domain attachment, and DNS remain explicit
+  owner-controlled external actions. The public domain should wait until the
+  repository, npm package, and `v0` Action tag are publicly usable.
+- Follow-up ticket: Complete the remaining DVL-054 launch artifacts, then run
+  DVL-055.

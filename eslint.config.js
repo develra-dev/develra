@@ -33,7 +33,23 @@ export default tseslint.config(
     files: ["scripts/*.mjs"],
     languageOptions: {
       ...tseslint.configs.disableTypeChecked.languageOptions,
-      globals: { process: "readonly" },
+      globals: {
+        console: "readonly",
+        process: "readonly",
+        URL: "readonly",
+      },
+    },
+  },
+  {
+    ...tseslint.configs.disableTypeChecked,
+    files: ["site/*.js"],
+    languageOptions: {
+      ...tseslint.configs.disableTypeChecked.languageOptions,
+      globals: {
+        document: "readonly",
+        navigator: "readonly",
+        window: "readonly",
+      },
     },
   },
   eslintConfigPrettier,

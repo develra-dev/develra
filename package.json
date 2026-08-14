@@ -27,10 +27,12 @@
     "test:action": "vitest run tests/action",
     "goldens:update": "pnpm build && node scripts/update-goldens.mjs",
     "package:action": "pnpm build && pnpm --filter @develra/action package",
+    "site:preview": "node scripts/serve-site.mjs",
+    "site:validate": "node scripts/validate-site.mjs",
     "smoke": "node scripts/smoke-package.mjs",
     "release:audit": "node scripts/audit-release.mjs",
     "release:validate": "pnpm verify && pnpm release:audit",
-    "verify": "pnpm lint && pnpm format:check && pnpm typecheck && pnpm test && pnpm test:fixtures && pnpm build && pnpm package:action && pnpm test:action && pnpm smoke"
+    "verify": "pnpm lint && pnpm format:check && pnpm site:validate && pnpm typecheck && pnpm test && pnpm test:fixtures && pnpm build && pnpm package:action && pnpm test:action && pnpm smoke"
   },
   "devDependencies": {
     "@eslint/js": "^9.33.0",

@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://develra.dev/sitemap.xml

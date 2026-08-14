@@ -1,0 +1,562 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Develra is the open-source, local-first lockfile for external APIs, SDKs, endpoints, webhooks, and MCP servers."
+    />
+    <meta name="theme-color" content="#050505" />
+    <meta name="color-scheme" content="dark" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://develra.dev/" />
+    <meta property="og:site_name" content="Develra" />
+    <meta property="og:title" content="Develra — Know what your code calls" />
+    <meta
+      property="og:description"
+      content="Scan external contracts locally. Commit a deterministic lockfile. Enforce it in CI."
+    />
+    <meta
+      property="og:image"
+      content="https://develra.dev/assets/social-card.png"
+    />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta
+      property="og:image:alt"
+      content="Develra: Know what your code calls. Scan, lock, and enforce external contracts."
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Develra — Know what your code calls" />
+    <meta
+      name="twitter:description"
+      content="A local-first lockfile for external APIs, SDKs, endpoints, webhooks, and MCP servers."
+    />
+    <meta
+      name="twitter:image"
+      content="https://develra.dev/assets/social-card.png"
+    />
+    <meta
+      name="twitter:image:alt"
+      content="Develra: Know what your code calls. Scan, lock, and enforce external contracts."
+    />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; img-src 'self' data:; style-src 'self'; script-src 'self'; connect-src 'none'; font-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'; frame-ancestors 'none'; upgrade-insecure-requests"
+    />
+    <title>Develra — Know what your code calls</title>
+    <link rel="canonical" href="https://develra.dev/" />
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+    <link
+      rel="preload"
+      href="assets/fonts/geist-variable.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="assets/fonts/geist-mono-variable.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="script.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <header class="site-header">
+      <div class="shell nav-shell">
+        <a class="brand" href="#top" aria-label="Develra home">
+          <img src="assets/favicon.svg" width="34" height="34" alt="" />
+          <span>develra</span>
+        </a>
+        <nav class="nav-links" aria-label="Primary navigation">
+          <a href="#how-it-works">How it works</a>
+          <a href="#privacy">Privacy</a>
+          <a href="#action">GitHub Action</a>
+          <a href="#faq">FAQ</a>
+        </nav>
+        <a
+          class="button button-quiet button-small"
+          href="https://github.com/develra-dev/develra"
+          aria-label="View Develra on GitHub"
+        >
+          <span>GitHub</span>
+          <svg viewBox="0 0 16 16" aria-hidden="true">
+            <path d="M5 11 11 5M6 5h5v5" />
+          </svg>
+        </a>
+      </div>
+    </header>
+
+    <main id="main">
+      <section class="hero shell" id="top">
+        <div class="hero-copy">
+          <h1
+            aria-label="Package lockfiles miss external APIs, SDK calls, endpoints, webhooks, and MCP servers."
+          >
+            <span class="headline-static" aria-hidden="true"
+              >Package lockfiles miss</span
+            >
+            <span
+              class="headline-rotator"
+              data-headline-rotator
+              aria-hidden="true"
+            >
+              <span class="headline-phrase is-active">external APIs.</span>
+              <span class="headline-phrase">SDK calls.</span>
+              <span class="headline-phrase">endpoints.</span>
+              <span class="headline-phrase">webhooks.</span>
+              <span class="headline-phrase">MCP servers.</span>
+            </span>
+          </h1>
+          <p class="hero-lede">
+            Develra finds the external APIs, SDK operations, endpoints,
+            webhooks, and MCP servers hiding in your repository—then locks the
+            inventory for review and CI.
+          </p>
+
+          <div class="command" aria-label="Scan command">
+            <code><span aria-hidden="true">$</span> npx develra scan</code>
+            <button
+              class="copy-button"
+              type="button"
+              data-copy="npx develra scan"
+              aria-label="Copy npx develra scan"
+            >
+              <svg viewBox="0 0 20 20" aria-hidden="true">
+                <rect x="7" y="7" width="9" height="9" rx="2" />
+                <path
+                  d="M13 7V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"
+                />
+              </svg>
+              <span>Copy</span>
+            </button>
+          </div>
+
+          <div class="hero-actions">
+            <a
+              class="button button-primary"
+              href="https://github.com/develra-dev/develra"
+            >
+              View on GitHub
+              <svg viewBox="0 0 16 16" aria-hidden="true">
+                <path d="M3 8h10M9 4l4 4-4 4" />
+              </svg>
+            </a>
+            <a class="button button-quiet" href="#how-it-works"
+              >See how it works</a
+            >
+          </div>
+
+          <ul class="trust-list" aria-label="Product guarantees">
+            <li>
+              <svg class="trust-icon" viewBox="0 0 18 18" aria-hidden="true">
+                <rect x="1.5" y="1.5" width="15" height="15" rx="5" />
+                <path d="m5 9 2.2 2.2L13 5.8" />
+              </svg>
+              <span>No account</span>
+            </li>
+            <li>
+              <svg class="trust-icon" viewBox="0 0 18 18" aria-hidden="true">
+                <rect x="1.5" y="1.5" width="15" height="15" rx="5" />
+                <path d="m5 9 2.2 2.2L13 5.8" />
+              </svg>
+              <span>No source upload</span>
+            </li>
+            <li>
+              <svg class="trust-icon" viewBox="0 0 18 18" aria-hidden="true">
+                <rect x="1.5" y="1.5" width="15" height="15" rx="5" />
+                <path d="m5 9 2.2 2.2L13 5.8" />
+              </svg>
+              <span>No telemetry</span>
+            </li>
+          </ul>
+        </div>
+
+        <div class="hero-visual" aria-label="Example Develra scan output">
+          <div class="orb orb-orange" aria-hidden="true"></div>
+          <div class="orb orb-teal" aria-hidden="true"></div>
+          <div class="orb orb-purple" aria-hidden="true"></div>
+          <div class="terminal-card">
+            <div class="terminal-bar">
+              <div class="terminal-dots" aria-hidden="true">
+                <span></span><span></span><span></span>
+              </div>
+              <span>~/your-project</span>
+              <span class="terminal-state">offline</span>
+            </div>
+            <div class="terminal-body" aria-hidden="true">
+              <p><span class="prompt">$</span> npx develra scan</p>
+              <p class="terminal-muted terminal-gap">
+                Develra scanned 38 files
+              </p>
+              <p class="terminal-muted">External contracts: 3</p>
+              <div class="finding">
+                <span class="confidence confirmed">confirmed</span>
+                <div>
+                  <strong>OpenAI</strong>
+                  <small>responses.create</small>
+                </div>
+              </div>
+              <div class="finding">
+                <span class="confidence confirmed">confirmed</span>
+                <div>
+                  <strong>Stripe</strong>
+                  <small>checkout.sessions.create</small>
+                </div>
+              </div>
+              <div class="finding">
+                <span class="confidence possible">possible</span>
+                <div>
+                  <strong>Slack</strong>
+                  <small>@slack/web-api</small>
+                </div>
+              </div>
+              <p class="terminal-success"><span>✓</span> Wrote develra.lock</p>
+            </div>
+          </div>
+          <div class="lock-chip" aria-hidden="true">
+            <svg viewBox="0 0 20 20">
+              <rect x="4" y="8" width="12" height="9" rx="3" />
+              <path d="M7 8V6a3 3 0 0 1 6 0v2" />
+            </svg>
+            deterministic
+          </div>
+        </div>
+      </section>
+
+      <section class="proof-strip" aria-label="Supported contract signals">
+        <div class="shell proof-list">
+          <span>SDK operations</span>
+          <span>Raw endpoints</span>
+          <span>Webhooks</span>
+          <span>MCP configs</span>
+          <span>JavaScript · TypeScript · Python</span>
+        </div>
+      </section>
+
+      <section class="section shell" id="how-it-works">
+        <div class="section-heading centered">
+          <h2>A package lockfile tells only half the story.</h2>
+          <p>
+            Remote services are dependencies too. Develra turns the evidence
+            already in your repository into a stable external-contract
+            inventory.
+          </p>
+        </div>
+
+        <div class="step-grid">
+          <article class="step-card">
+            <div class="step-number">01</div>
+            <div class="step-icon icon-orange" aria-hidden="true">
+              <svg viewBox="0 0 24 24">
+                <circle cx="11" cy="11" r="7" />
+                <path d="m16 16 5 5M8 11h6M11 8v6" />
+              </svg>
+            </div>
+            <h3>Discover</h3>
+            <p>
+              Scan manifests, imports, SDK calls, hosts, HTTP endpoints, and
+              static MCP configuration—without executing project code.
+            </p>
+          </article>
+          <article class="step-card featured-card">
+            <div class="step-number">02</div>
+            <div class="step-icon icon-teal" aria-hidden="true">
+              <svg viewBox="0 0 24 24">
+                <path d="M7 10V7a5 5 0 0 1 10 0v3" />
+                <rect x="4" y="10" width="16" height="11" rx="3" />
+                <path d="M12 14v3" />
+              </svg>
+            </div>
+            <h3>Lock</h3>
+            <p>
+              Commit a canonical <code>develra.lock</code> with relative paths,
+              explainable confidence, and no timestamps, secrets, or snippets.
+            </p>
+          </article>
+          <article class="step-card">
+            <div class="step-number">03</div>
+            <div class="step-icon icon-purple" aria-hidden="true">
+              <svg viewBox="0 0 24 24">
+                <path d="M4 5h16v14H4zM8 9l2 2-2 2M12 15h4" />
+              </svg>
+            </div>
+            <h3>Enforce</h3>
+            <p>
+              Run <code>develra check</code> locally or in the bundled GitHub
+              Action to catch contract inventory changes before merge.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section shell graph-section">
+        <div class="graph-copy">
+          <h2>See exactly what your repository reaches.</h2>
+          <p>
+            Every finding keeps evidence types and repository-relative paths, so
+            confidence is reviewable instead of magical.
+          </p>
+          <ul class="check-list">
+            <li><span>✓</span> Confirmed operations and endpoints</li>
+            <li><span>✓</span> Probable package + import matches</li>
+            <li><span>✓</span> Unknown hosts stay visible</li>
+            <li><span>✓</span> Deterministic Markdown, SVG, JSON, and SARIF</li>
+          </ul>
+          <a
+            class="text-link"
+            href="https://github.com/develra-dev/develra#what-it-finds"
+          >
+            Explore detection details
+            <svg viewBox="0 0 16 16" aria-hidden="true">
+              <path d="M3 8h10M9 4l4 4-4 4" />
+            </svg>
+          </a>
+        </div>
+        <div class="graph-frame">
+          <div class="frame-label">
+            <span>develra-graph.svg</span>
+            <span>generated locally</span>
+          </div>
+          <img
+            src="assets/contract-map.svg"
+            alt="External contract map connecting a repository to OpenAI, Slack, and Stripe"
+            width="900"
+            height="540"
+            loading="lazy"
+          />
+        </div>
+      </section>
+
+      <section class="section shell" id="privacy">
+        <div class="privacy-panel">
+          <div class="privacy-copy">
+            <h2>Your source never needs to leave your machine.</h2>
+            <p>
+              Default scans are offline and telemetry-free. Develra reads
+              bounded static evidence, never imports repository modules, and
+              never starts MCP servers.
+            </p>
+            <a
+              class="button button-quiet"
+              href="https://github.com/develra-dev/develra#privacy-and-safety"
+            >
+              Read the safety model
+            </a>
+          </div>
+          <ul class="privacy-list">
+            <li>
+              <span class="privacy-icon">01</span>
+              <div>
+                <strong>No account or API key</strong>
+                <p>Useful output from the first command.</p>
+              </div>
+            </li>
+            <li>
+              <span class="privacy-icon">02</span>
+              <div>
+                <strong>No project execution</strong>
+                <p>
+                  No imports, lifecycle scripts, binaries, or MCP processes.
+                </p>
+              </div>
+            </li>
+            <li>
+              <span class="privacy-icon">03</span>
+              <div>
+                <strong>Secret-safe output</strong>
+                <p>
+                  No environment values, auth headers, queries, or snippets.
+                </p>
+              </div>
+            </li>
+          </ul>
+          <div class="privacy-orb" aria-hidden="true"></div>
+        </div>
+      </section>
+
+      <section class="section shell action-section" id="action">
+        <div class="action-copy">
+          <h2>Make contract drift a pull-request check.</h2>
+          <p>
+            Commit the lockfile once, then let Develra compare every change. The
+            Action is bundled and read-only—there is no runtime install or
+            hosted service.
+          </p>
+          <a
+            class="button button-primary"
+            href="https://github.com/develra-dev/develra#github-action"
+          >
+            Add to your repository
+            <svg viewBox="0 0 16 16" aria-hidden="true">
+              <path d="M3 8h10M9 4l4 4-4 4" />
+            </svg>
+          </a>
+        </div>
+        <div class="code-card">
+          <div class="code-header">
+            <span>.github/workflows/develra.yml</span>
+            <button
+              class="copy-button copy-button-compact"
+              type="button"
+              data-copy="name: Develra&#10;&#10;on: [pull_request]&#10;&#10;permissions:&#10;  contents: read&#10;&#10;jobs:&#10;  contracts:&#10;    runs-on: ubuntu-latest&#10;    steps:&#10;      - uses: actions/checkout@v6&#10;      - uses: develra-dev/develra@v0"
+              aria-label="Copy GitHub Action workflow"
+            >
+              <svg viewBox="0 0 20 20" aria-hidden="true">
+                <rect x="7" y="7" width="9" height="9" rx="2" />
+                <path
+                  d="M13 7V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"
+                />
+              </svg>
+              <span>Copy</span>
+            </button>
+          </div>
+          <pre
+            aria-label="GitHub Actions workflow"
+          ><code><span class="yaml-key">name:</span> Develra
+
+<span class="yaml-key">on:</span> [pull_request]
+
+<span class="yaml-key">permissions:</span>
+  <span class="yaml-key">contents:</span> read
+
+<span class="yaml-key">jobs:</span>
+  <span class="yaml-key">contracts:</span>
+    <span class="yaml-key">runs-on:</span> ubuntu-latest
+    <span class="yaml-key">steps:</span>
+      - <span class="yaml-key">uses:</span> actions/checkout@v6
+      - <span class="yaml-key">uses:</span> <span class="yaml-value">develra-dev/develra@v0</span></code></pre>
+        </div>
+      </section>
+
+      <section class="section shell faq-section" id="faq">
+        <div class="faq-heading">
+          <h2>Good questions, answered plainly.</h2>
+          <p>
+            Develra is intentionally small, conservative, and useful without a
+            hosted product.
+          </p>
+        </div>
+        <div class="faq-list">
+          <details open>
+            <summary>
+              Does Develra upload my code?
+              <span aria-hidden="true"></span>
+            </summary>
+            <div class="faq-answer">
+              <div class="faq-answer-inner">
+                <p>
+                  No. Default <code>scan</code> and <code>check</code> are
+                  offline, telemetry-free, and do not instantiate a network
+                  client.
+                </p>
+              </div>
+            </div>
+          </details>
+          <details>
+            <summary>
+              Is an installed SDK automatically considered active?
+              <span aria-hidden="true"></span>
+            </summary>
+            <div class="faq-answer">
+              <div class="faq-answer-inner">
+                <p>
+                  No. Package-only evidence is labeled <em>possible</em>.
+                  Imports, calls, endpoints, and supporting signals raise
+                  confidence.
+                </p>
+              </div>
+            </div>
+          </details>
+          <details>
+            <summary>
+              What languages are supported?
+              <span aria-hidden="true"></span>
+            </summary>
+            <div class="faq-answer">
+              <div class="faq-answer-inner">
+                <p>
+                  The first release supports JavaScript, TypeScript, Python, raw
+                  HTTP endpoints, and static project-level MCP JSON
+                  configuration.
+                </p>
+              </div>
+            </div>
+          </details>
+          <details>
+            <summary>
+              Can I add support for another provider?
+              <span aria-hidden="true"></span>
+            </summary>
+            <div class="faq-answer">
+              <div class="faq-answer-inner">
+                <p>
+                  Yes. Provider packs are declarative YAML validated against a
+                  public schema, with a template and contributor workflow in the
+                  repository.
+                </p>
+              </div>
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <section class="section shell final-cta">
+        <div class="cta-geometry" aria-hidden="true">
+          <span></span><span></span><span></span>
+        </div>
+        <h2>Know what your code calls.</h2>
+        <p>Scan locally. Commit the inventory. Review every change.</p>
+        <div class="command command-centered">
+          <code><span aria-hidden="true">$</span> npx develra scan</code>
+          <button
+            class="copy-button"
+            type="button"
+            data-copy="npx develra scan"
+            aria-label="Copy npx develra scan"
+          >
+            <svg viewBox="0 0 20 20" aria-hidden="true">
+              <rect x="7" y="7" width="9" height="9" rx="2" />
+              <path
+                d="M13 7V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"
+              />
+            </svg>
+            <span>Copy</span>
+          </button>
+        </div>
+        <p class="cta-note">Apache-2.0 · No signup · Runs offline</p>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="shell footer-shell">
+        <div>
+          <a class="brand" href="#top" aria-label="Develra home">
+            <img src="assets/favicon.svg" width="30" height="30" alt="" />
+            <span>develra</span>
+          </a>
+          <p>A local-first lockfile for external contracts.</p>
+        </div>
+        <div class="footer-links">
+          <a href="https://github.com/develra-dev/develra">GitHub</a>
+          <a href="https://github.com/develra-dev/develra#development">Docs</a>
+          <a href="https://github.com/develra-dev/develra/security/policy"
+            >Security</a
+          >
+          <a href="https://github.com/develra-dev/develra/blob/main/LICENSE"
+            >License</a
+          >
+        </div>
+        <p class="copyright">Built in the open.</p>
+      </div>
+    </footer>
+
+    <p class="sr-only" id="copy-status" aria-live="polite"></p>
+  </body>
+</html>
