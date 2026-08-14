@@ -31,9 +31,7 @@ derive or agree with the CLI package value.
 - [x] Run the manual **Release validation** workflow.
 - [x] Download `develra-release-candidate` and compare its manifest with the
       workflow logs.
-- [ ] Configure `main` branch protection to require the CI workflow. GitHub
-      requires making this repository public or upgrading the current plan
-      before branch protection is available.
+- [x] Configure `main` branch protection to require the CI workflow.
 - [x] Keep default workflow permissions read-only.
 
 Local equivalent:
@@ -48,18 +46,16 @@ This produces an audited npm archive and its checksum manifest under
 
 ## Before changing visibility
 
-- [ ] Confirm Apache-2.0 remains the intended license.
-- [ ] Confirm `develra` is still available with `npm view develra`.
-- [ ] Confirm the repository description, website, and topics are accurate.
-      The Vercel deployment and canonical custom domain are verified; the
-      repository website field and topics still need final review.
-- [ ] Confirm issue templates, the security policy, and private vulnerability
+- [x] Confirm Apache-2.0 remains the intended license.
+- [x] Confirm `develra` is still available with `npm view develra`.
+- [x] Confirm the repository description, website, and topics are accurate.
+- [x] Confirm issue templates, the security policy, and private vulnerability
       reporting are enabled.
-- [ ] Confirm no documentation claims npm, Marketplace, or hosted-service
+- [x] Confirm no documentation claims npm, Marketplace, or hosted-service
       availability before those surfaces exist.
-- [ ] Review the commit history—not only the current tree—for secrets.
-- [ ] Make `develra-dev/develra` public.
-- [ ] Rerun CI after the visibility change.
+- [x] Review the commit history—not only the current tree—for secrets.
+- [x] Make `develra-dev/develra` public.
+- [x] Rerun CI after the visibility change.
 
 ## First npm publication
 
@@ -72,9 +68,9 @@ npm login
 npm publish release-artifacts/develra-0.1.0.tgz --access public
 ```
 
-- [ ] Verify `https://www.npmjs.com/package/develra` renders the expected README,
+- [x] Verify `https://www.npmjs.com/package/develra` renders the expected README,
       repository, license, version, and zero runtime dependencies.
-- [ ] Verify from a clean temporary directory:
+- [x] Verify from a clean temporary directory:
 
   ```bash
   npx develra@0.1.0 --version
@@ -87,10 +83,10 @@ npm publish release-artifacts/develra-0.1.0.tgz --access public
 
 ## GitHub release and Action channel
 
-- [ ] Create the immutable exact tag `v0.1.0` from the reviewed release commit.
-- [ ] Create or update the moving `v0` tag to the same commit.
-- [ ] Push tags only after npm publication and owner review.
-- [ ] Create the GitHub release from `docs/releases/v0.1.0.md`.
+- [x] Create the immutable exact tag `v0.1.0` from the reviewed release commit.
+- [x] Create or update the moving `v0` tag to the same commit.
+- [x] Push tags only after npm publication and owner review.
+- [x] Create the GitHub release from `docs/releases/v0.1.0.md`.
 - [ ] Verify a clean repository can run:
 
   ```yaml
@@ -109,10 +105,10 @@ has passed release validation. Never move an exact version tag.
 
 ## Post-release verification
 
-- [ ] `npx develra@0.1.0 scan` works without a Develra account.
-- [ ] An offline scan performs no network request.
-- [ ] Repeated scans produce byte-identical `develra.lock` files.
+- [x] `npx develra@0.1.0 scan` works without a Develra account.
+- [x] An offline scan performs no network request.
+- [x] Repeated scans produce byte-identical `develra.lock` files.
 - [ ] `develra-dev/develra@v0` runs without installing workspace dependencies.
-- [ ] The npm and GitHub release source URLs resolve to the reviewed commit.
+- [x] The npm and GitHub release source URLs resolve to the reviewed commit.
 - [ ] Open follow-up issues for known limitations rather than silently expanding
       the first-release scope.
