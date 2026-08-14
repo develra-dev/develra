@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title">
+  <title id="title">Develra</title>
+  <defs>
+    <linearGradient id="g" x1="9" y1="9" x2="55" y2="55" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#ff754f"/>
+      <stop offset=".5" stop-color="#ff5a2c"/>
+      <stop offset="1" stop-color="#3bd8d0"/>
+    </linearGradient>
+  </defs>
+  <rect x="2" y="2" width="60" height="60" rx="18" fill="#141414" stroke="#303030" stroke-width="2"/>
+  <path d="M18 16h11c12 0 19 6.2 19 16s-7 16-19 16H18V16Z" fill="none" stroke="url(#g)" stroke-width="6" stroke-linejoin="round"/>
+  <path d="M26 27h12M26 37h8" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
+</svg>
