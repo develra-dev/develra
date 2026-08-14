@@ -1,0 +1,49 @@
+name: Publish npm
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Exact immutable release tag to publish (for example, v0.1.2)
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: npm-publish
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    name: Publish trusted release
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    environment: npm
+    permissions:
+      contents: read
+      id-token: write
+    env:
+      DEVELRA_RELEASE_TAG: ${{ inputs.tag }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ inputs.tag }}
+      - uses: pnpm/action-setup@v6
+        with:
+          version: 10.15.0
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: pnpm
+      - name: Install trusted-publishing npm CLI
+        run: npm install --global npm@11.5.1
+      - name: Validate tag and package identity
+        run: node scripts/validate-release-tag.mjs
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm release:validate
+      - run: git diff --exit-code -- packages/action/dist
+      - name: Publish audited archive through npm OIDC
+        run: npm publish "release-artifacts/develra-${DEVELRA_RELEASE_TAG#v}.tgz" --access public

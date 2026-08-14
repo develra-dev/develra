@@ -478,3 +478,28 @@ Add entries in this format:
 - Follow-up ticket: Monitor Search Console coverage and queries without adding
   speculative landing pages; evaluate custom events only after a separate
   privacy and measurement decision.
+
+## 2026-08-14 — Tokenless npm publishing workflow
+
+- Decision or implementation summary: Added an owner-triggered npm publishing
+  workflow prepared for npm trusted publishing. The publish job checks out an
+  explicitly supplied immutable tag, validates that the tag matches the
+  canonical CLI package version and release notes, reruns the full release
+  validation, and publishes the audited archive through GitHub OIDC. The job is
+  bound to the `npm` GitHub environment and does not contain or consume a
+  long-lived npm token.
+- Alternatives considered: Automatic publishing on every pushed tag was
+  rejected because a tag alone should not be sufficient authorization to
+  publish. Reusing a traditional automation token was rejected because npm
+  trusted publishing provides short-lived scoped credentials and automatic
+  provenance. Staged publishing remains deferred until the simpler direct
+  release workflow has been exercised successfully.
+- Validation run: Targeted release-workflow tests and the full local
+  `pnpm verify` suite.
+- Known limitation: The npm-side trusted-publisher identity must still be bound
+  to `develra-dev/develra`, `publish-npm.yml`, and the `npm` environment through
+  the package settings. It can only be proven end to end during the next
+  intentional package release.
+- Follow-up ticket: Configure the npm package binding and GitHub environment
+  protection, verify the workflow during the next release, then disallow
+  traditional npm publishing tokens.
