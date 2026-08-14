@@ -1,0 +1,12 @@
+{
+  "openapi": "3.1.0",
+  "info": { "title": "Synthetic Widget API", "version": "1.0.0" },
+  "paths": {
+    "/v1/widgets/{id}": {
+      "get": {
+        "operationId": "getWidget",
+        "responses": { "200": { "description": "Widget" } }
+      }
+    }
+  }
+}

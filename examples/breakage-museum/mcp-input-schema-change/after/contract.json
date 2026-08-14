@@ -1,0 +1,18 @@
+{
+  "protocolVersion": "2025-11-25",
+  "tools": [
+    {
+      "name": "render_widget",
+      "description": "Render a synthetic widget.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "format": { "type": "string", "enum": ["html", "text"] },
+          "template": { "type": "string" }
+        },
+        "required": ["format", "template"],
+        "additionalProperties": false
+      }
+    }
+  ]
+}

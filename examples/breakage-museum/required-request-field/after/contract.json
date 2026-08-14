@@ -1,0 +1,32 @@
+{
+  "openapi": "3.1.0",
+  "info": { "title": "Synthetic Widget API", "version": "1.1.0" },
+  "paths": {
+    "/v1/widgets": {
+      "post": {
+        "operationId": "createWidget",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/CreateWidget" }
+            }
+          }
+        },
+        "responses": { "201": { "description": "Created" } }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "CreateWidget": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "owner_id": { "type": "string" }
+        },
+        "required": ["name", "owner_id"]
+      }
+    }
+  }
+}

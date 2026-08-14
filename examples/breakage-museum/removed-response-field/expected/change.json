@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "id": "removed-response-field",
+  "source_type": "openapi",
+  "synthetic": true,
+  "license": "Apache-2.0",
+  "change": {
+    "kind": "field_removed",
+    "severity": "breaking",
+    "scope": "response",
+    "operations": ["getWidget"],
+    "summary": "The Widget response no longer declares legacy_code.",
+    "pointer": "/components/schemas/Widget/properties/legacy_code",
+    "before": { "state": "present", "value": { "type": "string" } },
+    "after": { "state": "absent" }
+  }
+}

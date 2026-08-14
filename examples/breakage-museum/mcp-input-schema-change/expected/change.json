@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "id": "mcp-input-schema-change",
+  "source_type": "mcp",
+  "synthetic": true,
+  "license": "Apache-2.0",
+  "change": {
+    "kind": "mcp_input_required_field_added",
+    "severity": "breaking",
+    "scope": "mcp_tool_input",
+    "operations": ["render_widget"],
+    "summary": "render_widget now requires the format input.",
+    "pointer": "/tools/0/inputSchema/required",
+    "before": { "state": "present", "value": ["template"] },
+    "after": { "state": "present", "value": ["format", "template"] }
+  }
+}

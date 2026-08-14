@@ -741,7 +741,7 @@ Acceptance:
 - negative fixture is mandatory;
 - CI scopes useful failure messages to provider.
 
-## [ ] DVL-052 — Add Breakage Museum starter corpus
+## [x] DVL-052 — Add Breakage Museum starter corpus
 
 **Depends on:** DVL-033, DVL-034
 

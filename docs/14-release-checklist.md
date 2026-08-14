@@ -80,6 +80,8 @@ npm publish release-artifacts/develra-0.1.0.tgz --access public
 
 - [x] Add a manual, tag-validated GitHub Actions workflow that publishes the
       audited archive through npm trusted publishing without a long-lived token.
+- [x] Create the `npm` GitHub environment, restrict it to protected branches,
+      and require approval from the package owner before publishing.
 - [ ] In the `develra` package settings on npm, configure the trusted publisher:
 
   ```text
@@ -101,7 +103,7 @@ match the version in `apps/cli/package.json`, reruns the complete release audit,
 and publishes only the resulting allowlisted archive. npm CLI `11.5.1` is pinned
 because that is the minimum version supporting trusted publishing. The `npm`
 GitHub environment is also included in the npm trusted-publisher identity; add
-required reviewers to that environment before the first trusted release.
+or update required reviewers there when package maintainers change.
 
 ## GitHub release and Action channel
 

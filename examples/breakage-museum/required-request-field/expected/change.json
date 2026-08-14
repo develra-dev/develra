@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "id": "required-request-field",
+  "source_type": "openapi",
+  "synthetic": true,
+  "license": "Apache-2.0",
+  "change": {
+    "kind": "required_field_added",
+    "severity": "breaking",
+    "scope": "request",
+    "operations": ["createWidget"],
+    "summary": "createWidget requests must now include owner_id.",
+    "pointer": "/components/schemas/CreateWidget/required",
+    "before": { "state": "present", "value": ["name"] },
+    "after": { "state": "present", "value": ["name", "owner_id"] }
+  }
+}
