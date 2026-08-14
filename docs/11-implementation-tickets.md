@@ -781,7 +781,7 @@ Acceptance:
 - bug template asks for minimal reproducible fixture;
 - provider template asks for official source links.
 
-## [ ] DVL-054 — Prepare launch artifacts
+## [x] DVL-054 — Prepare launch artifacts
 
 **Depends on:** DVL-050 through DVL-053
 
@@ -802,7 +802,7 @@ Acceptance:
 - star request follows demonstrated value;
 - no spam or automated outreach workflow.
 
-## [ ] DVL-055 — Run release candidate audit
+## [x] DVL-055 — Run release candidate audit
 
 **Depends on:** all M0–M5 tickets
 

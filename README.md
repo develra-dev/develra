@@ -199,6 +199,9 @@ pnpm site:preview
 The checked-in Vercel configuration validates and deploys only `site/`. See the
 [website notes](docs/15-website.md) for preview and launch boundaries.
 
+Maintainer-ready launch copy and the reproducible terminal recording source are
+collected in [the launch artifacts](docs/16-launch-artifacts.md).
+
 See [CONTRIBUTING.md](CONTRIBUTING.md), [SECURITY.md](SECURITY.md), and the
 [implementation roadmap](docs/11-implementation-tickets.md). Maintainers use
 the owner-controlled [release checklist](docs/14-release-checklist.md); no

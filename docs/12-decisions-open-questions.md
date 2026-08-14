@@ -526,3 +526,47 @@ Add entries in this format:
   monitoring.
 - Follow-up ticket: Complete the remaining DVL-054 launch collateral, then use
   this corpus as input to the optional registry work beginning at DVL-060.
+
+## 2026-08-14 — DVL-054 launch collateral
+
+- Decision or implementation summary: Completed the remaining launch-source
+  artifacts in one reviewable document: a Show HN draft, technical article
+  outline, Marketplace copy, and links to release notes, the sample graph, and
+  ten bounded contributor tasks. Added a VHS terminal-recording source that
+  runs the published CLI against the checked-in TypeScript fixture without
+  writing to it.
+- Alternatives considered: Publishing posts automatically and adding outreach
+  automation were rejected. The copy asks for a star only after demonstrated
+  value, calls out current limits, and does not present optional upstream
+  monitoring as shipped.
+- Validation run: Launch claims were checked against the README, CLI contract,
+  Action metadata, release notes, and the full local release audit.
+- Known limitation: The source assets are prepared, but the terminal GIF and
+  launch posts are intentionally not generated or published automatically.
+- Follow-up ticket: Run the final DVL-055 audit, then publish selected launch
+  material manually when the owner is ready.
+
+## 2026-08-14 — DVL-055 final M5 release audit
+
+- Decision or implementation summary: Closed the first-release audit after all
+  M0–M5 implementation tickets were complete. Rebuilt and audited the standalone
+  npm archive and bundled Action, reran offline package and Action smoke tests,
+  checked every local validation suite, and confirmed that GitHub reports no
+  open Dependabot or secret-scanning alerts.
+- Alternatives considered: The audit did not create another package version,
+  move the `v0` tag, or republish existing launch material because no runtime
+  behavior changed and those external release actions require a separately
+  intentional versioned release.
+- Validation run: `pnpm release:validate`, including 22 unit/integration tests,
+  10 repository/Breakage Museum fixtures, 6 bundled Action tests, lint,
+  formatting, site validation, typechecking, builds, offline packaged CLI smoke,
+  and the release archive audit. `pnpm audit --prod` reported no known
+  vulnerabilities; GitHub reported zero open Dependabot and secret-scanning
+  alerts.
+- Known limitation: The npm trusted-publisher form and end-to-end OIDC proof
+  remain owner steps for the next intentional release. Search indexing,
+  analytics accumulation, and launch-post publication are external and
+  asynchronous.
+- Follow-up ticket: Finish the npm trusted-publisher binding, then treat DVL-060
+  as the next optional product milestone rather than silently expanding the
+  shipped local scanner.
