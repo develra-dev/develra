@@ -162,6 +162,19 @@ Read the [provider-pack specification](docs/05-provider-pack-spec.md) before
 contributing matchers. New operations should include safe positive, alias, and
 negative fixtures.
 
+## Breakage Museum
+
+The [Breakage Museum](examples/breakage-museum/) is a synthetic, executable
+corpus of representative OpenAPI and MCP contract changes: removed response
+fields, newly required request fields, response enum expansion, removed
+operations, and stricter MCP tool inputs. It provides regression data for
+future explicit upstream-change work without claiming that the current local
+scanner monitors vendors.
+
+```bash
+pnpm test:fixtures
+```
+
 ## Development
 
 Requires Node.js 22 or newer and pnpm 10.

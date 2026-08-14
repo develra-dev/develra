@@ -22,7 +22,7 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "typecheck": "tsc -p tsconfig.json --noEmit && pnpm -r typecheck",
-    "test": "vitest run --exclude tests/fixtures/** --exclude tests/action/**",
+    "test": "vitest run --exclude \"tests/fixtures/**\" --exclude \"tests/action/**\"",
     "test:fixtures": "vitest run tests/fixtures",
     "test:action": "vitest run tests/action",
     "goldens:update": "pnpm build && node scripts/update-goldens.mjs",

@@ -1,0 +1,23 @@
+{
+  "version": 1,
+  "id": "operation-removed",
+  "source_type": "openapi",
+  "synthetic": true,
+  "license": "Apache-2.0",
+  "change": {
+    "kind": "operation_removed",
+    "severity": "breaking",
+    "scope": "operation",
+    "operations": ["getWidget"],
+    "summary": "GET /v1/widgets/{id} and getWidget are no longer declared.",
+    "pointer": "/paths/~1v1~1widgets~1{id}/get",
+    "before": {
+      "state": "present",
+      "value": {
+        "operationId": "getWidget",
+        "responses": { "200": { "description": "Widget" } }
+      }
+    },
+    "after": { "state": "absent" }
+  }
+}

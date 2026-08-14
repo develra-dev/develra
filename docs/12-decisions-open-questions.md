@@ -487,7 +487,8 @@ Add entries in this format:
   canonical CLI package version and release notes, reruns the full release
   validation, and publishes the audited archive through GitHub OIDC. The job is
   bound to the `npm` GitHub environment and does not contain or consume a
-  long-lived npm token.
+  long-lived npm token. The environment is restricted to protected branches and
+  requires approval from the package owner.
 - Alternatives considered: Automatic publishing on every pushed tag was
   rejected because a tag alone should not be sufficient authorization to
   publish. Reusing a traditional automation token was rejected because npm
@@ -500,6 +501,28 @@ Add entries in this format:
   to `develra-dev/develra`, `publish-npm.yml`, and the `npm` environment through
   the package settings. It can only be proven end to end during the next
   intentional package release.
-- Follow-up ticket: Configure the npm package binding and GitHub environment
-  protection, verify the workflow during the next release, then disallow
-  traditional npm publishing tokens.
+- Follow-up ticket: Configure the npm package binding, verify the workflow
+  during the next release, then disallow traditional npm publishing tokens.
+
+## 2026-08-14 — DVL-052 Breakage Museum starter corpus
+
+- Decision or implementation summary: Added five small, synthetic external-
+  contract changes under `examples/breakage-museum/`: removed response field,
+  optional-to-required request field, response enum expansion, removed endpoint
+  operation, and stricter MCP tool input schema. Every case includes bounded
+  before/after snapshots, human-readable impact notes, and a machine-readable
+  expected change with an exact JSON Pointer assertion. Fixture tests discover
+  the corpus and execute those assertions deterministically. Quoted the main
+  test command's exclusion globs so adding fixture files cannot change shell
+  argument expansion or accidentally replace the unit/integration selection.
+- Alternatives considered: Vendor specifications and real incident excerpts
+  were rejected to avoid uncertain licensing and accidental vendor claims. A
+  production OpenAPI/MCP diff engine was rejected because DVL-052 requires a
+  corpus, while general upstream change analysis remains outside the first
+  local scanner milestone.
+- Validation run: `pnpm test:fixtures`, full `pnpm verify`, and release audit.
+- Known limitation: The corpus defines expected structural change vocabulary;
+  it is not wired into `scan` or `check` and does not imply continuous upstream
+  monitoring.
+- Follow-up ticket: Complete the remaining DVL-054 launch collateral, then use
+  this corpus as input to the optional registry work beginning at DVL-060.

@@ -1,0 +1,20 @@
+{
+  "version": 1,
+  "id": "response-enum-expansion",
+  "source_type": "openapi",
+  "synthetic": true,
+  "license": "Apache-2.0",
+  "change": {
+    "kind": "enum_value_added",
+    "severity": "warning",
+    "scope": "response",
+    "operations": ["listWidgets"],
+    "summary": "Widget status responses may now contain archived.",
+    "pointer": "/components/schemas/Widget/properties/status/enum",
+    "before": { "state": "present", "value": ["active", "draft"] },
+    "after": {
+      "state": "present",
+      "value": ["active", "archived", "draft"]
+    }
+  }
+}
