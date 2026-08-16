@@ -21,27 +21,26 @@
 
 ## In flight
 
-- No implementation ticket is active.
+- DVL-021 and DVL-028 reconciled in `docs/11-implementation-tickets.md` to
+  reflect shipped ten-provider release (v0.1.1). DVL-015 confirmed open.
 - npm trusted publishing is configured, but its end-to-end OIDC path remains
   unproven until the next intentional release.
 - M6 registry work and resolved Python lockfile parsing have not started.
 
 ## Next 3
 
-1. **Agent:** Reconcile the stale DVL-021 and DVL-028 checkboxes in
-   `docs/11-implementation-tickets.md` with the shipped provider packs,
-   fixtures, and completed release audit. Keep DVL-015 open unless reliable
-   Python lockfile support is actually implemented.
-2. **Maintainer:** Choose the next product scope: bounded Python lockfile support
+1. **Maintainer:** Choose the next product scope: bounded Python lockfile support
    (DVL-015), optional registry work beginning with DVL-060, or another explicit
    priority. M6 is not standing authorization to add networked behavior.
-3. **Prepare:** For the next intentional package release, verify the immutable
+2. **Prepare:** For the next intentional package release, verify the immutable
    tag and `apps/cli/package.json` version, run `pnpm release:validate` and
    `pnpm audit --prod`, then exercise trusted publishing. Do not publish or move
    tags without explicit maintainer authorization.
+3. **TBD:** Next priority to be determined after product scope choice.
 
 ## Recent decisions
 
+- DVL-021 and DVL-028 completion checkboxes updated to match v0.1.1 reality.
 - `apps/cli/package.json` is the only publishable version source; internal
   workspace packages use `0.0.0-private`.
 - v0.1.1 changed only the bundled Action's vulnerable HTTP dependency; scanner
