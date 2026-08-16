@@ -97,7 +97,7 @@ Initial classes:
 - npm manifest: `package.json`;
 - npm lockfiles: `package-lock.json`, `pnpm-lock.yaml`, `yarn.lock`;
 - Python manifests: `pyproject.toml`, `requirements*.txt`, `Pipfile`;
-- Python lockfiles when parser support is reliable;
+- Python lockfiles: `poetry.lock`, `uv.lock`, `Pipfile.lock`;
 - JS/TS source;
 - Python source;
 - MCP project config;
@@ -126,6 +126,12 @@ Package version precedence:
 2. exact manifest version;
 3. normalized declared range;
 4. omitted.
+
+Python lockfiles contribute resolved versions only for packages that a Python
+manifest in the same directory already declares as direct. Locked transitive
+packages are never promoted to direct dependencies, non-registry sources (path,
+editable, virtual, git, URL) are skipped, and a package locked to multiple
+marker-specific versions falls back to manifest evidence.
 
 Do not attempt package installation or run package-manager commands during scan.
 

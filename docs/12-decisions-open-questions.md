@@ -569,3 +569,31 @@ Add entries in this format:
   asynchronous.
 - Follow-up ticket: Treat DVL-060 as the next optional product milestone rather
   than silently expanding the shipped local scanner.
+
+## 2026-08-16 — DVL-015 — Resolved Python lockfile support
+
+- Decision or implementation summary: Implemented resolved direct versions from
+  `poetry.lock`, `uv.lock`, and `Pipfile.lock` using the already-bundled
+  bounded TOML and duplicate-key-aware JSON parsers. Lock data is correlated
+  with Python manifest evidence from the same directory, so only packages a
+  manifest already declares direct gain a resolved version and locked
+  transitive packages never become direct. Non-registry sources (path,
+  editable, virtual, git, URL) and packages locked to multiple marker-specific
+  versions fall back to manifest evidence. Malformed, orphaned, or unsupported
+  lock inputs produce at most one concise diagnostic per file.
+- Alternatives considered: Emitting every locked package was rejected because
+  it would violate the transitive-versus-direct invariant. Reading uv's
+  root-package dependency lists for directness was rejected in favor of one
+  uniform manifest correlation across all three formats. PEP 751 `pylock.toml`
+  and `pdm.lock` remain deferred because their directness cannot be determined
+  with the same confidence and no bounded fixture coverage exists yet.
+- Validation run: New unit tests for resolved-version precedence, PyPI name
+  normalization, transitive exclusion, ambiguity fallback, and single-per-file
+  diagnostics; a new `python-locked` repository fixture with a byte-identical
+  golden lockfile; and a fixture assertion that no `child_process` API is
+  invoked during scanning. Full local gate run before commit.
+- Known limitation: Correlation is same-directory only, so a lockfile without a
+  companion manifest in its own directory contributes no versions and reports
+  one info diagnostic. Yarn lockfiles remain deferred.
+- Follow-up ticket: None; consider `pylock.toml` when the format stabilizes in
+  real repositories.

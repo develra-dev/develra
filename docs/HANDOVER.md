@@ -1,4 +1,4 @@
-# HANDOVER — updated 2026-08-15
+# HANDOVER — updated 2026-08-16
 
 ## Status
 
@@ -21,17 +21,20 @@
 
 ## In flight
 
-- DVL-021 and DVL-028 reconciled in `docs/11-implementation-tickets.md` to
-  reflect shipped ten-provider release (v0.1.1). DVL-015 confirmed open.
+- DVL-015 implemented on branch
+  `pirouetta/11-implement-dvl-015-as-a-complet`: resolved direct versions from
+  `poetry.lock`, `uv.lock`, and `Pipfile.lock`, correlated with same-directory
+  Python manifest evidence. Unmerged and unreleased.
 - npm trusted publishing is configured, but its end-to-end OIDC path remains
   unproven until the next intentional release.
-- M6 registry work and resolved Python lockfile parsing have not started.
+- M6 registry work has not started.
 
 ## Next 3
 
-1. **Forrest:** Choose the next product scope: bounded Python lockfile support
-   (DVL-015), optional registry work beginning with DVL-060, or another explicit
-   priority. M6 is not standing authorization to add networked behavior.
+1. **Forrest:** Review and merge the DVL-015 branch, then choose the next
+   product scope: optional registry work beginning with DVL-060 or another
+   explicit priority. M6 is not standing authorization to add networked
+   behavior.
 2. **Prepare:** For the next intentional package release, verify the immutable
    tag and `apps/cli/package.json` version, run `pnpm release:validate` and
    `pnpm audit --prod`, then exercise trusted publishing. Do not publish or move
@@ -40,6 +43,9 @@
 
 ## Recent decisions
 
+- DVL-015 shipped only the three bounded Python lock formats; `pylock.toml`,
+  `pdm.lock`, and Yarn stay deferred, and locked transitive packages never
+  become direct dependencies.
 - DVL-021 and DVL-028 completion checkboxes updated to match v0.1.1 reality.
 - `apps/cli/package.json` is the only publishable version source; internal
   workspace packages use `0.0.0-private`.
@@ -63,9 +69,9 @@
 - `develra.lock` must remain timestamp-free, canonically sorted, and
   byte-identical for equivalent scans. Installation alone is only weak
   evidence; never report it as confirmed use.
-- DVL-021 and DVL-028 are unchecked but implemented. DVL-015 is genuinely
-  deferred. Do not reimplement completed provider work or pretend Python
-  lockfiles are supported.
+- Python lockfile support covers only `poetry.lock`, `uv.lock`, and
+  `Pipfile.lock` via same-directory manifest correlation. Never emit every
+  locked package: transitive packages must not become direct dependencies.
 - Domain logic belongs in reusable packages, reporters consume normalized scan
   results, and provider packs remain declarative untrusted data.
 - Action source or runtime dependency changes require rebuilding and verifying
