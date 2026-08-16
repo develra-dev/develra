@@ -314,7 +314,7 @@ Acceptance:
 - unsupported matcher kinds fail validation;
 - indexes are immutable after load.
 
-## [ ] DVL-021 — Add provider template and first three packs
+## [x] DVL-021 — Add provider template and first three packs
 
 **Depends on:** DVL-020
 
@@ -428,7 +428,7 @@ Acceptance:
 - Stripe-like override behavior does not produce an unjustified effective-date claim;
 - tests cover redaction.
 
-## [ ] DVL-028 — Add remaining initial provider packs
+## [x] DVL-028 — Add remaining initial provider packs
 
 **Depends on:** DVL-024 through DVL-027
 
