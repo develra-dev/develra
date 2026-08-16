@@ -129,15 +129,16 @@ The first release supports:
 
 - JavaScript and TypeScript (`package.json`, npm and pnpm lockfiles, ESM,
   CommonJS, SDK calls, `fetch`, Axios, Got, and Ky);
-- Python (`pyproject.toml`, requirements and Pipfile manifests, imports, SDK
+- Python (`pyproject.toml`, requirements and Pipfile manifests, resolved direct
+  versions from `poetry.lock`, `uv.lock`, and `Pipfile.lock`, imports, SDK
   calls, and Requests-style endpoints);
 - static project-level MCP JSON configurations;
 - ten bundled provider packs: Anthropic, Clerk, GitHub, OpenAI, Resend,
   Shopify, Slack, Stripe, Supabase, and Twilio.
 
 Detection stays conservative. It does not evaluate variables, execute dynamic
-imports, inspect runtime traffic, resolve Python lockfiles yet, or claim a
-specific provider for an unknown custom domain. Recoverable parse and scan
+imports, inspect runtime traffic, promote locked transitive packages to direct
+dependencies, or claim a specific provider for an unknown custom domain. Recoverable parse and scan
 limits are reported as diagnostics instead of silently inventing certainty.
 
 ## Privacy and safety

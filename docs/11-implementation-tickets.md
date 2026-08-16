@@ -240,11 +240,16 @@ Acceptance:
 - malformed files create diagnostics and continue;
 - exact ecosystem normalization is tested.
 
-## [ ] DVL-015 — Parse Python lockfiles where reliable
+## [x] DVL-015 — Parse Python lockfiles where reliable
 
 **Depends on:** DVL-014
 
 Implement only lock formats with a reliable parser and fixture coverage. It is acceptable to defer a format rather than parse it incorrectly.
+
+Shipped formats: `poetry.lock`, `uv.lock`, and `Pipfile.lock`, correlated with
+same-directory manifest evidence so locked transitive packages never become
+direct. Other Python lock formats (for example PEP 751 `pylock.toml` and
+`pdm.lock`) remain deferred.
 
 Acceptance:
 
