@@ -18,6 +18,7 @@ import {
   parseLockfile,
   parseMcpConfig,
   parseNpmManifest,
+  parsePythonLock,
   parseYamlUnique,
   resolveReadableInsideRoot,
   scanJavascriptSource,
@@ -164,6 +165,158 @@ describe("parsers and detection", () => {
     expect(
       result.evidence.some((item) => item.operationId === "chat.postMessage"),
     ).toBe(true);
+  });
+
+  it("resolves only manifest-direct packages from poetry.lock", () => {
+    const result = parsePythonLock(
+      [
+        "[[package]]",
+        'name = "anthropic"',
+        'version = "0.69.0"',
+        "",
+        "[[package]]",
+        'name = "Typing_Extensions"',
+        'version = "4.12.2"',
+        "",
+        "[[package]]",
+        'name = "httpx"',
+        'version = "0.28.1"',
+        "",
+        "[[package]]",
+        'name = "local-helper"',
+        'version = "0.0.1"',
+        "",
+        "[package.source]",
+        'type = "directory"',
+        'url = "helpers/local"',
+      ].join("\n"),
+      "poetry.lock",
+      new Set(["anthropic", "typing-extensions", "local-helper"]),
+    );
+    expect(result.diagnostics).toEqual([]);
+    expect(
+      result.evidence.map((item) => ({
+        kind: item.kind,
+        resolved: item.metadata?.resolved,
+        ...item.package,
+      })),
+    ).toEqual([
+      {
+        kind: "lockfile",
+        resolved: true,
+        ecosystem: "pypi",
+        name: "anthropic",
+        version: "0.69.0",
+        direct: true,
+      },
+      {
+        kind: "lockfile",
+        resolved: true,
+        ecosystem: "pypi",
+        name: "typing-extensions",
+        version: "4.12.2",
+        direct: true,
+      },
+    ]);
+  });
+
+  it("resolves uv.lock registry entries and skips virtual and ambiguous ones", () => {
+    const result = parsePythonLock(
+      [
+        "version = 1",
+        "",
+        "[[package]]",
+        'name = "fixture-project"',
+        'version = "0.0.0"',
+        'source = { virtual = "." }',
+        "",
+        "[[package]]",
+        'name = "requests"',
+        'version = "2.32.4"',
+        'source = { registry = "https://pypi.org/simple" }',
+        "",
+        "[[package]]",
+        'name = "pinned-twice"',
+        'version = "1.0.0"',
+        'source = { registry = "https://pypi.org/simple" }',
+        "",
+        "[[package]]",
+        'name = "pinned-twice"',
+        'version = "2.0.0"',
+        'source = { registry = "https://pypi.org/simple" }',
+      ].join("\n"),
+      "uv.lock",
+      new Set(["fixture-project", "requests", "pinned-twice"]),
+    );
+    expect(result.diagnostics).toEqual([]);
+    expect(result.evidence.map((item) => item.package)).toEqual([
+      {
+        ecosystem: "pypi",
+        name: "requests",
+        version: "2.32.4",
+        direct: true,
+      },
+    ]);
+  });
+
+  it("resolves Pipfile.lock pins without promoting transitive packages", () => {
+    const result = parsePythonLock(
+      JSON.stringify({
+        _meta: { hash: { sha256: "0" } },
+        default: {
+          Requests: { version: "==2.32.4" },
+          urllib3: { version: "==2.5.0" },
+          "vcs-dep": { git: "https://example.invalid/repo.git" },
+        },
+        develop: { pytest: { version: "==8.3.2" } },
+      }),
+      "Pipfile.lock",
+      new Set(["requests", "pytest", "vcs-dep"]),
+    );
+    expect(result.diagnostics).toEqual([]);
+    expect(result.evidence.map((item) => item.package)).toEqual([
+      { ecosystem: "pypi", name: "pytest", version: "8.3.2", direct: true },
+      { ecosystem: "pypi", name: "requests", version: "2.32.4", direct: true },
+    ]);
+  });
+
+  it("reports at most one concise diagnostic per malformed or unmatched lockfile", () => {
+    const malformed = parsePythonLock(
+      "[[package]\nname = broken",
+      "poetry.lock",
+      new Set(["anthropic"]),
+    );
+    expect(malformed.evidence).toEqual([]);
+    expect(malformed.diagnostics).toHaveLength(1);
+    expect(malformed.diagnostics[0]).toMatchObject({
+      code: "DVL_PARSE_POETRY_LOCK",
+      severity: "warning",
+      file: "poetry.lock",
+    });
+
+    const unsupported = parsePythonLock(
+      "anything",
+      "pdm.lock",
+      new Set(["anthropic"]),
+    );
+    expect(unsupported.evidence).toEqual([]);
+    expect(unsupported.diagnostics).toHaveLength(1);
+    expect(unsupported.diagnostics[0]).toMatchObject({
+      code: "DVL_LOCK_PYTHON_UNSUPPORTED",
+      severity: "info",
+    });
+
+    const orphaned = parsePythonLock(
+      '[[package]]\nname = "anthropic"\nversion = "0.69.0"\n',
+      "uv.lock",
+      new Set(),
+    );
+    expect(orphaned.evidence).toEqual([]);
+    expect(orphaned.diagnostics).toHaveLength(1);
+    expect(orphaned.diagnostics[0]).toMatchObject({
+      code: "DVL_LOCK_PYTHON_NO_MANIFEST",
+      severity: "info",
+    });
   });
 
   it("redacts MCP arguments, environment values, URL paths, and queries", () => {

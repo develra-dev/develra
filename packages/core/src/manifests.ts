@@ -356,20 +356,174 @@ export function parsePythonManifest(
   }
 }
 
-export function parsePythonLock(
-  _text: string,
+interface LockedPackage {
+  readonly name: string;
+  readonly version: string;
+}
+
+function resolvedDirectEvidence(
+  locked: readonly LockedPackage[],
+  directNames: ReadonlySet<string>,
   relativePath: string,
+): Evidence[] {
+  const versions = new Map<string, Set<string>>();
+  for (const item of locked) {
+    if (!directNames.has(item.name)) continue;
+    const existing = versions.get(item.name) ?? new Set<string>();
+    existing.add(item.version);
+    versions.set(item.name, existing);
+  }
+  const evidence: Evidence[] = [];
+  for (const name of [...versions.keys()].sort()) {
+    const candidates = versions.get(name);
+    // Marker- or platform-specific locks can pin one package to several
+    // versions. That is ambiguous, so fall back to manifest evidence.
+    if (candidates?.size !== 1) continue;
+    const version = [...candidates][0];
+    if (!version) continue;
+    addPackageEvidence(
+      evidence,
+      relativePath,
+      "lockfile",
+      { ecosystem: "pypi", name, version, direct: true },
+      { resolved: true },
+    );
+  }
+  return evidence;
+}
+
+function tomlLockedPackages(
+  text: string,
+  isRegistrySource: (source: Record<string, unknown> | undefined) => boolean,
+): LockedPackage[] {
+  const root = asRecord(parseToml(text));
+  if (!root) throw new TypeError("Expected a TOML table");
+  const locked: LockedPackage[] = [];
+  for (const rawEntry of Array.isArray(root.package) ? root.package : []) {
+    const entry = asRecord(rawEntry);
+    const name = stringValue(entry?.name);
+    const version = stringValue(entry?.version);
+    if (!entry || !name || !version) continue;
+    // Only registry-resolved entries carry trustworthy contract versions;
+    // path, editable, virtual, git, and URL sources are skipped.
+    if (!isRegistrySource(asRecord(entry.source))) continue;
+    locked.push({ name: normalizePackageName("pypi", name), version });
+  }
+  return locked;
+}
+
+function poetryLockedPackages(text: string): LockedPackage[] {
+  return tomlLockedPackages(text, (source) => {
+    const type = stringValue(source?.type);
+    return type === undefined || type === "legacy";
+  });
+}
+
+function uvLockedPackages(text: string): LockedPackage[] {
+  return tomlLockedPackages(
+    text,
+    (source) => source === undefined || "registry" in source,
+  );
+}
+
+function pipfileLockedPackages(
+  text: string,
+  relativePath: string,
+): LockedPackage[] {
+  const root = asRecord(parseJsonUnique(text, relativePath));
+  if (!root) throw new TypeError("Expected a JSON object");
+  const locked: LockedPackage[] = [];
+  for (const section of ["default", "develop"]) {
+    for (const [rawName, rawValue] of Object.entries(
+      asRecord(root[section]) ?? {},
+    )) {
+      const version = stringValue(asRecord(rawValue)?.version);
+      // Registry entries always pin "==version"; VCS and path entries do not.
+      if (!version?.startsWith("==")) continue;
+      locked.push({
+        name: normalizePackageName("pypi", rawName),
+        version: version.slice(2),
+      });
+    }
+  }
+  return locked;
+}
+
+const PYTHON_LOCK_FORMATS: Readonly<
+  Record<
+    string,
+    {
+      readonly parseErrorCode: string;
+      readonly parse: (text: string, relativePath: string) => LockedPackage[];
+    }
+  >
+> = {
+  "poetry.lock": {
+    parseErrorCode: "DVL_PARSE_POETRY_LOCK",
+    parse: poetryLockedPackages,
+  },
+  "uv.lock": { parseErrorCode: "DVL_PARSE_UV_LOCK", parse: uvLockedPackages },
+  "pipfile.lock": {
+    parseErrorCode: "DVL_PARSE_PIPFILE_LOCK",
+    parse: pipfileLockedPackages,
+  },
+};
+
+export function parsePythonLock(
+  text: string,
+  relativePath: string,
+  directNames: ReadonlySet<string>,
 ): AdapterEvidenceResult {
-  return {
-    evidence: [],
-    diagnostics: [
-      {
-        code: "DVL_LOCK_PYTHON_UNSUPPORTED",
-        severity: "info",
-        message:
-          "This Python lock format is not yet used for version resolution; manifest declarations were still scanned.",
-        file: relativePath,
-      },
-    ],
-  };
+  const basename = relativePath.split("/").pop()?.toLowerCase() ?? "";
+  const format = PYTHON_LOCK_FORMATS[basename];
+  if (!format) {
+    return {
+      evidence: [],
+      diagnostics: [
+        {
+          code: "DVL_LOCK_PYTHON_UNSUPPORTED",
+          severity: "info",
+          message:
+            "This Python lock format is not yet used for version resolution; manifest declarations were still scanned.",
+          file: relativePath,
+        },
+      ],
+    };
+  }
+  if (directNames.size === 0) {
+    return {
+      evidence: [],
+      diagnostics: [
+        {
+          code: "DVL_LOCK_PYTHON_NO_MANIFEST",
+          severity: "info",
+          message:
+            "No companion Python manifest evidence exists in this directory; resolved lockfile versions were not applied.",
+          file: relativePath,
+        },
+      ],
+    };
+  }
+  try {
+    return {
+      evidence: resolvedDirectEvidence(
+        format.parse(text, relativePath),
+        directNames,
+        relativePath,
+      ),
+      diagnostics: [],
+    };
+  } catch (error) {
+    return {
+      evidence: [],
+      diagnostics: [
+        {
+          code: format.parseErrorCode,
+          severity: "warning",
+          message: `Invalid ${basename}; manifest versions remain available (${errorMessage(error)}).`,
+          file: relativePath,
+        },
+      ],
+    };
+  }
 }

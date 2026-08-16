@@ -1,3 +1,4 @@
+import nodePath from "node:path";
 import { TextDecoder } from "node:util";
 
 import { classifyFile, isProbablyBinary } from "./classify.js";
@@ -38,6 +39,10 @@ export async function scanRepository(
   const mcpServers: McpServerFinding[] = [];
   const diagnostics: Diagnostic[] = [...discovery.diagnostics];
   const languages = new Set<Language>();
+  // Python lockfiles are correlated with same-directory manifest evidence
+  // after discovery, so locked transitive packages never become direct.
+  const pendingPythonLocks: { text: string; relativePath: string }[] = [];
+  const pythonDirectNames = new Map<string, Set<string>>();
 
   for (const file of discovery.files) {
     options.signal?.throwIfAborted();
@@ -56,6 +61,10 @@ export async function scanRepository(
     const text = decoder.decode(data);
     if (kind === "javascript" || kind === "typescript") languages.add(kind);
     if (kind === "python") languages.add("python");
+    if (kind === "python-lock") {
+      pendingPythonLocks.push({ text, relativePath: file.relativePath });
+      continue;
+    }
 
     const result =
       kind === "npm-manifest"
@@ -64,27 +73,44 @@ export async function scanRepository(
           ? parseNpmLock(text, file.relativePath)
           : kind === "python-manifest"
             ? parsePythonManifest(text, file.relativePath)
-            : kind === "python-lock"
-              ? parsePythonLock(text, file.relativePath)
-              : kind === "javascript" || kind === "typescript"
-                ? scanJavascriptSource(
-                    text,
-                    file.relativePath,
-                    kind,
-                    options.catalog,
-                  )
-                : kind === "python"
-                  ? scanPythonSource(text, file.relativePath, options.catalog)
-                  : undefined;
+            : kind === "javascript" || kind === "typescript"
+              ? scanJavascriptSource(
+                  text,
+                  file.relativePath,
+                  kind,
+                  options.catalog,
+                )
+              : kind === "python"
+                ? scanPythonSource(text, file.relativePath, options.catalog)
+                : undefined;
     if (result) {
       evidence.push(...result.evidence);
       diagnostics.push(...result.diagnostics);
+      if (kind === "python-manifest") {
+        const directory = nodePath.posix.dirname(file.relativePath);
+        const names = pythonDirectNames.get(directory) ?? new Set<string>();
+        for (const item of result.evidence)
+          if (item.package?.ecosystem === "pypi" && item.package.direct)
+            names.add(item.package.name);
+        pythonDirectNames.set(directory, names);
+      }
     }
     if (kind === "mcp-config") {
       const mcp = parseMcpConfig(text, file.relativePath);
       mcpServers.push(...mcp.servers);
       diagnostics.push(...mcp.diagnostics);
     }
+  }
+
+  for (const pending of pendingPythonLocks) {
+    const directory = nodePath.posix.dirname(pending.relativePath);
+    const result = parsePythonLock(
+      pending.text,
+      pending.relativePath,
+      pythonDirectNames.get(directory) ?? new Set<string>(),
+    );
+    evidence.push(...result.evidence);
+    diagnostics.push(...result.diagnostics);
   }
 
   const mappedEvidence = evidence.map((item): Evidence => {
