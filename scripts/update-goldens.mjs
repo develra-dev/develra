@@ -18,7 +18,8 @@ const catalog = await loadBundledProviders();
 const outputDirectory = path.resolve("fixtures/expected");
 await mkdir(outputDirectory, { recursive: true });
 
-for (const name of ["ts-saas", "python-service", "mcp-project"]) {
+const names = ["ts-saas", "python-service", "python-locked", "mcp-project"];
+for (const name of names) {
   const result = await scanRepository({
     root: path.resolve("fixtures/repositories", name),
     catalog,
@@ -30,4 +31,6 @@ for (const name of ["ts-saas", "python-service", "mcp-project"]) {
   );
 }
 
-process.stdout.write("Updated 3 deterministic lockfile goldens.\n");
+process.stdout.write(
+  `Updated ${names.length} deterministic lockfile goldens.\n`,
+);

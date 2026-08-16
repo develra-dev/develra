@@ -1,0 +1,26 @@
+version: 1
+project:
+  root: .
+  languages:
+    - python
+providers:
+  - id: anthropic
+    confidence: confirmed
+    packages:
+      - ecosystem: pypi
+        name: anthropic
+        version: 0.69.0
+        direct: true
+    api_versions: []
+    operations:
+      - id: messages.create
+        confidence: confirmed
+        files:
+          - app/main.py
+    endpoints: []
+    files:
+      - app/main.py
+      - pyproject.toml
+      - uv.lock
+mcp_servers: []
+unknowns: []
