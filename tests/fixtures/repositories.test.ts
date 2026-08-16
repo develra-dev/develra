@@ -1,3 +1,4 @@
+import childProcess from "node:child_process";
 import { readFile } from "node:fs/promises";
 import nodePath from "node:path";
 
@@ -87,6 +88,47 @@ describe("repository fixtures", () => {
     ]);
   });
 
+  it("applies resolved uv.lock versions to direct packages without running package managers", async () => {
+    const processSpies = (
+      [
+        "spawn",
+        "spawnSync",
+        "exec",
+        "execSync",
+        "execFile",
+        "execFileSync",
+        "fork",
+      ] as const
+    ).map((name) => vi.spyOn(childProcess, name));
+    const result = await scanRepository({
+      root: fixture("python-locked"),
+      catalog: await loadBundledProviders(),
+    });
+    for (const spy of processSpies) {
+      expect(spy).not.toHaveBeenCalled();
+      spy.mockRestore();
+    }
+    expect(result.diagnostics).toEqual([]);
+    expect(result.providers).toMatchObject([
+      {
+        id: "anthropic",
+        confidence: "confirmed",
+        packages: [
+          {
+            ecosystem: "pypi",
+            name: "anthropic",
+            version: "0.69.0",
+            direct: true,
+          },
+        ],
+        files: ["app/main.py", "pyproject.toml", "uv.lock"],
+      },
+    ]);
+    const lock = serializeLockfile(toLockfile(result));
+    expect(lock).toContain("version: 0.69.0");
+    expect(lock).not.toMatch(/httpx|urllib3/u);
+  });
+
   it("parses MCP configuration without retaining secrets", async () => {
     const result = await scanRepository({
       root: fixture("mcp-project"),
@@ -100,18 +142,20 @@ describe("repository fixtures", () => {
 
   it("produces identical bytes across repeated scans", async () => {
     const catalog = await loadBundledProviders();
-    const first = serializeLockfile(
-      toLockfile(await scanRepository({ root: fixture("ts-saas"), catalog })),
-    );
-    const second = serializeLockfile(
-      toLockfile(await scanRepository({ root: fixture("ts-saas"), catalog })),
-    );
-    expect(first).toBe(second);
-    expect(first).toBe(
-      await readFile(
-        nodePath.resolve("fixtures/expected/ts-saas.lock"),
-        "utf8",
-      ),
-    );
+    for (const name of ["ts-saas", "python-locked"]) {
+      const first = serializeLockfile(
+        toLockfile(await scanRepository({ root: fixture(name), catalog })),
+      );
+      const second = serializeLockfile(
+        toLockfile(await scanRepository({ root: fixture(name), catalog })),
+      );
+      expect(first).toBe(second);
+      expect(first).toBe(
+        await readFile(
+          nodePath.resolve("fixtures/expected", `${name}.lock`),
+          "utf8",
+        ),
+      );
+    }
   });
 });
