@@ -570,7 +570,7 @@ Add entries in this format:
 - Follow-up ticket: Treat DVL-060 as the next optional product milestone rather
   than silently expanding the shipped local scanner.
 
-## 2026-08-16 — DVL-015 — Resolved Python lockfile support
+## 2026-08-29 — DVL-015 — Resolved Python lockfile support
 
 - Decision or implementation summary: Implemented resolved direct versions from
   `poetry.lock`, `uv.lock`, and `Pipfile.lock` using the already-bundled
@@ -591,7 +591,8 @@ Add entries in this format:
   normalization, transitive exclusion, ambiguity fallback, and single-per-file
   diagnostics; a new `python-locked` repository fixture with a byte-identical
   golden lockfile; and a fixture assertion that no `child_process` API is
-  invoked during scanning. Full local gate run before commit.
+  invoked during scanning. The complete `pnpm verify` local gate passed during
+  final review before merging to `main`.
 - Known limitation: Correlation is same-directory only, so a lockfile without a
   companion manifest in its own directory contributes no versions and reports
   one info diagnostic. Yarn lockfiles remain deferred.

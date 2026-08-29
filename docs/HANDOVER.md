@@ -1,4 +1,4 @@
-# HANDOVER — updated 2026-08-16
+# HANDOVER — updated 2026-08-29
 
 ## Status
 
@@ -21,20 +21,17 @@
 
 ## In flight
 
-- DVL-015 implemented on branch
-  `pirouetta/11-implement-dvl-015-as-a-complet`: resolved direct versions from
-  `poetry.lock`, `uv.lock`, and `Pipfile.lock`, correlated with same-directory
-  Python manifest evidence. Unmerged and unreleased.
+- No scanner implementation ticket is currently in flight. DVL-015 is complete
+  on `main` but is not yet included in a published npm release.
 - npm trusted publishing is configured, but its end-to-end OIDC path remains
   unproven until the next intentional release.
 - M6 registry work has not started.
 
 ## Next 3
 
-1. **Maintainer:** Review and merge the DVL-015 branch, then choose the next
-   product scope: optional registry work beginning with DVL-060 or another
-   explicit priority. M6 is not standing authorization to add networked
-   behavior.
+1. **Maintainer:** Choose the next product scope: optional registry work beginning
+   with DVL-060 or another explicit priority. M6 is not standing authorization
+   to add networked behavior.
 2. **Prepare:** For the next intentional package release, verify the immutable
    tag and `apps/cli/package.json` version, run `pnpm release:validate` and
    `pnpm audit --prod`, then exercise trusted publishing. Do not publish or move
@@ -43,9 +40,9 @@
 
 ## Recent decisions
 
-- DVL-015 shipped only the three bounded Python lock formats; `pylock.toml`,
-  `pdm.lock`, and Yarn stay deferred, and locked transitive packages never
-  become direct dependencies.
+- DVL-015 landed on `main` with only the three bounded Python lock formats;
+  `pylock.toml`, `pdm.lock`, and Yarn stay deferred, and locked transitive
+  packages never become direct dependencies.
 - DVL-021 and DVL-028 completion checkboxes updated to match v0.1.1 reality.
 - `apps/cli/package.json` is the only publishable version source; internal
   workspace packages use `0.0.0-private`.
