@@ -46,4 +46,4 @@ jobs:
       - run: pnpm release:validate
       - run: git diff --exit-code -- packages/action/dist
       - name: Publish audited archive through npm OIDC
-        run: npm publish "release-artifacts/develra-${DEVELRA_RELEASE_TAG#v}.tgz" --access public
+        run: npm publish "./release-artifacts/develra-${DEVELRA_RELEASE_TAG#v}.tgz" --access public

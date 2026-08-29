@@ -59,7 +59,9 @@ describe("trusted npm publishing", () => {
     expect(workflow).toContain("id-token: write");
     expect(workflow).toContain("npm@11.5.1");
     expect(workflow).toContain("pnpm release:validate");
-    expect(workflow).toContain("npm publish");
+    expect(workflow).toContain(
+      'npm publish "./release-artifacts/develra-${DEVELRA_RELEASE_TAG#v}.tgz"',
+    );
     expect(workflow).not.toMatch(/NPM_(?:TOKEN|AUTH_TOKEN)/u);
     expect(workflow).not.toContain("NODE_AUTH_TOKEN");
   });
