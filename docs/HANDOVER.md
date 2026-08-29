@@ -29,9 +29,9 @@
 
 ## Next 3
 
-1. **Maintainer:** Choose the next product scope: optional registry work beginning
-   with DVL-060 or another explicit priority. M6 is not standing authorization
-   to add networked behavior.
+1. **Maintainer:** Choose the next product scope: optional registry work
+   beginning with DVL-060 or another explicit priority. M6 is not standing
+   authorization to add networked behavior.
 2. **Prepare:** For the next intentional package release, verify the immutable
    tag and `apps/cli/package.json` version, run `pnpm release:validate` and
    `pnpm audit --prod`, then exercise trusted publishing. Do not publish or move
@@ -43,6 +43,8 @@
 - DVL-015 landed on `main` with only the three bounded Python lock formats;
   `pylock.toml`, `pdm.lock`, and Yarn stay deferred, and locked transitive
   packages never become direct dependencies.
+- Public Git history uses a GitHub noreply identity, and local research notes
+  are excluded from version control.
 - DVL-021 and DVL-028 completion checkboxes updated to match v0.1.1 reality.
 - `apps/cli/package.json` is the only publishable version source; internal
   workspace packages use `0.0.0-private`.

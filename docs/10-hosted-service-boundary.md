@@ -46,7 +46,8 @@ Potential paid capabilities:
 
 ## Future implementation stack
 
-The hosted implementation stack is deliberately undecided and is not a constraint on the open-source TypeScript CLI.
+The hosted implementation stack is deliberately undecided and is not a
+constraint on the open-source TypeScript CLI.
 
 ## Shared identity model
 

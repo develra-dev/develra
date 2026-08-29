@@ -13,6 +13,9 @@ develra-codex-handoff.zip
 develra-codex-handoff/
 release-artifacts/
 
+# Local research and handoff notes may contain private product context.
+/sources/
+
 # Workspace build outputs are reproducible. Only the standalone Action bundle
 # is committed so consumers can run it without installing dependencies.
 **/dist/

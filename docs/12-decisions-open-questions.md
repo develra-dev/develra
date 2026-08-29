@@ -19,7 +19,8 @@ When a material decision changes, add an ADR-style entry rather than silently re
 
 **Status:** accepted
 
-Build on `develra.dev`. The first build is Develra's open-source external-contract scanner and lockfile.
+Build on `develra.dev`. The first build is Develra's open-source
+external-contract scanner and lockfile.
 
 ## ADR-002 — The directory is an acquisition layer, not the moat
 
@@ -31,7 +32,9 @@ Do not center the product on public API changelog pages. Personalized mapping fr
 
 **Status:** accepted
 
-The project may invest in polished artifacts, Action support, provider contributions, and a Breakage Museum before revenue validation while keeping hosted complexity behind demonstrated open-source use.
+The project may invest in polished artifacts, Action support, provider
+contributions, and a Breakage Museum before revenue validation while keeping
+hosted complexity behind demonstrated open-source use.
 
 ## ADR-004 — Local-first scanner
 

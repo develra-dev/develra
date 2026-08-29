@@ -379,6 +379,8 @@ Do not adopt a heavy framework when a small library or standard API suffices. Do
 
 ## Future hosted architecture
 
-The hosted implementation stack is intentionally not prescribed by the local scanner. The shared contract is the normalized lockfile, provider IDs, operation IDs, and registry interface.
+The hosted implementation stack is intentionally not prescribed by the local
+scanner. The shared contract is the normalized lockfile, provider IDs,
+operation IDs, and registry interface.
 
 See `docs/10-hosted-service-boundary.md`.

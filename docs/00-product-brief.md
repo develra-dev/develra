@@ -234,4 +234,5 @@ These are directional, not hard gates:
 
 ## Product investment decision
 
-The implementation plan prioritizes a polished, star-capable open-source product while keeping hosted complexity behind demonstrated open-source use.
+The implementation plan prioritizes a polished, star-capable open-source
+product while keeping hosted complexity behind demonstrated open-source use.
