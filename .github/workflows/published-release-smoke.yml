@@ -17,9 +17,9 @@ jobs:
         with:
           node-version: 22
       - name: Verify published version
-        run: npx --yes develra@0.1.1 --version
+        run: npx --yes develra@0.1.2 --version
       - name: Scan a clean fixture without writing
-        run: npx --yes develra@0.1.1 scan --no-write
+        run: npx --yes develra@0.1.2 scan --no-write
         working-directory: fixtures/repositories/ts-saas
 
   action:

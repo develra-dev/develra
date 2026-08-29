@@ -5,6 +5,20 @@ All notable changes to Develra will be documented here. The project follows
 
 ## [Unreleased]
 
+## [0.1.2] - 2026-08-29
+
+### Added
+
+- Resolve direct Python dependency versions from bounded `poetry.lock`,
+  `uv.lock`, and `Pipfile.lock` inputs without promoting transitive packages or
+  changing the scanner's offline behavior.
+
+### Security
+
+- Refreshed the synthetic Python lockfile fixture to patched `requests` 2.33.0
+  and `urllib3` 2.7.0 releases. These fixture packages are never installed or
+  executed by Develra.
+
 ## [0.1.1] - 2026-08-13
 
 ### Security

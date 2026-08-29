@@ -11,6 +11,6 @@ Set Theme { "name": "Whimsy", "black": "#050505", "brightBlack": "#666666", "red
 Type "cd fixtures/repositories/ts-saas"
 Enter
 Sleep 700ms
-Type "npx --yes develra@0.1.1 scan --no-write"
+Type "npx --yes develra@0.1.2 scan --no-write"
 Enter
 Sleep 6s

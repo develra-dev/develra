@@ -133,6 +133,8 @@ Code quality
 - Sample SVG: [`examples/develra-graph.svg`](../examples/develra-graph.svg)
 - First release notes: [`docs/releases/v0.1.0.md`](releases/v0.1.0.md)
 - Security patch notes: [`docs/releases/v0.1.1.md`](releases/v0.1.1.md)
+- Python lockfile release notes:
+  [`docs/releases/v0.1.2.md`](releases/v0.1.2.md)
 - Ten bounded contributor tasks:
   [`docs/13-good-first-issues.md`](13-good-first-issues.md)
 - Marketplace listing:

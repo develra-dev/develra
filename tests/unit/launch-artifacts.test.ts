@@ -57,6 +57,7 @@ describe("launch artifacts", () => {
         "examples/develra-graph.svg",
         "docs/releases/v0.1.0.md",
         "docs/releases/v0.1.1.md",
+        "docs/releases/v0.1.2.md",
       ].map((relative) => access(nodePath.join(repositoryRoot, relative))),
     );
   });

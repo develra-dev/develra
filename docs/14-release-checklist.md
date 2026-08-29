@@ -137,6 +137,18 @@ has passed release validation. Never move an exact version tag.
 - [x] Create the GitHub release from `docs/releases/v0.1.1.md`.
 - [x] Rerun the published npm and Action smoke workflow.
 
+## v0.1.2 Python lockfile release
+
+- [x] Refresh the synthetic Python fixture to patched `requests` 2.33.0 and
+      `urllib3` 2.7.0 releases.
+- [ ] Run full local and public release validation.
+- [ ] Create immutable `v0.1.2` from the reviewed release commit.
+- [ ] Publish `develra@0.1.2` through npm trusted publishing.
+- [ ] Move `v0` to the same reviewed commit and create the GitHub release from
+      `docs/releases/v0.1.2.md`.
+- [ ] Rerun the published npm and Action smoke workflow and verify the fixture
+      Dependabot alerts close.
+
 ## Post-release verification
 
 - [x] `npx develra@0.1.0 scan` works without a Develra account.

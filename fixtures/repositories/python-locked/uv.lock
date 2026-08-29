@@ -28,7 +28,7 @@ source = { registry = "https://pypi.org/simple" }
 
 [[package]]
 name = "requests"
-version = "2.32.4"
+version = "2.33.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "urllib3" },
@@ -41,5 +41,5 @@ source = { registry = "https://pypi.org/simple" }
 
 [[package]]
 name = "urllib3"
-version = "2.5.0"
+version = "2.7.0"
 source = { registry = "https://pypi.org/simple" }
