@@ -66,9 +66,11 @@ Provider and operation IDs originate in provider packs.
 
 Do not use display names as foreign keys.
 
-## Suggested registry protocol
+## Draft registry protocol
 
-The CLI should depend on an abstract interface. A future public HTTP registry could expose:
+The CLI depends on an abstract interface. The transport contract for a future
+public HTTP registry is checked in at `schemas/registry.openapi.yaml` and
+exposes only:
 
 ```text
 GET /v1/capabilities
@@ -76,10 +78,16 @@ GET /v1/providers
 GET /v1/providers/{provider_id}
 GET /v1/providers/{provider_id}/state
 GET /v1/changes?provider_id=...&since=...
-POST /v1/inventories/check
 ```
 
-The first three may be public/cacheable. Uploading an inventory requires explicit user action and a privacy contract.
+All five operations are public, read-only, cacheable `GET` requests with
+versioned envelopes, ETag revalidation, bounded pagination, and structured
+errors. The contract identifies no deployed server. Authentication, billing,
+mutation endpoints, and inventory upload are deliberately absent.
+
+Uploading an inventory requires explicit user action and a privacy contract. It
+must not be added to the public protocol merely because the normalized
+lockfile shape already exists.
 
 ## Inventory upload
 

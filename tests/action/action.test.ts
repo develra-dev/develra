@@ -3,6 +3,7 @@ import {
   mkdtemp,
   mkdir,
   readFile,
+  readdir,
   rm,
   symlink,
   writeFile,
@@ -65,6 +66,19 @@ function environment(
 }
 
 describe("bundled GitHub Action", () => {
+  it("packages only schemas required by the CLI and Action runtimes", async () => {
+    const expected = [
+      "develra-config.schema.json",
+      "develra-lock.schema.json",
+      "provider.schema.json",
+    ];
+    for (const root of ["apps/cli", "packages/action"]) {
+      expect(
+        (await readdir(nodePath.resolve(root, "dist/schemas"))).sort(),
+      ).toEqual(expected);
+    }
+  });
+
   it("runs without a workspace install and writes outputs", async () => {
     const fixture = await actionFixture();
     await execute(process.execPath, [action], {

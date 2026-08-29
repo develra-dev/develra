@@ -1,0 +1,26 @@
+{
+  "api_version": "v1",
+  "data": [
+    {
+      "id": "fixture-checkout-removal",
+      "provider_id": "fixture-payments",
+      "observed_at": "2026-08-29T00:00:00Z",
+      "effective_at": "2026-09-30T00:00:00Z",
+      "severity": "breaking",
+      "operations": ["checkout.sessions.create"],
+      "endpoints": [],
+      "summary": "Synthetic fixture removes checkout.sessions.create.",
+      "confidence": "confirmed",
+      "provenance": {
+        "kind": "remote",
+        "source_id": "fixture:payments-openapi",
+        "retrieved_at": "2026-08-29T00:00:00Z",
+        "source_url": "https://example.invalid/contracts/fixture-payments.json",
+        "content_hash": "sha256:1111111111111111111111111111111111111111111111111111111111111111"
+      }
+    }
+  ],
+  "page": {
+    "next_cursor": "fixture_cursor_2"
+  }
+}

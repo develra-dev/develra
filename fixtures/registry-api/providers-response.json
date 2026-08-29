@@ -1,0 +1,14 @@
+{
+  "api_version": "v1",
+  "data": [
+    {
+      "id": "fixture-payments",
+      "name": "Fixture Payments",
+      "description": "Synthetic provider metadata for registry contract tests.",
+      "homepage": "https://example.invalid/providers/fixture-payments"
+    }
+  ],
+  "page": {
+    "next_cursor": null
+  }
+}

@@ -38,6 +38,15 @@ await cp(
   path.join(output, "data"),
   { recursive: true },
 );
-await cp(path.join(repositoryRoot, "schemas"), path.join(output, "schemas"), {
-  recursive: true,
-});
+const schemaOutput = path.join(output, "schemas");
+await mkdir(schemaOutput, { recursive: true });
+for (const name of [
+  "develra-config.schema.json",
+  "develra-lock.schema.json",
+  "provider.schema.json",
+]) {
+  await cp(
+    path.join(repositoryRoot, "schemas", name),
+    path.join(schemaOutput, name),
+  );
+}

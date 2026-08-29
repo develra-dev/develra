@@ -176,6 +176,14 @@ scanner monitors vendors.
 pnpm test:fixtures
 ```
 
+## Registry protocol draft
+
+The [draft public registry OpenAPI contract](schemas/registry.openapi.yaml) is
+a read-only, transport-neutral specification for future capabilities, provider
+metadata/state, and normalized changes. It has no deployed server,
+authentication, billing, inventory upload, or effect on the offline CLI.
+Bounded synthetic response fixtures live under `fixtures/registry-api/`.
+
 ## Development
 
 Requires Node.js 22 or newer and pnpm 10.

@@ -395,6 +395,22 @@ Registry source confidence is retained on the change and is not promoted by
 inventory relevance. The mapper performs exact structural matching without an
 LLM. Endpoint- and field-level relevance remain outside DVL-061.
 
+## Draft registry HTTP contract
+
+`schemas/registry.openapi.yaml` is the canonical transport draft for a future
+public registry. It defines only read-only v1 capabilities, provider
+discovery/detail/state, and change-query operations. Every success or error
+body carries `api_version: v1`; list responses use bounded opaque cursors;
+successful responses support ETag revalidation and explicit public cache
+directives; errors use bounded `application/problem+json` envelopes with
+no-store caching and retry guidance for rate limiting or unavailability.
+
+The contract has no server URL, security scheme, request body, inventory-upload
+operation, authentication, or billing surface. Synthetic examples under
+`fixtures/registry-api/` are validated against the component schemas without
+making a network request. Nothing in the current scanner or CLI loads this
+document or instantiates a transport.
+
 ## Configuration layers
 
 Resolve config in this order:

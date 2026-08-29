@@ -698,3 +698,32 @@ Add entries in this format:
 - Follow-up ticket: DVL-062 requires explicit authorization before adding a
   remote transport or CLI behavior; DVL-063 may specify the future API without
   building it.
+
+## 2026-08-29 — DVL-063 — Draft public registry API contract
+
+- Decision or implementation summary: Added an OpenAPI 3.1 contract for five
+  public, read-only v1 endpoints: capabilities, provider listing, provider
+  detail, provider state, and normalized change queries. Success and problem
+  responses use explicit `api_version: v1` envelopes; provider/change lists use
+  bounded opaque cursors; successful responses define ETag and Cache-Control
+  behavior; rate-limit and unavailable errors provide bounded retry guidance.
+  CLI and Action packaging now allowlist only runtime JSON schemas so the draft
+  protocol does not enter either executable artifact.
+- Alternatives considered: Inventory upload was omitted because it requires a
+  separate privacy contract and explicit user action. Authentication, billing,
+  mutations, a server URL, and implementation-framework choices were omitted
+  because no hosted service is authorized. A dedicated OpenAPI framework was
+  rejected in favor of the already-used AJV library, declared directly for the
+  contract tests, and validation of every component reference and response
+  fixture.
+- Validation run: Contract tests resolve every local OpenAPI reference, assert
+  the bounded read-only surface and cache/error semantics, validate six
+  synthetic JSON response fixtures against the OpenAPI 3.1 component schemas,
+  and reject a mismatched envelope version. Lint, strict typechecking, and the
+  complete `pnpm verify` gate pass.
+- Known limitation: This is a client/server contract draft, not a running
+  registry. It does not validate live responses, define an inventory upload,
+  or change the offline CLI. DVL-062 remains the separately authorized work for
+  an optional bounded client transport and `check --registry` behavior.
+- Follow-up ticket: DVL-062, only after explicit authorization for its remote
+  transport and CLI behavior.

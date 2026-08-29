@@ -1,0 +1,23 @@
+{
+  "api_version": "v1",
+  "data": {
+    "provider_id": "fixture-payments",
+    "revision": "synthetic-2026-08-29",
+    "operations": ["checkout.sessions.create", "payment_intents.create"],
+    "endpoints": [
+      {
+        "method": "POST",
+        "host": "api.example.invalid",
+        "path": "/v1/payment_intents"
+      }
+    ],
+    "confidence": "confirmed",
+    "provenance": {
+      "kind": "remote",
+      "source_id": "fixture:payments-openapi",
+      "retrieved_at": "2026-08-29T00:00:00Z",
+      "source_url": "https://example.invalid/contracts/fixture-payments.json",
+      "content_hash": "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+    }
+  }
+}

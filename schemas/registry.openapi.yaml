@@ -1,0 +1,624 @@
+openapi: 3.1.0
+info:
+  title: Develra public registry API
+  version: 1.0.0-draft
+  description: >-
+    Transport contract for a future read-only Develra public registry. This
+    document does not identify a deployed server and does not authorize source
+    upload, authentication, billing, or hosted processing.
+  license:
+    name: Apache-2.0
+    identifier: Apache-2.0
+security: []
+tags:
+  - name: Registry
+    description: Public registry capabilities and provider contracts.
+  - name: Changes
+    description: Public normalized upstream contract changes.
+paths:
+  /v1/capabilities:
+    get:
+      tags: [Registry]
+      operationId: getRegistryCapabilities
+      summary: Describe public registry capabilities
+      parameters:
+        - $ref: "#/components/parameters/IfNoneMatch"
+      responses:
+        "200":
+          description: Registry capabilities.
+          headers:
+            Cache-Control:
+              $ref: "#/components/headers/StableCacheControl"
+            ETag:
+              $ref: "#/components/headers/ETag"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CapabilitiesEnvelopeV1"
+        "304":
+          $ref: "#/components/responses/NotModifiedStable"
+        "429":
+          $ref: "#/components/responses/TooManyRequests"
+        "503":
+          $ref: "#/components/responses/ServiceUnavailable"
+  /v1/providers:
+    get:
+      tags: [Registry]
+      operationId: listProviders
+      summary: List public providers
+      parameters:
+        - $ref: "#/components/parameters/Cursor"
+        - $ref: "#/components/parameters/Limit"
+        - $ref: "#/components/parameters/IfNoneMatch"
+      responses:
+        "200":
+          description: A stable page of providers ordered by provider ID.
+          headers:
+            Cache-Control:
+              $ref: "#/components/headers/StableCacheControl"
+            ETag:
+              $ref: "#/components/headers/ETag"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProviderListEnvelopeV1"
+        "304":
+          $ref: "#/components/responses/NotModifiedStable"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "429":
+          $ref: "#/components/responses/TooManyRequests"
+        "503":
+          $ref: "#/components/responses/ServiceUnavailable"
+  /v1/providers/{provider_id}:
+    get:
+      tags: [Registry]
+      operationId: getProvider
+      summary: Get public provider metadata
+      parameters:
+        - $ref: "#/components/parameters/ProviderId"
+        - $ref: "#/components/parameters/IfNoneMatch"
+      responses:
+        "200":
+          description: Provider metadata and declared public contract sources.
+          headers:
+            Cache-Control:
+              $ref: "#/components/headers/StableCacheControl"
+            ETag:
+              $ref: "#/components/headers/ETag"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProviderEnvelopeV1"
+        "304":
+          $ref: "#/components/responses/NotModifiedStable"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "429":
+          $ref: "#/components/responses/TooManyRequests"
+        "503":
+          $ref: "#/components/responses/ServiceUnavailable"
+  /v1/providers/{provider_id}/state:
+    get:
+      tags: [Registry]
+      operationId: getProviderState
+      summary: Get the latest normalized provider state
+      parameters:
+        - $ref: "#/components/parameters/ProviderId"
+        - $ref: "#/components/parameters/IfNoneMatch"
+      responses:
+        "200":
+          description: Latest available normalized provider state.
+          headers:
+            Cache-Control:
+              $ref: "#/components/headers/StableCacheControl"
+            ETag:
+              $ref: "#/components/headers/ETag"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProviderStateEnvelopeV1"
+        "304":
+          $ref: "#/components/responses/NotModifiedStable"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "429":
+          $ref: "#/components/responses/TooManyRequests"
+        "503":
+          $ref: "#/components/responses/ServiceUnavailable"
+  /v1/changes:
+    get:
+      tags: [Changes]
+      operationId: listContractChanges
+      summary: List normalized changes for selected providers
+      description: >-
+        Returns changes in ascending observed_at and ID order. since is an
+        exclusive lower bound. Cursors are opaque and must not be constructed or
+        interpreted by clients.
+      parameters:
+        - $ref: "#/components/parameters/ProviderIds"
+        - $ref: "#/components/parameters/Since"
+        - $ref: "#/components/parameters/Cursor"
+        - $ref: "#/components/parameters/Limit"
+        - $ref: "#/components/parameters/IfNoneMatch"
+      responses:
+        "200":
+          description: A stable page of normalized contract changes.
+          headers:
+            Cache-Control:
+              $ref: "#/components/headers/ChangeCacheControl"
+            ETag:
+              $ref: "#/components/headers/ETag"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ChangeListEnvelopeV1"
+        "304":
+          $ref: "#/components/responses/NotModifiedChanges"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "429":
+          $ref: "#/components/responses/TooManyRequests"
+        "503":
+          $ref: "#/components/responses/ServiceUnavailable"
+components:
+  parameters:
+    ProviderId:
+      name: provider_id
+      in: path
+      required: true
+      description: Durable provider-pack ID, not a display name.
+      schema:
+        $ref: "#/components/schemas/ProviderId"
+    ProviderIds:
+      name: provider_id
+      in: query
+      required: true
+      description: One or more durable provider IDs.
+      style: form
+      explode: true
+      schema:
+        type: array
+        minItems: 1
+        maxItems: 50
+        uniqueItems: true
+        items:
+          $ref: "#/components/schemas/ProviderId"
+    Since:
+      name: since
+      in: query
+      required: false
+      description: Exclusive observed_at lower bound in RFC 3339 format.
+      schema:
+        type: string
+        format: date-time
+    Cursor:
+      name: cursor
+      in: query
+      required: false
+      description: Opaque continuation cursor returned by the previous page.
+      schema:
+        type: string
+        minLength: 1
+        maxLength: 1024
+    Limit:
+      name: limit
+      in: query
+      required: false
+      description: Maximum number of records to return.
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 100
+        default: 50
+    IfNoneMatch:
+      name: If-None-Match
+      in: header
+      required: false
+      description: Revalidate a cached representation using its ETag.
+      schema:
+        type: string
+        minLength: 1
+        maxLength: 256
+  headers:
+    ETag:
+      description: Strong validator for the complete response representation.
+      required: true
+      schema:
+        type: string
+        minLength: 3
+        maxLength: 256
+      example: '"sha256:fixture"'
+    StableCacheControl:
+      description: Cache policy for stable registry metadata and state.
+      required: true
+      schema:
+        type: string
+        const: public, max-age=300, stale-while-revalidate=60
+    ChangeCacheControl:
+      description: Cache policy for the change feed.
+      required: true
+      schema:
+        type: string
+        const: public, max-age=60, stale-while-revalidate=60
+    NoStoreCacheControl:
+      description: Error responses must not be cached.
+      required: true
+      schema:
+        type: string
+        const: no-store
+    RetryAfter:
+      description: Seconds before the client should retry.
+      required: true
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 86400
+  responses:
+    NotModifiedStable:
+      description: The cached representation remains current.
+      headers:
+        Cache-Control:
+          $ref: "#/components/headers/StableCacheControl"
+        ETag:
+          $ref: "#/components/headers/ETag"
+    NotModifiedChanges:
+      description: The cached change page remains current.
+      headers:
+        Cache-Control:
+          $ref: "#/components/headers/ChangeCacheControl"
+        ETag:
+          $ref: "#/components/headers/ETag"
+    BadRequest:
+      description: A path or query parameter is invalid.
+      headers:
+        Cache-Control:
+          $ref: "#/components/headers/NoStoreCacheControl"
+      content:
+        application/problem+json:
+          schema:
+            $ref: "#/components/schemas/ErrorEnvelopeV1"
+    NotFound:
+      description: The requested provider or state does not exist.
+      headers:
+        Cache-Control:
+          $ref: "#/components/headers/NoStoreCacheControl"
+      content:
+        application/problem+json:
+          schema:
+            $ref: "#/components/schemas/ErrorEnvelopeV1"
+    TooManyRequests:
+      description: The public rate limit has been exceeded.
+      headers:
+        Cache-Control:
+          $ref: "#/components/headers/NoStoreCacheControl"
+        Retry-After:
+          $ref: "#/components/headers/RetryAfter"
+      content:
+        application/problem+json:
+          schema:
+            $ref: "#/components/schemas/ErrorEnvelopeV1"
+    ServiceUnavailable:
+      description: Registry data is temporarily unavailable; retry is safe.
+      headers:
+        Cache-Control:
+          $ref: "#/components/headers/NoStoreCacheControl"
+        Retry-After:
+          $ref: "#/components/headers/RetryAfter"
+      content:
+        application/problem+json:
+          schema:
+            $ref: "#/components/schemas/ErrorEnvelopeV1"
+  schemas:
+    ProviderId:
+      type: string
+      pattern: ^[a-z0-9]+(?:-[a-z0-9]+)*$
+      maxLength: 128
+    OperationId:
+      type: string
+      minLength: 1
+      maxLength: 256
+      pattern: ^[A-Za-z0-9_-]+(?:\.[A-Za-z0-9_-]+)*$
+    Confidence:
+      type: string
+      enum: [confirmed, probable, possible]
+    Endpoint:
+      type: object
+      additionalProperties: false
+      required: [method, path]
+      properties:
+        method:
+          type: string
+          pattern: ^[A-Z][A-Z0-9_-]{1,15}$
+        host:
+          type: string
+          minLength: 1
+          maxLength: 253
+          pattern: ^[a-z0-9.-]+$
+        path:
+          type: string
+          minLength: 1
+          maxLength: 2048
+          pattern: ^/
+    Provenance:
+      type: object
+      additionalProperties: false
+      required: [kind, source_id, retrieved_at]
+      properties:
+        kind:
+          const: remote
+        source_id:
+          type: string
+          minLength: 1
+          maxLength: 256
+        retrieved_at:
+          type: string
+          format: date-time
+        source_url:
+          type: string
+          format: uri
+          pattern: ^https://
+          maxLength: 2048
+        content_hash:
+          type: string
+          pattern: ^sha256:[a-f0-9]{64}$
+    RegistryCapabilities:
+      type: object
+      additionalProperties: false
+      required: [mode, remote, provider_state, changes]
+      properties:
+        mode:
+          const: remote
+        remote:
+          const: true
+        provider_state:
+          const: true
+        changes:
+          const: true
+    ProviderSummary:
+      type: object
+      additionalProperties: false
+      required: [id, name, description]
+      properties:
+        id:
+          $ref: "#/components/schemas/ProviderId"
+        name:
+          type: string
+          minLength: 1
+          maxLength: 128
+        description:
+          type: string
+          minLength: 1
+          maxLength: 500
+        homepage:
+          type: string
+          format: uri
+          pattern: ^https://
+          maxLength: 2048
+    ContractSource:
+      type: object
+      additionalProperties: false
+      required: [source_id, type, url]
+      properties:
+        source_id:
+          type: string
+          minLength: 1
+          maxLength: 256
+        type:
+          type: string
+          enum: [openapi, json-schema, graphql, mcp, changelog, docs]
+        url:
+          type: string
+          format: uri
+          pattern: ^https://
+          maxLength: 2048
+    Provider:
+      type: object
+      additionalProperties: false
+      required: [id, name, description, operations, contract_sources]
+      properties:
+        id:
+          $ref: "#/components/schemas/ProviderId"
+        name:
+          type: string
+          minLength: 1
+          maxLength: 128
+        description:
+          type: string
+          minLength: 1
+          maxLength: 500
+        homepage:
+          type: string
+          format: uri
+          pattern: ^https://
+          maxLength: 2048
+        operations:
+          type: array
+          maxItems: 10000
+          uniqueItems: true
+          items:
+            $ref: "#/components/schemas/OperationId"
+        contract_sources:
+          type: array
+          maxItems: 25
+          items:
+            $ref: "#/components/schemas/ContractSource"
+    ProviderState:
+      type: object
+      additionalProperties: false
+      required:
+        - provider_id
+        - revision
+        - operations
+        - endpoints
+        - confidence
+        - provenance
+      properties:
+        provider_id:
+          $ref: "#/components/schemas/ProviderId"
+        revision:
+          type: string
+          minLength: 1
+          maxLength: 256
+        operations:
+          type: array
+          maxItems: 10000
+          uniqueItems: true
+          items:
+            $ref: "#/components/schemas/OperationId"
+        endpoints:
+          type: array
+          maxItems: 10000
+          items:
+            $ref: "#/components/schemas/Endpoint"
+        confidence:
+          $ref: "#/components/schemas/Confidence"
+        provenance:
+          $ref: "#/components/schemas/Provenance"
+    ContractChange:
+      type: object
+      additionalProperties: false
+      required:
+        - id
+        - provider_id
+        - observed_at
+        - severity
+        - operations
+        - endpoints
+        - summary
+        - confidence
+        - provenance
+      properties:
+        id:
+          type: string
+          minLength: 1
+          maxLength: 256
+        provider_id:
+          $ref: "#/components/schemas/ProviderId"
+        observed_at:
+          type: string
+          format: date-time
+        effective_at:
+          type: string
+          format: date-time
+        severity:
+          type: string
+          enum: [breaking, warning, informational, unknown]
+        operations:
+          type: array
+          maxItems: 10000
+          uniqueItems: true
+          items:
+            $ref: "#/components/schemas/OperationId"
+        endpoints:
+          type: array
+          maxItems: 10000
+          items:
+            $ref: "#/components/schemas/Endpoint"
+        summary:
+          type: string
+          minLength: 1
+          maxLength: 1000
+        confidence:
+          $ref: "#/components/schemas/Confidence"
+        provenance:
+          $ref: "#/components/schemas/Provenance"
+    PageInfo:
+      type: object
+      additionalProperties: false
+      required: [next_cursor]
+      properties:
+        next_cursor:
+          type: [string, "null"]
+          minLength: 1
+          maxLength: 1024
+    CapabilitiesEnvelopeV1:
+      type: object
+      additionalProperties: false
+      required: [api_version, data]
+      properties:
+        api_version:
+          const: v1
+        data:
+          $ref: "#/components/schemas/RegistryCapabilities"
+    ProviderListEnvelopeV1:
+      type: object
+      additionalProperties: false
+      required: [api_version, data, page]
+      properties:
+        api_version:
+          const: v1
+        data:
+          type: array
+          maxItems: 100
+          items:
+            $ref: "#/components/schemas/ProviderSummary"
+        page:
+          $ref: "#/components/schemas/PageInfo"
+    ProviderEnvelopeV1:
+      type: object
+      additionalProperties: false
+      required: [api_version, data]
+      properties:
+        api_version:
+          const: v1
+        data:
+          $ref: "#/components/schemas/Provider"
+    ProviderStateEnvelopeV1:
+      type: object
+      additionalProperties: false
+      required: [api_version, data]
+      properties:
+        api_version:
+          const: v1
+        data:
+          $ref: "#/components/schemas/ProviderState"
+    ChangeListEnvelopeV1:
+      type: object
+      additionalProperties: false
+      required: [api_version, data, page]
+      properties:
+        api_version:
+          const: v1
+        data:
+          type: array
+          maxItems: 100
+          items:
+            $ref: "#/components/schemas/ContractChange"
+        page:
+          $ref: "#/components/schemas/PageInfo"
+    ErrorEnvelopeV1:
+      type: object
+      additionalProperties: false
+      required: [api_version, type, title, status, code, request_id]
+      properties:
+        api_version:
+          const: v1
+        type:
+          type: string
+          format: uri
+          maxLength: 2048
+        title:
+          type: string
+          minLength: 1
+          maxLength: 128
+        status:
+          type: integer
+          minimum: 400
+          maximum: 599
+        detail:
+          type: string
+          minLength: 1
+          maxLength: 1000
+        instance:
+          type: string
+          format: uri-reference
+          maxLength: 2048
+        code:
+          type: string
+          pattern: ^[a-z][a-z0-9_]*$
+          maxLength: 64
+        request_id:
+          type: string
+          pattern: ^req_[A-Za-z0-9_-]+$
+          maxLength: 128

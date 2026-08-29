@@ -1,0 +1,9 @@
+{
+  "api_version": "v1",
+  "data": {
+    "mode": "remote",
+    "remote": true,
+    "provider_state": true,
+    "changes": true
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "api_version": "v1",
+  "type": "about:blank",
+  "title": "Invalid request",
+  "status": 400,
+  "detail": "The provider_id query parameter is required.",
+  "instance": "/v1/changes",
+  "code": "invalid_request",
+  "request_id": "req_fixture_001"
+}

@@ -26,16 +26,17 @@
 - npm trusted publishing has been proven end to end with the `v0.1.2` release.
 - npm account writes require 2FA, the `develra` package disallows traditional
   publishing tokens, and the account token inventory is empty.
-- DVL-061 adds an offline `FixtureRegistry`, synthetic snapshots, and pure
-  provider/operation relevance mapping. No registry transport or CLI mode
-  exists yet.
+- DVL-061 adds an offline `FixtureRegistry` and relevance mapping. DVL-063 adds
+  a read-only future registry OpenAPI contract and synthetic response fixtures.
+  No registry transport, server, or CLI mode exists yet.
 
 ## Next 3
 
 1. **Decide:** Explicitly authorize DVL-062 before adding any optional remote
-   transport or `check --registry` behavior; DVL-061 alone stays local.
-2. **Specify:** DVL-063 can draft the future public registry OpenAPI contract
-   without implementing a service, authentication, billing, or transport.
+   transport or `check --registry` behavior; DVL-061 and DVL-063 stay local.
+2. **Review:** Treat `schemas/registry.openapi.yaml` as a draft until a real
+   registry implementation is intentionally approved; keep uploads, auth, and
+   billing out of the public v1 surface.
 3. **Prepare:** For the next intentional package release, verify the immutable
    tag and `apps/cli/package.json` version, then run `pnpm release:validate` and
    `pnpm audit --prod`. Do not publish or move tags without explicit maintainer
@@ -53,6 +54,8 @@
   remote capability is explicit and no scanner command instantiates transport.
 - DVL-061 keeps registry fixtures local, maps exact operation intersections as
   strong relevance, and labels provider-only matches as uncertain.
+- DVL-063 specifies only five cacheable public GET operations with versioned
+  envelopes and bounded synthetic fixtures; it does not deploy a service.
 - npm publishing is hardened around OIDC: account writes require 2FA, package
   publishing disallows traditional tokens, and no access tokens remain.
 - Public Git history uses a GitHub noreply identity, and local research notes

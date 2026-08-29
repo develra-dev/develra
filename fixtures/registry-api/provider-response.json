@@ -1,0 +1,17 @@
+{
+  "api_version": "v1",
+  "data": {
+    "id": "fixture-payments",
+    "name": "Fixture Payments",
+    "description": "Synthetic provider metadata for registry contract tests.",
+    "homepage": "https://example.invalid/providers/fixture-payments",
+    "operations": ["checkout.sessions.create", "payment_intents.create"],
+    "contract_sources": [
+      {
+        "source_id": "fixture:payments-openapi",
+        "type": "openapi",
+        "url": "https://example.invalid/contracts/fixture-payments.json"
+      }
+    ]
+  }
+}

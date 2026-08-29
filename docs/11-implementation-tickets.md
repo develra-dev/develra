@@ -868,7 +868,7 @@ Acceptance:
 - offline mode never instantiates transport;
 - reports show source provenance.
 
-## [ ] DVL-063 — Draft public registry API contract
+## [x] DVL-063 — Draft public registry API contract
 
 **Depends on:** DVL-060
 
