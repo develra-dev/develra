@@ -95,8 +95,8 @@ npm publish release-artifacts/develra-0.1.0.tgz --access public
 
 - [x] Verify trusted publishing with the next intentional release by running
       **Publish npm** from `main` with its exact existing tag.
-- [ ] After trusted publishing works, require 2FA and disallow traditional
-      automation tokens; revoke obsolete publishing tokens.
+- [x] After trusted publishing works, require 2FA and disallow traditional
+      automation tokens; verify that no obsolete publishing tokens remain.
 
 The publish job checks out the supplied immutable tag, requires that it exactly
 match the version in `apps/cli/package.json`, reruns the complete release audit,

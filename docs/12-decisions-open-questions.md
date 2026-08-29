@@ -650,3 +650,24 @@ Add entries in this format:
   `check --registry` option. Default scan/check behavior remains unchanged and
   offline.
 - Follow-up ticket: DVL-061.
+
+## 2026-08-29 — npm trusted-publishing hardening
+
+- Decision or implementation summary: Kept the proven GitHub Actions OIDC
+  trusted publisher, confirmed account-level `auth-and-writes` 2FA, and set the
+  `develra` package to require 2FA while disallowing traditional publishing
+  tokens. The npm access-token inventory was empty, so no token revocation was
+  necessary.
+- Alternatives considered: Creating or retaining a long-lived automation token
+  was rejected because trusted publishing already provides short-lived,
+  workflow-bound credentials. Switching to staged publishing was deferred; the
+  protected GitHub `npm` environment already requires explicit release
+  approval, while staged publishing would add a second manual promotion step.
+- Validation run: npm profile security state and token inventory were checked
+  through an interactively authenticated CLI session, and
+  `npm access set mfa=publish develra` completed successfully after npm's 2FA
+  challenge. No credential values were written to the repository or logs.
+- Known limitation: The stricter package setting will be exercised end to end
+  on the next intentional OIDC release; npm documents trusted publishers as
+  unaffected by the traditional-token restriction.
+- Follow-up ticket: None.
