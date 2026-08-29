@@ -93,7 +93,7 @@ npm publish release-artifacts/develra-0.1.0.tgz --access public
   Allowed actions: npm publish
   ```
 
-- [ ] Verify trusted publishing with the next intentional release by running
+- [x] Verify trusted publishing with the next intentional release by running
       **Publish npm** from `main` with its exact existing tag.
 - [ ] After trusted publishing works, require 2FA and disallow traditional
       automation tokens; revoke obsolete publishing tokens.
@@ -141,12 +141,12 @@ has passed release validation. Never move an exact version tag.
 
 - [x] Refresh the synthetic Python fixture to patched `requests` 2.33.0 and
       `urllib3` 2.7.0 releases.
-- [ ] Run full local and public release validation.
-- [ ] Create immutable `v0.1.2` from the reviewed release commit.
-- [ ] Publish `develra@0.1.2` through npm trusted publishing.
-- [ ] Move `v0` to the same reviewed commit and create the GitHub release from
+- [x] Run full local and public release validation.
+- [x] Create immutable `v0.1.2` from the reviewed release commit.
+- [x] Publish `develra@0.1.2` through npm trusted publishing.
+- [x] Move `v0` to the same reviewed commit and create the GitHub release from
       `docs/releases/v0.1.2.md`.
-- [ ] Rerun the published npm and Action smoke workflow and verify the fixture
+- [x] Rerun the published npm and Action smoke workflow and verify the fixture
       Dependabot alerts close.
 
 ## Post-release verification

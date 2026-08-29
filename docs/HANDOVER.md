@@ -5,9 +5,9 @@
 - Develra is a public Apache-2.0, local-first external-contract scanner and
   deterministic lockfile for JavaScript, TypeScript, Python, raw HTTP usage,
   webhook-like URLs, and project-level MCP configuration.
-- The current public CLI is `develra@0.1.1`. Exact tags `v0.1.0` and `v0.1.1`
-  exist, and the moving `v0` GitHub Action channel points to the reviewed
-  `v0.1.1` security patch.
+- The current public CLI is `develra@0.1.2`. Exact tags `v0.1.0`, `v0.1.1`, and
+  `v0.1.2` exist, and the moving `v0` GitHub Action channel points to the
+  reviewed `v0.1.2` release.
 - The npm package, GitHub repository, Marketplace Action, and static website are
   live. M0–M5 and the first-release audit are complete.
 - The CLI supports `scan`, `check`, `graph`, `providers list`,
@@ -22,9 +22,8 @@
 ## In flight
 
 - No scanner implementation ticket is currently in flight. DVL-015 is complete
-  on `main` but is not yet included in a published npm release.
-- npm trusted publishing is configured, but its end-to-end OIDC path remains
-  unproven until the next intentional release.
+  and shipped in `develra@0.1.2`.
+- npm trusted publishing has been proven end to end with the `v0.1.2` release.
 - M6 registry work has not started.
 
 ## Next 3
@@ -32,17 +31,21 @@
 1. **Maintainer:** Choose the next product scope: optional registry work
    beginning with DVL-060 or another explicit priority. M6 is not standing
    authorization to add networked behavior.
-2. **Prepare:** For the next intentional package release, verify the immutable
-   tag and `apps/cli/package.json` version, run `pnpm release:validate` and
-   `pnpm audit --prod`, then exercise trusted publishing. Do not publish or move
-   tags without explicit maintainer authorization.
-3. **TBD:** Next priority to be determined after product scope choice.
+2. **Harden:** Require 2FA and disallow traditional npm automation tokens, then
+   revoke any obsolete publishing tokens now that trusted publishing works.
+3. **Prepare:** For the next intentional package release, verify the immutable
+   tag and `apps/cli/package.json` version, then run `pnpm release:validate` and
+   `pnpm audit --prod`. Do not publish or move tags without explicit maintainer
+   authorization.
 
 ## Recent decisions
 
 - DVL-015 landed on `main` with only the three bounded Python lock formats;
   `pylock.toml`, `pdm.lock`, and Yarn stay deferred, and locked transitive
   packages never become direct dependencies.
+- `develra@0.1.2` shipped DVL-015, proved npm OIDC trusted publishing, and
+  refreshed vulnerable synthetic fixture versions without adding runtime
+  dependencies.
 - Public Git history uses a GitHub noreply identity, and local research notes
   are excluded from version control.
 - DVL-021 and DVL-028 completion checkboxes updated to match v0.1.1 reality.

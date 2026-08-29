@@ -601,3 +601,29 @@ Add entries in this format:
   one info diagnostic. Yarn lockfiles remain deferred.
 - Follow-up ticket: None; consider `pylock.toml` when the format stabilizes in
   real repositories.
+
+## 2026-08-29 — v0.1.2 Python lockfile release
+
+- Decision or implementation summary: Published `develra@0.1.2` from immutable
+  tag `v0.1.2` through npm OIDC trusted publishing, created the matching GitHub
+  release, and moved the compatible `v0` Action channel to the same reviewed
+  commit. The release ships DVL-015's bounded `poetry.lock`, `uv.lock`, and
+  `Pipfile.lock` resolution. Synthetic fixture pins were refreshed to
+  `requests` 2.33.0 and `urllib3` 2.7.0, closing all five Dependabot alerts
+  without changing Develra's zero-runtime-dependency CLI.
+- Alternatives considered: Starting M6 registry work before publishing DVL-015
+  was rejected so the completed offline scanner improvement could ship without
+  introducing a networked product boundary. Moving the immutable tag after a
+  publish-workflow correction was rejected; the workflow on `main` was fixed
+  while the reviewed `v0.1.2` tag remained unchanged.
+- Validation run: Local `pnpm release:validate`, `pnpm audit --prod`, all six
+  hosted Node 22/24 Linux, macOS, and Windows CI jobs, the manual release
+  validation workflow, the trusted-publishing workflow, a clean public
+  `develra@0.1.2` install and scan, and the published npm plus `v0` Action smoke
+  workflow all passed. The first publish attempt exposed a missing `./` prefix
+  on the archive path; regression coverage was added and the corrected retry
+  succeeded.
+- Known limitation: Traditional npm publishing credentials have not yet been
+  audited or revoked. M6 registry work remains optional and unstarted.
+- Follow-up ticket: Choose the next product scope; if registry work is selected,
+  begin with DVL-060.
