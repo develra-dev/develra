@@ -26,16 +26,16 @@
 - npm trusted publishing has been proven end to end with the `v0.1.2` release.
 - npm account writes require 2FA, the `develra` package disallows traditional
   publishing tokens, and the account token inventory is empty.
-- DVL-060 defines the registry boundary and offline `NoopRegistry`; no registry
-  transport or CLI mode exists yet.
+- DVL-061 adds an offline `FixtureRegistry`, synthetic snapshots, and pure
+  provider/operation relevance mapping. No registry transport or CLI mode
+  exists yet.
 
 ## Next 3
 
-1. **Implement:** DVL-061 local `FixtureRegistry` snapshots and relevance tests.
-   This remains local test infrastructure and is not authorization to add
-   networked behavior.
-2. **Decide:** Explicitly authorize DVL-062 before adding any optional remote
+1. **Decide:** Explicitly authorize DVL-062 before adding any optional remote
    transport or `check --registry` behavior; DVL-061 alone stays local.
+2. **Specify:** DVL-063 can draft the future public registry OpenAPI contract
+   without implementing a service, authentication, billing, or transport.
 3. **Prepare:** For the next intentional package release, verify the immutable
    tag and `apps/cli/package.json` version, then run `pnpm release:validate` and
    `pnpm audit --prod`. Do not publish or move tags without explicit maintainer
@@ -51,6 +51,8 @@
   dependencies.
 - DVL-060 adds only typed registry contracts and an offline `NoopRegistry`;
   remote capability is explicit and no scanner command instantiates transport.
+- DVL-061 keeps registry fixtures local, maps exact operation intersections as
+  strong relevance, and labels provider-only matches as uncertain.
 - npm publishing is hardened around OIDC: account writes require 2FA, package
   publishing disallows traditional tokens, and no access tokens remain.
 - Public Git history uses a GitHub noreply identity, and local research notes
@@ -60,8 +62,8 @@
   workspace packages use `0.0.0-private`.
 - v0.1.1 changed only the bundled Action's vulnerable HTTP dependency; scanner
   behavior and lockfile output remain compatible with v0.1.0.
-- The first-release implementation is complete. DVL-060 is only the next
-  possible milestone, not active work.
+- The first-release implementation is complete; optional M6 work remains
+  separate from the shipped default scanner path.
 - The Breakage Museum is a synthetic future-facing corpus, not evidence that
   Develra performs vendor monitoring today.
 - Publishing, releases, moving tags, deployments, and launch posts remain

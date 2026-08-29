@@ -375,6 +375,26 @@ provider state or changes, and performs no I/O. Current `scan` and local `check`
 paths do not query a registry at all. A future remote-capable path must be
 enabled by an explicit option and must never be instantiated by default.
 
+`FixtureRegistry` accepts already-loaded local provider states and changes. It
+advertises `mode: "fixture"` and `remote: false`, canonicalizes fixture arrays,
+returns defensive copies, filters changes by provider and an exclusive `since`
+timestamp, and performs no filesystem or network I/O. Synthetic snapshots live
+under `fixtures/registry/`; tests load them explicitly so fixture behavior does
+not become an implicit production data source.
+
+The pure `mapContractChangesToInventory` helper maps normalized changes to the
+providers and operations already present in a lockfile inventory:
+
+- changes for absent providers are irrelevant and omitted;
+- a provider match without an affected operation is weak evidence, and its
+  message says relevance is uncertain;
+- an affected-operation intersection is strong evidence and carries the
+  operation's repository-relative evidence paths into the message.
+
+Registry source confidence is retained on the change and is not promoted by
+inventory relevance. The mapper performs exact structural matching without an
+LLM. Endpoint- and field-level relevance remain outside DVL-061.
+
 ## Configuration layers
 
 Resolve config in this order:

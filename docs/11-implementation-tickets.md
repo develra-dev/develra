@@ -841,7 +841,7 @@ Acceptance:
 - registry data models carry provenance and confidence;
 - remote capability is explicit.
 
-## [ ] DVL-061 — Add fixture registry
+## [x] DVL-061 — Add fixture registry
 
 **Depends on:** DVL-060
 

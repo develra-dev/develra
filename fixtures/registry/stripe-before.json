@@ -1,0 +1,22 @@
+{
+  "providerId": "stripe",
+  "revision": "synthetic-2026-08-01",
+  "operations": [
+    "webhooks.constructEvent",
+    "payment_intents.create",
+    "checkout.sessions.create"
+  ],
+  "endpoints": [
+    {
+      "method": "POST",
+      "host": "api.stripe.com",
+      "path": "/v1/payment_intents"
+    }
+  ],
+  "confidence": "confirmed",
+  "provenance": {
+    "kind": "fixture",
+    "sourceId": "fixture:synthetic-stripe-contract",
+    "retrievedAt": "2026-08-01T00:00:00Z"
+  }
+}

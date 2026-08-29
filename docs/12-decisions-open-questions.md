@@ -671,3 +671,30 @@ Add entries in this format:
   on the next intentional OIDC release; npm documents trusted publishers as
   unaffected by the traditional-token restriction.
 - Follow-up ticket: None.
+
+## 2026-08-29 — DVL-061 — Local fixture registry and relevance mapping
+
+- Decision or implementation summary: Added an exported, transport-free
+  `FixtureRegistry` that accepts already-loaded provider snapshots and changes,
+  canonicalizes their arrays, serves defensive copies, and filters changes by
+  provider plus an exclusive `since` timestamp. Added pure inventory relevance
+  mapping: exact affected-operation intersections are strong and carry relative
+  evidence paths, provider-only matches are weak and explicitly uncertain, and
+  absent providers are omitted. Registry source confidence remains distinct
+  from inventory match strength.
+- Alternatives considered: Reading fixture files inside the registry was
+  rejected because the core abstraction should not hide filesystem I/O.
+  Generating relevance text with an LLM was rejected because provider and
+  operation IDs provide deterministic structural evidence. Endpoint and field
+  inference were deferred beyond this operation-focused ticket.
+- Validation run: Synthetic before/after snapshots and normalized changes are
+  exercised against the checked-in TypeScript golden lockfile. Focused registry
+  tests, lint, typechecking, and the complete `pnpm verify` gate pass without a
+  network call.
+- Known limitation: The fixture documents are typed test inputs, not remotely
+  validated registry responses. There is no HTTP implementation, no endpoint
+  relevance mapping, and no `check --registry` CLI option; default scan/check
+  behavior remains offline and unchanged.
+- Follow-up ticket: DVL-062 requires explicit authorization before adding a
+  remote transport or CLI behavior; DVL-063 may specify the future API without
+  building it.

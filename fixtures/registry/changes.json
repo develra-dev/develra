@@ -1,0 +1,48 @@
+[
+  {
+    "id": "synthetic-shopify-admin-change",
+    "providerId": "shopify",
+    "observedAt": "2026-08-29T02:00:00Z",
+    "severity": "warning",
+    "operations": ["products.create"],
+    "endpoints": [],
+    "summary": "Synthetic fixture changes an operation for an absent provider.",
+    "confidence": "confirmed",
+    "provenance": {
+      "kind": "fixture",
+      "sourceId": "fixture:synthetic-shopify-contract",
+      "retrievedAt": "2026-08-29T02:00:00Z"
+    }
+  },
+  {
+    "id": "synthetic-stripe-webhook-change",
+    "providerId": "stripe",
+    "observedAt": "2026-08-29T01:00:00Z",
+    "severity": "breaking",
+    "operations": ["webhooks.constructEvent"],
+    "endpoints": [],
+    "summary": "Synthetic fixture changes a Stripe operation absent from the inventory.",
+    "confidence": "probable",
+    "provenance": {
+      "kind": "fixture",
+      "sourceId": "fixture:synthetic-stripe-contract",
+      "retrievedAt": "2026-08-29T01:00:00Z"
+    }
+  },
+  {
+    "id": "synthetic-stripe-checkout-removal",
+    "providerId": "stripe",
+    "observedAt": "2026-08-29T00:00:00Z",
+    "effectiveAt": "2026-09-30T00:00:00Z",
+    "severity": "breaking",
+    "operations": ["checkout.sessions.create"],
+    "endpoints": [],
+    "summary": "Synthetic fixture removes checkout.sessions.create from the provider snapshot.",
+    "confidence": "confirmed",
+    "provenance": {
+      "kind": "fixture",
+      "sourceId": "fixture:synthetic-stripe-contract",
+      "retrievedAt": "2026-08-29T00:00:00Z"
+    }
+  }
+]
