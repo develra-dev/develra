@@ -358,7 +358,9 @@ export function parsePythonManifest(
 
 interface LockedPackage {
   readonly name: string;
-  readonly version: string;
+  // Concrete registry-resolved version, or undefined when the entry's
+  // source or pin cannot be trusted as an exact registry resolution.
+  readonly version: string | undefined;
 }
 
 function resolvedDirectEvidence(
@@ -366,20 +368,24 @@ function resolvedDirectEvidence(
   directNames: ReadonlySet<string>,
   relativePath: string,
 ): Evidence[] {
-  const versions = new Map<string, Set<string>>();
+  // Marker- or platform-specific locks can pin one package to several
+  // versions, or mix registry and non-registry sources. Either is ambiguous,
+  // so those names (marked null) fall back to manifest evidence.
+  const versions = new Map<string, string | null>();
   for (const item of locked) {
     if (!directNames.has(item.name)) continue;
-    const existing = versions.get(item.name) ?? new Set<string>();
-    existing.add(item.version);
-    versions.set(item.name, existing);
+    const existing = versions.get(item.name);
+    versions.set(
+      item.name,
+      item.version !== undefined &&
+        (existing === undefined || existing === item.version)
+        ? item.version
+        : null,
+    );
   }
   const evidence: Evidence[] = [];
   for (const name of [...versions.keys()].sort()) {
-    const candidates = versions.get(name);
-    // Marker- or platform-specific locks can pin one package to several
-    // versions. That is ambiguous, so fall back to manifest evidence.
-    if (candidates?.size !== 1) continue;
-    const version = [...candidates][0];
+    const version = versions.get(name);
     if (!version) continue;
     addPackageEvidence(
       evidence,
@@ -402,12 +408,15 @@ function tomlLockedPackages(
   for (const rawEntry of Array.isArray(root.package) ? root.package : []) {
     const entry = asRecord(rawEntry);
     const name = stringValue(entry?.name);
-    const version = stringValue(entry?.version);
-    if (!entry || !name || !version) continue;
+    if (!entry || !name) continue;
+    const version = stringValue(entry.version);
     // Only registry-resolved entries carry trustworthy contract versions;
-    // path, editable, virtual, git, and URL sources are skipped.
-    if (!isRegistrySource(asRecord(entry.source))) continue;
-    locked.push({ name: normalizePackageName("pypi", name), version });
+    // path, editable, virtual, git, and URL sources are recorded without a
+    // version so a package they share with registry entries stays ambiguous.
+    locked.push({
+      name: normalizePackageName("pypi", name),
+      version: isRegistrySource(asRecord(entry.source)) ? version : undefined,
+    });
   }
   return locked;
 }
@@ -426,6 +435,11 @@ function uvLockedPackages(text: string): LockedPackage[] {
   );
 }
 
+// PEP 440 exact pin: "==" followed by one concrete version — no "==="
+// arbitrary equality, no wildcard, no compound specifier.
+const PIPFILE_EXACT_PIN = /^==[^,\s*=][^,\s*]*$/u;
+const PIPFILE_NON_REGISTRY_KEYS = ["git", "hg", "svn", "bzr", "path", "file"];
+
 function pipfileLockedPackages(
   text: string,
   relativePath: string,
@@ -437,12 +451,19 @@ function pipfileLockedPackages(
     for (const [rawName, rawValue] of Object.entries(
       asRecord(root[section]) ?? {},
     )) {
-      const version = stringValue(asRecord(rawValue)?.version);
-      // Registry entries always pin "==version"; VCS and path entries do not.
-      if (!version?.startsWith("==")) continue;
+      const entry = asRecord(rawValue);
+      const pin = stringValue(entry?.version);
+      // Only registry entries pinned to an exact "==version" are trustworthy;
+      // VCS, path, and file entries may still carry a version field, but it
+      // describes whatever the source builds, not a registry resolution.
+      const trusted =
+        entry !== undefined &&
+        pin !== undefined &&
+        PIPFILE_EXACT_PIN.test(pin) &&
+        PIPFILE_NON_REGISTRY_KEYS.every((key) => entry[key] === undefined);
       locked.push({
         name: normalizePackageName("pypi", rawName),
-        version: version.slice(2),
+        version: trusted ? pin.slice(2) : undefined,
       });
     }
   }

@@ -130,8 +130,9 @@ Package version precedence:
 Python lockfiles contribute resolved versions only for packages that a Python
 manifest in the same directory already declares as direct. Locked transitive
 packages are never promoted to direct dependencies, non-registry sources (path,
-editable, virtual, git, URL) are skipped, and a package locked to multiple
-marker-specific versions falls back to manifest evidence.
+editable, virtual, git, URL) never contribute versions, and a package locked to
+multiple marker-specific versions — or to a mix of registry and non-registry
+sources — falls back to manifest evidence.
 
 Do not attempt package installation or run package-manager commands during scan.
 
