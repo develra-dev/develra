@@ -220,7 +220,7 @@ describe("parsers and detection", () => {
     ]);
   });
 
-  it("resolves uv.lock registry entries and skips virtual and ambiguous ones", () => {
+  it("resolves uv.lock registry entries and skips virtual, ambiguous, and source-forked ones", () => {
     const result = parsePythonLock(
       [
         "version = 1",
@@ -244,9 +244,19 @@ describe("parsers and detection", () => {
         'name = "pinned-twice"',
         'version = "2.0.0"',
         'source = { registry = "https://pypi.org/simple" }',
+        "",
+        "[[package]]",
+        'name = "forked-dep"',
+        'version = "1.0.0"',
+        'source = { registry = "https://pypi.org/simple" }',
+        "",
+        "[[package]]",
+        'name = "forked-dep"',
+        'version = "2.0.0"',
+        'source = { git = "https://example.invalid/fork.git?rev=abc123" }',
       ].join("\n"),
       "uv.lock",
-      new Set(["fixture-project", "requests", "pinned-twice"]),
+      new Set(["fixture-project", "requests", "pinned-twice", "forked-dep"]),
     );
     expect(result.diagnostics).toEqual([]);
     expect(result.evidence.map((item) => item.package)).toEqual([
@@ -259,7 +269,7 @@ describe("parsers and detection", () => {
     ]);
   });
 
-  it("resolves Pipfile.lock pins without promoting transitive packages", () => {
+  it("resolves only exact registry Pipfile.lock pins without promoting transitive packages", () => {
     const result = parsePythonLock(
       JSON.stringify({
         _meta: { hash: { sha256: "0" } },
@@ -267,11 +277,25 @@ describe("parsers and detection", () => {
           Requests: { version: "==2.32.4" },
           urllib3: { version: "==2.5.0" },
           "vcs-dep": { git: "https://example.invalid/repo.git" },
+          "vcs-pinned": {
+            git: "https://example.invalid/pin.git",
+            ref: "abc123",
+            version: "==1.4.0",
+          },
+          "wildcard-pin": { version: "==2.32.*" },
+          "arbitrary-equality": { version: "===1.0-weird" },
         },
         develop: { pytest: { version: "==8.3.2" } },
       }),
       "Pipfile.lock",
-      new Set(["requests", "pytest", "vcs-dep"]),
+      new Set([
+        "requests",
+        "pytest",
+        "vcs-dep",
+        "vcs-pinned",
+        "wildcard-pin",
+        "arbitrary-equality",
+      ]),
     );
     expect(result.diagnostics).toEqual([]);
     expect(result.evidence.map((item) => item.package)).toEqual([
