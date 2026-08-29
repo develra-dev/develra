@@ -1,0 +1,261 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://develra.dev/schemas/registry-response/v1.json",
+  "title": "Develra registry client response",
+  "oneOf": [
+    {
+      "$ref": "#/$defs/capabilitiesEnvelope"
+    },
+    {
+      "$ref": "#/$defs/providerStateEnvelope"
+    },
+    {
+      "$ref": "#/$defs/changeListEnvelope"
+    }
+  ],
+  "$defs": {
+    "providerId": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+      "maxLength": 128
+    },
+    "operationId": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256,
+      "pattern": "^[A-Za-z0-9_-]+(?:\\.[A-Za-z0-9_-]+)*$"
+    },
+    "confidence": {
+      "type": "string",
+      "enum": ["confirmed", "probable", "possible"]
+    },
+    "endpoint": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["method", "path"],
+      "properties": {
+        "method": {
+          "type": "string",
+          "pattern": "^[A-Z][A-Z0-9_-]{1,15}$"
+        },
+        "host": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 253,
+          "pattern": "^[a-z0-9.-]+$"
+        },
+        "path": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048,
+          "pattern": "^/"
+        }
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "source_id", "retrieved_at"],
+      "properties": {
+        "kind": {
+          "const": "remote"
+        },
+        "source_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256,
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9:._/-]*$"
+        },
+        "retrieved_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "source_url": {
+          "type": "string",
+          "format": "uri",
+          "pattern": "^https://",
+          "maxLength": 2048
+        },
+        "content_hash": {
+          "type": "string",
+          "pattern": "^sha256:[a-f0-9]{64}$"
+        }
+      }
+    },
+    "capabilitiesEnvelope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["api_version", "data"],
+      "properties": {
+        "api_version": {
+          "const": "v1"
+        },
+        "data": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["mode", "remote", "provider_state", "changes"],
+          "properties": {
+            "mode": {
+              "const": "remote"
+            },
+            "remote": {
+              "const": true
+            },
+            "provider_state": {
+              "type": "boolean"
+            },
+            "changes": {
+              "type": "boolean"
+            }
+          }
+        }
+      }
+    },
+    "providerStateEnvelope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["api_version", "data"],
+      "properties": {
+        "api_version": {
+          "const": "v1"
+        },
+        "data": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "provider_id",
+            "revision",
+            "operations",
+            "endpoints",
+            "confidence",
+            "provenance"
+          ],
+          "properties": {
+            "provider_id": {
+              "$ref": "#/$defs/providerId"
+            },
+            "revision": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 256
+            },
+            "operations": {
+              "type": "array",
+              "maxItems": 10000,
+              "uniqueItems": true,
+              "items": {
+                "$ref": "#/$defs/operationId"
+              }
+            },
+            "endpoints": {
+              "type": "array",
+              "maxItems": 10000,
+              "items": {
+                "$ref": "#/$defs/endpoint"
+              }
+            },
+            "confidence": {
+              "$ref": "#/$defs/confidence"
+            },
+            "provenance": {
+              "$ref": "#/$defs/provenance"
+            }
+          }
+        }
+      }
+    },
+    "contractChange": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "provider_id",
+        "observed_at",
+        "severity",
+        "operations",
+        "endpoints",
+        "summary",
+        "confidence",
+        "provenance"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256,
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9:._/-]*$"
+        },
+        "provider_id": {
+          "$ref": "#/$defs/providerId"
+        },
+        "observed_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "effective_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "severity": {
+          "type": "string",
+          "enum": ["breaking", "warning", "informational", "unknown"]
+        },
+        "operations": {
+          "type": "array",
+          "maxItems": 10000,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/operationId"
+          }
+        },
+        "endpoints": {
+          "type": "array",
+          "maxItems": 10000,
+          "items": {
+            "$ref": "#/$defs/endpoint"
+          }
+        },
+        "summary": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        },
+        "confidence": {
+          "$ref": "#/$defs/confidence"
+        },
+        "provenance": {
+          "$ref": "#/$defs/provenance"
+        }
+      }
+    },
+    "changeListEnvelope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["api_version", "data", "page"],
+      "properties": {
+        "api_version": {
+          "const": "v1"
+        },
+        "data": {
+          "type": "array",
+          "maxItems": 100,
+          "items": {
+            "$ref": "#/$defs/contractChange"
+          }
+        },
+        "page": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["next_cursor"],
+          "properties": {
+            "next_cursor": {
+              "type": ["string", "null"],
+              "minLength": 1,
+              "maxLength": 1024
+            }
+          }
+        }
+      }
+    }
+  }
+}

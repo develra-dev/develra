@@ -1,4 +1,5 @@
 import type { Confidence, EndpointRef, ProviderFinding } from "./types.js";
+import { DevelraError } from "./errors.js";
 
 export const REGISTRY_MODES = ["offline", "fixture", "remote"] as const;
 export type RegistryMode = (typeof REGISTRY_MODES)[number];
@@ -79,6 +80,16 @@ export interface ContractChangeRelevance {
   readonly files: readonly string[];
   readonly message: string;
 }
+
+export type RegistryCheckResult =
+  | {
+      readonly status: "no_changes";
+      readonly findings: readonly [];
+    }
+  | {
+      readonly status: "changes";
+      readonly findings: readonly ContractChangeRelevance[];
+    };
 
 const NOOP_CAPABILITIES: RegistryCapabilities = Object.freeze({
   mode: "offline",
@@ -252,6 +263,29 @@ export class FixtureRegistry implements ContractRegistry {
         .map(cloneChange),
     );
   }
+}
+
+export async function checkRegistryForInventory(
+  registry: ContractRegistry,
+  providers: readonly ProviderFinding[],
+): Promise<RegistryCheckResult> {
+  const capabilities = await registry.getCapabilities();
+  if (!capabilities.remote || !capabilities.changes) {
+    throw new DevelraError(
+      "The selected registry does not provide remote changes.",
+      4,
+      "DVL_REGISTRY_CAPABILITY",
+    );
+  }
+  if (providers.length === 0) return { status: "no_changes", findings: [] };
+
+  const changes = await registry.getChanges({
+    providerIds: providers.map((provider) => provider.id),
+  });
+  const findings = mapContractChangesToInventory(changes, providers);
+  return findings.length === 0
+    ? { status: "no_changes", findings: [] }
+    : { status: "changes", findings };
 }
 
 export function mapContractChangesToInventory(

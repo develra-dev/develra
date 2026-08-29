@@ -854,7 +854,7 @@ Acceptance:
 - operation match is worded as stronger evidence;
 - no LLM required.
 
-## [ ] DVL-062 — Add optional `check --registry`
+## [x] DVL-062 — Add optional `check --registry`
 
 **Depends on:** DVL-061
 

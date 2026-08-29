@@ -44,6 +44,7 @@ for (const name of [
   "develra-config.schema.json",
   "develra-lock.schema.json",
   "provider.schema.json",
+  "registry-response.schema.json",
 ]) {
   await cp(
     path.join(repositoryRoot, "schemas", name),

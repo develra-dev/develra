@@ -11,7 +11,10 @@ import addFormatsImport from "ajv-formats";
 
 import { DevelraError } from "./errors.js";
 
-type SchemaName = "develra-lock.schema.json" | "develra-config.schema.json";
+type SchemaName =
+  | "develra-lock.schema.json"
+  | "develra-config.schema.json"
+  | "registry-response.schema.json";
 
 interface AjvLike {
   compile(schema: object): ValidateFunction;
@@ -86,6 +89,17 @@ export async function validateConfig(value: unknown): Promise<void> {
       `Invalid Develra config: ${formatErrors(validator.errors)}`,
       2,
       "DVL_CONFIG_SCHEMA",
+    );
+  }
+}
+
+export async function validateRegistryResponse(value: unknown): Promise<void> {
+  const validator = await schemaValidator("registry-response.schema.json");
+  if (!validator(value)) {
+    throw new DevelraError(
+      `Invalid registry response: ${formatErrors(validator.errors)}`,
+      4,
+      "DVL_REGISTRY_SCHEMA",
     );
   }
 }

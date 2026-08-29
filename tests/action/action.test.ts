@@ -71,6 +71,7 @@ describe("bundled GitHub Action", () => {
       "develra-config.schema.json",
       "develra-lock.schema.json",
       "provider.schema.json",
+      "registry-response.schema.json",
     ];
     for (const root of ["apps/cli", "packages/action"]) {
       expect(

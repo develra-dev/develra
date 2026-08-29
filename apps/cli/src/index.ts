@@ -3,6 +3,8 @@ import nodePath from "node:path";
 
 import {
   DevelraError,
+  HttpRegistry,
+  checkRegistryForInventory,
   diffLockfiles,
   evaluatePolicy,
   parseLockfile,
@@ -14,7 +16,9 @@ import {
   writeLockfileAtomic,
   type ChangeKind,
   type Confidence,
+  type ContractRegistry,
   type LockfileDiff,
+  type RegistryCheckResult,
   type ScanResult,
 } from "@develra/core";
 import { loadBundledProviders } from "@develra/providers";
@@ -24,6 +28,7 @@ import {
   renderDiffMarkdown,
   renderJson,
   renderMarkdown,
+  renderRegistryConsole,
   renderSarif,
   renderSvg,
 } from "@develra/reporters";
@@ -175,6 +180,8 @@ export interface CheckCommandOptions {
   readonly json?: string;
   readonly markdown?: string;
   readonly sarif?: string;
+  readonly registry?: string;
+  readonly registryFactory?: (url: string) => ContractRegistry;
   readonly strict?: boolean;
   readonly quiet?: boolean;
   readonly writer?: OutputWriter;
@@ -185,6 +192,7 @@ export interface CheckCommandResult {
   readonly diff: LockfileDiff;
   readonly passed: boolean;
   readonly violations: number;
+  readonly registry?: RegistryCheckResult;
   readonly reportPaths: readonly string[];
 }
 
@@ -233,20 +241,35 @@ export async function performCheck(
     options.failOn ?? config?.policy?.fail_on ?? "probable",
     policyKinds,
   );
+  const registry = options.registry
+    ? await checkRegistryForInventory(
+        (options.registryFactory ?? ((url) => new HttpRegistry(url)))(
+          options.registry,
+        ),
+        result.providers,
+      )
+    : undefined;
   const writer = options.writer ?? processWriter;
   const machineStdout = options.json === "-";
-  if (!options.quiet)
-    (machineStdout ? writer.stderr : writer.stdout)(renderDiffConsole(diff));
+  if (!options.quiet) {
+    const humanWriter = machineStdout ? writer.stderr : writer.stdout;
+    humanWriter(renderDiffConsole(diff));
+    if (registry) humanWriter(renderRegistryConsole(registry));
+  }
   const reportPaths: string[] = [];
   const markdownPath = options.markdown ?? config?.reporters?.markdown;
   const sarifPath = options.sarif ?? config?.reporters?.sarif;
   if (markdownPath)
     reportPaths.push(
-      await writeArtifact(root, markdownPath, renderDiffMarkdown(diff)),
+      await writeArtifact(
+        root,
+        markdownPath,
+        renderDiffMarkdown(diff, registry),
+      ),
     );
   if (sarifPath)
     reportPaths.push(
-      await writeArtifact(root, sarifPath, renderSarif(result, diff)),
+      await writeArtifact(root, sarifPath, renderSarif(result, diff, registry)),
     );
   if (options.json === "-") {
     writer.stdout(
@@ -254,7 +277,7 @@ export async function performCheck(
         schema_version: 1,
         command: "check",
         status: diff.changed ? "changed" : "ok",
-        result: { diff, policy },
+        result: { diff, policy, ...(registry ? { registry } : {}) },
         diagnostics: result.diagnostics,
       }),
     );
@@ -267,7 +290,7 @@ export async function performCheck(
           schema_version: 1,
           command: "check",
           status: diff.changed ? "changed" : "ok",
-          result: { diff, policy },
+          result: { diff, policy, ...(registry ? { registry } : {}) },
           diagnostics: result.diagnostics,
         }),
       ),
@@ -278,6 +301,7 @@ export async function performCheck(
     diff,
     passed: policy.passed,
     violations: policy.violations.length,
+    ...(registry ? { registry } : {}),
     reportPaths,
   };
 }

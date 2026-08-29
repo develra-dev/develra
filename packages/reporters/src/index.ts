@@ -7,6 +7,7 @@ import type {
   LockfileDiff,
   LockfileDocument,
   ProviderFinding,
+  RegistryCheckResult,
   ScanResult,
 } from "@develra/core";
 
@@ -104,6 +105,34 @@ export function renderDiffConsole(diff: LockfileDiff): string {
     if (change.files.length > 0) lines.push(`  ${change.files.join(", ")}`);
   }
   lines.push("", "Run `develra scan` and review develra.lock.");
+  return `${lines.join("\n")}\n`;
+}
+
+function terminalText(value: string): string {
+  return [...value]
+    .map((character) => {
+      const codePoint = character.codePointAt(0) ?? 0;
+      return codePoint <= 31 || (codePoint >= 127 && codePoint <= 159)
+        ? " "
+        : character;
+    })
+    .join("")
+    .trim();
+}
+
+export function renderRegistryConsole(registry: RegistryCheckResult): string {
+  if (registry.status === "no_changes")
+    return "Remote registry: no relevant contract changes.\n";
+
+  const lines = ["Remote registry: relevant contract changes", ""];
+  for (const finding of registry.findings) {
+    const source = finding.change.provenance;
+    lines.push(`! ${terminalText(finding.message)}`);
+    lines.push(
+      `  source ${terminalText(source.sourceId)} · retrieved ${terminalText(source.retrievedAt)}`,
+    );
+    if (source.sourceUrl) lines.push(`  ${terminalText(source.sourceUrl)}`);
+  }
   return `${lines.join("\n")}\n`;
 }
 
@@ -228,26 +257,49 @@ export function renderMarkdown(
   return lines.join("\n");
 }
 
-export function renderDiffMarkdown(diff: LockfileDiff): string {
+export function renderDiffMarkdown(
+  diff: LockfileDiff,
+  registry?: RegistryCheckResult,
+): string {
   const lines = ["# Develra external-contract check", ""];
-  if (!diff.changed)
-    return `${lines.join("\n")}**Status:** Inventory is current.\n`;
-  lines.push(
-    "**Status:** Contract inventory changed",
-    "",
-    "| Change | Contract | Confidence | Evidence |",
-    "|---|---|---|---|",
-  );
-  for (const change of diff.changes) {
+  if (!diff.changed) lines.push("**Status:** Inventory is current.", "");
+  else {
     lines.push(
-      `| ${change.type} ${change.kind} | ${markdownCode(`${change.providerId ? `${change.providerId}.` : ""}${change.key}`)} | ${change.confidence} | ${change.files.map(markdownCode).join(", ")} |`,
+      "**Status:** Contract inventory changed",
+      "",
+      "| Change | Contract | Confidence | Evidence |",
+      "|---|---|---|---|",
+    );
+    for (const change of diff.changes) {
+      lines.push(
+        `| ${change.type} ${change.kind} | ${markdownCode(`${change.providerId ? `${change.providerId}.` : ""}${change.key}`)} | ${change.confidence} | ${change.files.map(markdownCode).join(", ")} |`,
+      );
+    }
+    lines.push(
+      "",
+      "Run `npx develra scan` locally and review `develra.lock`.",
+      "",
     );
   }
-  lines.push(
-    "",
-    "Run `npx develra scan` locally and review `develra.lock`.",
-    "",
-  );
+
+  if (registry) {
+    lines.push("## Remote registry", "");
+    if (registry.status === "no_changes") {
+      lines.push("No relevant remote contract changes.", "");
+    } else {
+      for (const finding of registry.findings) {
+        const source = finding.change.provenance;
+        lines.push(
+          `- ${markdownText(terminalText(finding.message))}`,
+          `  - Source: ${markdownCode(source.sourceId)}`,
+          `  - Retrieved: ${markdownCode(source.retrievedAt)}`,
+        );
+        if (source.sourceUrl)
+          lines.push(`  - URL: ${markdownCode(source.sourceUrl)}`);
+      }
+      lines.push("");
+    }
+  }
   return lines.join("\n");
 }
 
@@ -346,7 +398,11 @@ function sarifLevel(confidence: Confidence): "error" | "warning" | "note" {
       : "note";
 }
 
-export function renderSarif(result: ScanResult, diff?: LockfileDiff): string {
+export function renderSarif(
+  result: ScanResult,
+  diff?: LockfileDiff,
+  registry?: RegistryCheckResult,
+): string {
   const changes: readonly InventoryChange[] =
     diff?.changes ??
     result.providers.map(
@@ -360,10 +416,12 @@ export function renderSarif(result: ScanResult, diff?: LockfileDiff): string {
         }) satisfies InventoryChange,
     );
   const bounded = changes.slice(0, 1000);
+  const registryFindings = registry?.findings ?? [];
   const rules = [
-    ...new Set(
-      bounded.map((change) => `develra/${change.kind}-${change.type}`),
-    ),
+    ...new Set([
+      ...bounded.map((change) => `develra/${change.kind}-${change.type}`),
+      ...(registryFindings.length ? ["develra/registry-change"] : []),
+    ]),
   ].sort();
   const sarif = {
     version: "2.1.0",
@@ -382,32 +440,71 @@ export function renderSarif(result: ScanResult, diff?: LockfileDiff): string {
             })),
           },
         },
-        results: bounded.map((change) => ({
-          ruleId: `develra/${change.kind}-${change.type}`,
-          level: sarifLevel(change.confidence),
-          message: {
-            text: `${change.type} ${change.kind}: ${change.providerId ? `${change.providerId}.` : ""}${change.key}`,
-          },
-          ...(change.files[0]
-            ? {
-                locations: [
-                  {
-                    physicalLocation: {
-                      artifactLocation: {
-                        uri: change.files[0],
-                        uriBaseId: "%SRCROOT%",
+        results: [
+          ...bounded.map((change) => ({
+            ruleId: `develra/${change.kind}-${change.type}`,
+            level: sarifLevel(change.confidence),
+            message: {
+              text: `${change.type} ${change.kind}: ${change.providerId ? `${change.providerId}.` : ""}${change.key}`,
+            },
+            ...(change.files[0]
+              ? {
+                  locations: [
+                    {
+                      physicalLocation: {
+                        artifactLocation: {
+                          uri: change.files[0],
+                          uriBaseId: "%SRCROOT%",
+                        },
                       },
                     },
-                  },
-                ],
-              }
-            : {}),
-          partialFingerprints: {
-            primaryLocationLineHash: fingerprint(
-              `${change.type}:${change.kind}:${change.providerId ?? ""}:${change.key}`,
-            ),
-          },
-        })),
+                  ],
+                }
+              : {}),
+            partialFingerprints: {
+              primaryLocationLineHash: fingerprint(
+                `${change.type}:${change.kind}:${change.providerId ?? ""}:${change.key}`,
+              ),
+            },
+          })),
+          ...registryFindings.map((finding) => {
+            const source = finding.change.provenance;
+            return {
+              ruleId: "develra/registry-change",
+              level: sarifLevel(finding.change.confidence),
+              message: { text: terminalText(finding.message) },
+              ...(finding.files[0]
+                ? {
+                    locations: [
+                      {
+                        physicalLocation: {
+                          artifactLocation: {
+                            uri: finding.files[0],
+                            uriBaseId: "%SRCROOT%",
+                          },
+                        },
+                      },
+                    ],
+                  }
+                : {}),
+              properties: {
+                providerId: finding.change.providerId,
+                changeId: finding.change.id,
+                sourceId: source.sourceId,
+                retrievedAt: source.retrievedAt,
+                ...(source.sourceUrl ? { sourceUrl: source.sourceUrl } : {}),
+                ...(source.contentHash
+                  ? { contentHash: source.contentHash }
+                  : {}),
+              },
+              partialFingerprints: {
+                primaryLocationLineHash: fingerprint(
+                  `registry:${finding.change.providerId}:${finding.change.id}`,
+                ),
+              },
+            };
+          }),
+        ],
       },
     ],
   };

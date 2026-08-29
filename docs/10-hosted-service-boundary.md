@@ -66,7 +66,7 @@ Provider and operation IDs originate in provider packs.
 
 Do not use display names as foreign keys.
 
-## Draft registry protocol
+## Registry protocol and optional client
 
 The CLI depends on an abstract interface. The transport contract for a future
 public HTTP registry is checked in at `schemas/registry.openapi.yaml` and
@@ -84,6 +84,13 @@ All five operations are public, read-only, cacheable `GET` requests with
 versioned envelopes, ETag revalidation, bounded pagination, and structured
 errors. The contract identifies no deployed server. Authentication, billing,
 mutation endpoints, and inventory upload are deliberately absent.
+
+The open-source CLI implements only the capabilities, provider-state, and
+change-query client methods. `check --registry <url>` must be explicit and
+sends only detected provider IDs; it does not send the normalized inventory,
+source, evidence paths, or credentials. The repository still identifies no
+default deployed server. Remote findings are informational and carry source
+provenance rather than claiming guaranteed impact.
 
 Uploading an inventory requires explicit user action and a privacy contract. It
 must not be added to the public protocol merely because the normalized

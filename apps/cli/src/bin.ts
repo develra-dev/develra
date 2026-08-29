@@ -128,6 +128,7 @@ program
   .option("--json <path>", "write JSON; use - for stdout")
   .option("--markdown <path>", "write Markdown report")
   .option("--sarif <path>", "write SARIF")
+  .option("--registry <url>", "check an explicit remote registry URL")
   .action(
     async (
       pathArgument: string | undefined,
@@ -148,6 +149,7 @@ program
         ...(options.json ? { json: options.json as string } : {}),
         ...(options.markdown ? { markdown: options.markdown as string } : {}),
         ...(options.sarif ? { sarif: options.sarif as string } : {}),
+        ...(options.registry ? { registry: options.registry as string } : {}),
         strict: Boolean(global.strict),
         quiet: Boolean(global.quiet),
       });

@@ -2,6 +2,7 @@ export * from "./classify.js";
 export * from "./diff.js";
 export * from "./discovery.js";
 export * from "./errors.js";
+export * from "./http-registry.js";
 export * from "./lockfile.js";
 export * from "./manifests.js";
 export * from "./mcp.js";

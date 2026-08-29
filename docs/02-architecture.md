@@ -368,12 +368,12 @@ Provide:
 
 - `NoopRegistry` for offline default;
 - `FixtureRegistry` for tests;
-- later `HttpRegistry`.
+- `HttpRegistry` only for an explicitly supplied remote URL.
 
 `NoopRegistry` advertises `mode: "offline"` and `remote: false`, returns no
-provider state or changes, and performs no I/O. Current `scan` and local `check`
-paths do not query a registry at all. A future remote-capable path must be
-enabled by an explicit option and must never be instantiated by default.
+provider state or changes, and performs no I/O. Current `scan` and ordinary
+`check` paths do not query a registry at all. `check --registry <url>` is the
+only remote-capable path and the transport is never instantiated by default.
 
 `FixtureRegistry` accepts already-loaded local provider states and changes. It
 advertises `mode: "fixture"` and `remote: false`, canonicalizes fixture arrays,
@@ -395,10 +395,10 @@ Registry source confidence is retained on the change and is not promoted by
 inventory relevance. The mapper performs exact structural matching without an
 LLM. Endpoint- and field-level relevance remain outside DVL-061.
 
-## Draft registry HTTP contract
+## Registry HTTP contract and client
 
-`schemas/registry.openapi.yaml` is the canonical transport draft for a future
-public registry. It defines only read-only v1 capabilities, provider
+`schemas/registry.openapi.yaml` is the canonical transport contract for a
+compatible public registry. It defines only read-only v1 capabilities, provider
 discovery/detail/state, and change-query operations. Every success or error
 body carries `api_version: v1`; list responses use bounded opaque cursors;
 successful responses support ETag revalidation and explicit public cache
@@ -408,8 +408,18 @@ no-store caching and retry guidance for rate limiting or unavailability.
 The contract has no server URL, security scheme, request body, inventory-upload
 operation, authentication, or billing surface. Synthetic examples under
 `fixtures/registry-api/` are validated against the component schemas without
-making a network request. Nothing in the current scanner or CLI loads this
-document or instantiates a transport.
+making a network request.
+
+`HttpRegistry` uses the Node.js built-in `fetch` implementation only after an
+explicit `check --registry` option. It accepts HTTPS URLs, with loopback HTTP
+only for testing; rejects credentials, query strings, fragments, and redirects;
+omits credentials and authorization headers; applies a five-second timeout;
+and reads at most 512 KiB of decompressed JSON per response. Runtime responses
+are validated against `schemas/registry-response.schema.json`. Provider queries
+and opaque-cursor pagination are bounded, repeated cursors and duplicate change
+IDs are rejected, and remote failures are typed as exit code 4. The CLI sends
+only detected provider IDs, maps returned changes locally, and never uploads
+source, lockfile contents, or evidence paths.
 
 ## Configuration layers
 

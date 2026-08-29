@@ -129,6 +129,7 @@ try {
     "schemas/develra-lock.schema.json",
     "schemas/develra-config.schema.json",
     "schemas/provider.schema.json",
+    "schemas/registry-response.schema.json",
   ];
   for (const relative of requiredActionFiles) {
     await stat(
@@ -171,6 +172,7 @@ try {
     "dist/licenses.txt",
     "dist/data/stripe.yaml",
     "dist/schemas/develra-lock.schema.json",
+    "dist/schemas/registry-response.schema.json",
   ]) {
     assert(
       packedFiles.includes(required),

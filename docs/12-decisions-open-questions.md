@@ -727,3 +727,29 @@ Add entries in this format:
   an optional bounded client transport and `check --registry` behavior.
 - Follow-up ticket: DVL-062, only after explicit authorization for its remote
   transport and CLI behavior.
+
+## 2026-08-29 — DVL-062 — Optional remote registry check
+
+- Decision or implementation summary: Added `check --registry <url>` as the
+  sole transport opt-in. The core `HttpRegistry` uses Node's built-in `fetch`,
+  accepts HTTPS plus loopback HTTP, sends only detected provider IDs, rejects
+  redirects and credential-bearing URLs, applies a five-second timeout and a
+  512 KiB response limit, validates a dedicated runtime response schema, and
+  bounds query batches and opaque-cursor pagination. Relevant changes are
+  mapped locally and remain informational; console, JSON, Markdown, and SARIF
+  preserve registry provenance. Remote failures are typed as exit code 4.
+- Alternatives considered: A default registry URL, config-based opt-in,
+  authentication, caching, inventory upload, a third-party HTTP dependency,
+  and making upstream changes fail policy were omitted because they add trust
+  or product complexity not required by this ticket.
+- Validation run: Unit tests cover conversion, pagination, URL safety, response
+  bounds, schema rejection, unavailable responses, and reporter provenance. A
+  packaged CLI test uses a loopback registry to prove ordinary `check` makes
+  zero requests, no-change and change responses remain distinct, JSON carries
+  provenance, and unavailable service responses exit 4. The complete
+  repository validation gate passes.
+- Known limitation: Develra does not operate or configure a default registry,
+  send authentication, cache remote data, or fail CI for upstream changes.
+  Provider-state support is exposed by the reusable client but is not required
+  by the current CLI relevance query.
+- Follow-up ticket: None; M6's optional public registry boundary is complete.

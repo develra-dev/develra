@@ -146,6 +146,7 @@ develra check [path]
 --json <path|->
 --markdown <path>
 --sarif <path>
+--registry <url>          query a compatible read-only remote registry
 ```
 
 ### Behavior
@@ -157,6 +158,19 @@ develra check [path]
 3. normalizes both structures;
 4. reports additions, removals, and changes;
 5. exits 3 when selected policy is violated.
+
+Without `--registry`, `check` does not instantiate a transport and remains
+offline. With an explicit registry URL, it sends only the detected provider IDs
+to the registry capabilities and changes endpoints. It does not send source,
+lockfile contents, credentials, file paths, or authorization headers.
+
+Registry URLs must use HTTPS; HTTP is accepted only for loopback development.
+Responses must be JSON matching `schemas/registry-response.schema.json`, are
+limited to 512 KiB each, time out after five seconds, and use bounded
+pagination. A successful response distinguishes no relevant changes from
+relevant changes and includes provenance in console, JSON, Markdown, and SARIF
+reports. Remote findings are informational and do not change local policy.
+Transport, capability, pagination, or validation failure exits 4.
 
 Example:
 

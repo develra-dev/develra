@@ -75,6 +75,19 @@ npx develra doctor
 npx develra providers list
 ```
 
+An optional remote registry check can compare detected provider and operation
+IDs with a compatible read-only registry:
+
+```bash
+npx develra check --registry https://registry.example.com
+```
+
+This flag is the only way to enable the transport. It sends detected provider
+IDs as query parameters, never source, lockfile contents, credentials, or file
+paths. Remote changes are informational and include source provenance in
+console, JSON, Markdown, and SARIF output; local inventory policy remains the
+only reason for exit code 3. Registry transport or validation failures exit 4.
+
 By default, `check` fails on changed findings at `probable` confidence or
 higher. Set policy in `develra.config.yaml`:
 
@@ -176,13 +189,15 @@ scanner monitors vendors.
 pnpm test:fixtures
 ```
 
-## Registry protocol draft
+## Optional registry protocol
 
-The [draft public registry OpenAPI contract](schemas/registry.openapi.yaml) is
-a read-only, transport-neutral specification for future capabilities, provider
-metadata/state, and normalized changes. It has no deployed server,
-authentication, billing, inventory upload, or effect on the offline CLI.
-Bounded synthetic response fixtures live under `fixtures/registry-api/`.
+The [public registry OpenAPI contract](schemas/registry.openapi.yaml) defines
+read-only capabilities, provider metadata/state, and normalized changes. No
+default server is configured or deployed by this repository, and the protocol
+has no authentication, billing, mutation, or inventory-upload surface. The
+optional client validates bounded responses; without `--registry`, `scan` and
+`check` remain offline. Synthetic response fixtures live under
+`fixtures/registry-api/`.
 
 ## Development
 

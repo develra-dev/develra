@@ -26,21 +26,20 @@
 - npm trusted publishing has been proven end to end with the `v0.1.2` release.
 - npm account writes require 2FA, the `develra` package disallows traditional
   publishing tokens, and the account token inventory is empty.
-- DVL-061 adds an offline `FixtureRegistry` and relevance mapping. DVL-063 adds
-  a read-only future registry OpenAPI contract and synthetic response fixtures.
-  No registry transport, server, or CLI mode exists yet.
+- DVL-062 adds the explicit `check --registry <url>` mode and a bounded,
+  validated `HttpRegistry`. DVL-063 provides the matching read-only OpenAPI
+  contract and synthetic response fixtures. No default registry server exists.
 
 ## Next 3
 
-1. **Decide:** Explicitly authorize DVL-062 before adding any optional remote
-   transport or `check --registry` behavior; DVL-061 and DVL-063 stay local.
-2. **Review:** Treat `schemas/registry.openapi.yaml` as a draft until a real
-   registry implementation is intentionally approved; keep uploads, auth, and
-   billing out of the public v1 surface.
-3. **Prepare:** For the next intentional package release, verify the immutable
+1. **Review:** Keep any future hosted registry implementation separate from the
+   explicit public client boundary; uploads, auth, and billing remain absent.
+2. **Prepare:** For the next intentional package release, verify the immutable
    tag and `apps/cli/package.json` version, then run `pnpm release:validate` and
    `pnpm audit --prod`. Do not publish or move tags without explicit maintainer
    authorization.
+3. **Observe:** Gather real usage feedback before adding cache state,
+   credentials, or an upstream-change failure policy.
 
 ## Recent decisions
 
@@ -56,6 +55,8 @@
   strong relevance, and labels provider-only matches as uncertain.
 - DVL-063 specifies only five cacheable public GET operations with versioned
   envelopes and bounded synthetic fixtures; it does not deploy a service.
+- DVL-062 implements only the explicit read-only client path: no configured
+  endpoint, authentication, upload, caching, or upstream-change failure policy.
 - npm publishing is hardened around OIDC: account writes require 2FA, package
   publishing disallows traditional tokens, and no access tokens remain.
 - Public Git history uses a GitHub noreply identity, and local research notes
@@ -74,9 +75,10 @@
 
 ## Landmines
 
-- Default `scan` and local `check` must stay offline. They must not instantiate
-  a network transport, execute target code or package scripts, import target
-  modules, or run MCP servers.
+- Default `scan` and ordinary `check` must stay offline. Only an explicit
+  `check --registry` URL may instantiate a network transport. No command may
+  execute target code or package scripts, import target modules, or run MCP
+  servers.
 - Never emit secrets, environment values, source snippets, authorization data,
   or absolute paths. Enforce root containment and repository-relative POSIX
   evidence paths.
