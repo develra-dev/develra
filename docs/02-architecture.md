@@ -324,10 +324,43 @@ The human reporter explains changes. Policy decides whether they fail CI.
 Do not couple the scanner to an HTTP endpoint.
 
 ```ts
+type RegistryMode = "offline" | "fixture" | "remote";
+
+interface RegistryProvenance {
+  kind: "fixture" | "remote";
+  sourceId: string;
+  retrievedAt: string;
+  sourceUrl?: string;
+  contentHash?: string;
+}
+
+interface ProviderContractState {
+  providerId: string;
+  revision: string;
+  operations: string[];
+  endpoints: EndpointRef[];
+  confidence: Confidence;
+  provenance: RegistryProvenance;
+}
+
+interface ContractChange {
+  id: string;
+  providerId: string;
+  observedAt: string;
+  effectiveAt?: string;
+  severity: "breaking" | "warning" | "informational" | "unknown";
+  operations: string[];
+  endpoints: EndpointRef[];
+  summary: string;
+  confidence: Confidence;
+  provenance: RegistryProvenance;
+}
+
 interface ContractRegistry {
+  readonly mode: RegistryMode;
   getCapabilities(): Promise<RegistryCapabilities>;
   getProviderState(providerId: string): Promise<ProviderContractState | null>;
-  getChanges(query: ChangeQuery): Promise<ContractChange[]>;
+  getChanges(query: ChangeQuery): Promise<readonly ContractChange[]>;
 }
 ```
 
@@ -337,7 +370,10 @@ Provide:
 - `FixtureRegistry` for tests;
 - later `HttpRegistry`.
 
-Default `scan` must use `NoopRegistry` and never instantiate `HttpRegistry`.
+`NoopRegistry` advertises `mode: "offline"` and `remote: false`, returns no
+provider state or changes, and performs no I/O. Current `scan` and local `check`
+paths do not query a registry at all. A future remote-capable path must be
+enabled by an explicit option and must never be instantiated by default.
 
 ## Configuration layers
 

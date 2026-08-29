@@ -24,13 +24,14 @@
 - No scanner implementation ticket is currently in flight. DVL-015 is complete
   and shipped in `develra@0.1.2`.
 - npm trusted publishing has been proven end to end with the `v0.1.2` release.
-- M6 registry work has not started.
+- DVL-060 defines the registry boundary and offline `NoopRegistry`; no registry
+  transport or CLI mode exists yet.
 
 ## Next 3
 
-1. **Maintainer:** Choose the next product scope: optional registry work
-   beginning with DVL-060 or another explicit priority. M6 is not standing
-   authorization to add networked behavior.
+1. **Implement:** DVL-061 local `FixtureRegistry` snapshots and relevance tests.
+   This remains local test infrastructure and is not authorization to add
+   networked behavior.
 2. **Harden:** Require 2FA and disallow traditional npm automation tokens, then
    revoke any obsolete publishing tokens now that trusted publishing works.
 3. **Prepare:** For the next intentional package release, verify the immutable
@@ -46,6 +47,8 @@
 - `develra@0.1.2` shipped DVL-015, proved npm OIDC trusted publishing, and
   refreshed vulnerable synthetic fixture versions without adding runtime
   dependencies.
+- DVL-060 adds only typed registry contracts and an offline `NoopRegistry`;
+  remote capability is explicit and no scanner command instantiates transport.
 - Public Git history uses a GitHub noreply identity, and local research notes
   are excluded from version control.
 - DVL-021 and DVL-028 completion checkboxes updated to match v0.1.1 reality.

@@ -8,6 +8,7 @@ export * from "./mcp.js";
 export * from "./normalize.js";
 export * from "./parsing.js";
 export * from "./path.js";
+export * from "./registry.js";
 export * from "./scan.js";
 export * from "./schema.js";
 export * from "./source.js";

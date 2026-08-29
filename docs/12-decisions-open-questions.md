@@ -627,3 +627,26 @@ Add entries in this format:
   audited or revoked. M6 registry work remains optional and unstarted.
 - Follow-up ticket: Choose the next product scope; if registry work is selected,
   begin with DVL-060.
+
+## 2026-08-29 — DVL-060 — Offline registry boundary
+
+- Decision or implementation summary: Added exported registry capability,
+  provenance, provider-state, change-query, and contract-change types to the
+  reusable core package. Added `NoopRegistry`, which explicitly advertises an
+  offline, non-remote mode and returns no state or changes without performing
+  I/O. Registry-derived state and changes require both source provenance and a
+  confidence label.
+- Alternatives considered: Adding an HTTP client or wiring a registry into
+  `scan` or local `check` was rejected because DVL-060 defines only the
+  dependency boundary; explicit CLI activation, bounded validation, and
+  registry-specific failure behavior belong to DVL-062. Implementing fixture
+  snapshots in the same change was rejected because DVL-061 owns their data and
+  relevance semantics.
+- Validation run: Targeted registry unit tests cover explicit capabilities,
+  empty state/change behavior, required provenance and confidence, and the
+  absence of network calls. The complete repository validation gate also
+  passes.
+- Known limitation: There is no fixture or HTTP implementation and no
+  `check --registry` option. Default scan/check behavior remains unchanged and
+  offline.
+- Follow-up ticket: DVL-061.

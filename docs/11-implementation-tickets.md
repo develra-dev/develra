@@ -828,7 +828,7 @@ Acceptance:
 
 # M6 — Optional public registry boundary
 
-## [ ] DVL-060 — Define registry types and no-op implementation
+## [x] DVL-060 — Define registry types and no-op implementation
 
 **Depends on:** DVL-030
 
