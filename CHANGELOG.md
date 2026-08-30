@@ -5,6 +5,11 @@ All notable changes to Develra will be documented here. The project follows
 
 ## [Unreleased]
 
+### Changed
+
+- Update the public website to describe the opt-in registry command and its
+  privacy boundary while keeping offline-by-default behavior explicit.
+
 ## [0.2.0] - 2026-08-29
 
 ### Added

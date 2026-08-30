@@ -146,6 +146,12 @@ function inspectMarkup(html) {
     [/No account/, "the no-account product promise"],
     [/No source upload/, "the local-first product promise"],
     [/No CLI telemetry/, "the telemetry-free CLI promise"],
+    [
+      /develra check --registry\s+https:\/\/www\.develra\.dev\/api/,
+      "the optional public registry command",
+    ],
+    [/sends only detected provider IDs/, "the registry privacy boundary"],
+    [/Offline by default/, "the offline-default product promise"],
     [/class="trust-icon"/, "the product-guarantee check icons"],
     [/~\/your-project/, "the example project path"],
     [/class="faq-answer"/, "animated FAQ answer wrappers"],
@@ -191,6 +197,12 @@ function inspectMarkup(html) {
 
   if (/~\/acme-app/.test(html)) {
     failures.push("index.html must not use the acme placeholder project path");
+  }
+
+  if (/no runtime install or\s+hosted service/i.test(html)) {
+    failures.push(
+      "index.html must not claim that no hosted service exists now that the optional public registry is deployed",
+    );
   }
 }
 

@@ -431,8 +431,8 @@
           <h2>Make contract drift a pull-request check.</h2>
           <p>
             Commit the lockfile once, then let Develra compare every change. The
-            Action is bundled and read-only—there is no runtime install or
-            hosted service.
+            Action is bundled and read-only—there is no runtime install, and
+            default checks stay offline.
           </p>
           <a
             class="button button-primary"
@@ -500,6 +500,24 @@
                   No. Default <code>scan</code> and <code>check</code> are
                   offline, telemetry-free, and do not instantiate a network
                   client.
+                </p>
+              </div>
+            </div>
+          </details>
+          <details>
+            <summary>
+              Can Develra check for upstream provider changes?
+              <span aria-hidden="true"></span>
+            </summary>
+            <div class="faq-answer">
+              <div class="faq-answer-inner">
+                <p>
+                  Yes, as an explicit opt-in. Run
+                  <code
+                    >develra check --registry https://www.develra.dev/api</code
+                  >. The request sends only detected provider IDs—never source,
+                  lockfile contents, repository names, credentials, or file
+                  paths. Without <code>--registry</code>, checks stay offline.
                 </p>
               </div>
             </div>
@@ -575,7 +593,7 @@
             <span>Copy</span>
           </button>
         </div>
-        <p class="cta-note">Apache-2.0 · No signup · Runs offline</p>
+        <p class="cta-note">Apache-2.0 · No signup · Offline by default</p>
       </section>
     </main>
 

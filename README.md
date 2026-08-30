@@ -223,7 +223,8 @@ pnpm site:validate
 pnpm site:preview
 ```
 
-The checked-in Vercel configuration validates and deploys only `site/`. See the
+The checked-in Vercel configuration validates and deploys the static `site/`
+alongside the two read-only registry functions under `api/`. See the
 [website notes](docs/15-website.md) for preview and launch boundaries.
 
 Maintainer-ready launch copy and the reproducible terminal recording source are
