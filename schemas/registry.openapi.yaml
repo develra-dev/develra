@@ -1,18 +1,21 @@
 openapi: 3.1.0
 info:
   title: Develra public registry API
-  version: 1.0.0-draft
+  version: 1.0.0
   description: >-
-    Transport contract for a future read-only Develra public registry. This
-    document does not identify a deployed server and does not authorize source
-    upload, authentication, billing, or hosted processing.
+    Transport contract for the read-only Develra public registry. The registry
+    does not accept source upload, authentication, billing, or hosted repository
+    processing.
   license:
     name: Apache-2.0
     identifier: Apache-2.0
 security: []
+servers:
+  - url: https://www.develra.dev/api
+    description: Develra public registry
 tags:
   - name: Registry
-    description: Public registry capabilities and provider contracts.
+    description: Public registry capabilities.
   - name: Changes
     description: Public normalized upstream contract changes.
 paths:
@@ -37,91 +40,6 @@ paths:
                 $ref: "#/components/schemas/CapabilitiesEnvelopeV1"
         "304":
           $ref: "#/components/responses/NotModifiedStable"
-        "429":
-          $ref: "#/components/responses/TooManyRequests"
-        "503":
-          $ref: "#/components/responses/ServiceUnavailable"
-  /v1/providers:
-    get:
-      tags: [Registry]
-      operationId: listProviders
-      summary: List public providers
-      parameters:
-        - $ref: "#/components/parameters/Cursor"
-        - $ref: "#/components/parameters/Limit"
-        - $ref: "#/components/parameters/IfNoneMatch"
-      responses:
-        "200":
-          description: A stable page of providers ordered by provider ID.
-          headers:
-            Cache-Control:
-              $ref: "#/components/headers/StableCacheControl"
-            ETag:
-              $ref: "#/components/headers/ETag"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ProviderListEnvelopeV1"
-        "304":
-          $ref: "#/components/responses/NotModifiedStable"
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "429":
-          $ref: "#/components/responses/TooManyRequests"
-        "503":
-          $ref: "#/components/responses/ServiceUnavailable"
-  /v1/providers/{provider_id}:
-    get:
-      tags: [Registry]
-      operationId: getProvider
-      summary: Get public provider metadata
-      parameters:
-        - $ref: "#/components/parameters/ProviderId"
-        - $ref: "#/components/parameters/IfNoneMatch"
-      responses:
-        "200":
-          description: Provider metadata and declared public contract sources.
-          headers:
-            Cache-Control:
-              $ref: "#/components/headers/StableCacheControl"
-            ETag:
-              $ref: "#/components/headers/ETag"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ProviderEnvelopeV1"
-        "304":
-          $ref: "#/components/responses/NotModifiedStable"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "429":
-          $ref: "#/components/responses/TooManyRequests"
-        "503":
-          $ref: "#/components/responses/ServiceUnavailable"
-  /v1/providers/{provider_id}/state:
-    get:
-      tags: [Registry]
-      operationId: getProviderState
-      summary: Get the latest normalized provider state
-      parameters:
-        - $ref: "#/components/parameters/ProviderId"
-        - $ref: "#/components/parameters/IfNoneMatch"
-      responses:
-        "200":
-          description: Latest available normalized provider state.
-          headers:
-            Cache-Control:
-              $ref: "#/components/headers/StableCacheControl"
-            ETag:
-              $ref: "#/components/headers/ETag"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ProviderStateEnvelopeV1"
-        "304":
-          $ref: "#/components/responses/NotModifiedStable"
-        "404":
-          $ref: "#/components/responses/NotFound"
         "429":
           $ref: "#/components/responses/TooManyRequests"
         "503":
@@ -234,13 +152,13 @@ components:
       required: true
       schema:
         type: string
-        const: public, max-age=300, stale-while-revalidate=60
+        const: public, max-age=300
     ChangeCacheControl:
       description: Cache policy for the change feed.
       required: true
       schema:
         type: string
-        const: public, max-age=60, stale-while-revalidate=60
+        const: public, max-age=60
     NoStoreCacheControl:
       description: Error responses must not be cached.
       required: true
@@ -372,7 +290,7 @@ components:
         remote:
           const: true
         provider_state:
-          const: true
+          type: boolean
         changes:
           const: true
     ProviderSummary:

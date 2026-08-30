@@ -882,6 +882,23 @@ Acceptance:
 - pagination/caching/error semantics;
 - schema fixtures.
 
+## [x] DVL-064 — Launch the minimal public registry
+
+**Depends on:** DVL-062, DVL-063
+
+Deploy a useful public change feed without creating a hosted product.
+
+Acceptance:
+
+- only capabilities and bounded change-query routes are deployed;
+- every public record uses bundled provider/operation IDs and official HTTPS
+  provenance;
+- the service has no authentication, database, source upload, inventory store,
+  automated polling, or AI classification;
+- the CLI still requires an explicit `--registry` URL and sends only provider
+  IDs;
+- endpoint, schema, privacy, cache, pagination, and packaged CLI tests pass.
+
 ---
 
 # Deferred hosted backlog

@@ -51,8 +51,8 @@ instead of equating installation with use, and preserves unknown hosts rather
 than guessing.
 
 The repository includes the scanner, Action, schemas, provider packs, fixtures,
-and a synthetic Breakage Museum. The current tool does not monitor vendors or
-claim full program analysis; those boundaries are documented.
+and a synthetic Breakage Museum. The current tool does not continuously monitor
+vendors or claim full program analysis; those boundaries are documented.
 
 I would especially value feedback on false positives, missing provider signals,
 and whether committing this kind of inventory is useful in real repositories.
@@ -135,6 +135,8 @@ Code quality
 - Security patch notes: [`docs/releases/v0.1.1.md`](releases/v0.1.1.md)
 - Python lockfile release notes:
   [`docs/releases/v0.1.2.md`](releases/v0.1.2.md)
+- Optional registry release notes:
+  [`docs/releases/v0.2.0.md`](releases/v0.2.0.md)
 - Ten bounded contributor tasks:
   [`docs/13-good-first-issues.md`](13-good-first-issues.md)
 - Marketplace listing:

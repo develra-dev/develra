@@ -398,17 +398,18 @@ LLM. Endpoint- and field-level relevance remain outside DVL-061.
 ## Registry HTTP contract and client
 
 `schemas/registry.openapi.yaml` is the canonical transport contract for a
-compatible public registry. It defines only read-only v1 capabilities, provider
-discovery/detail/state, and change-query operations. Every success or error
-body carries `api_version: v1`; list responses use bounded opaque cursors;
-successful responses support ETag revalidation and explicit public cache
-directives; errors use bounded `application/problem+json` envelopes with
-no-store caching and retry guidance for rate limiting or unavailability.
+compatible public registry. The deployed v1 surface contains only capabilities
+and change-query operations. Every success or error body carries
+`api_version: v1`; change responses use bounded opaque cursors; successful
+responses support ETag revalidation and explicit public cache directives;
+errors use bounded `application/problem+json` envelopes with no-store caching.
 
-The contract has no server URL, security scheme, request body, inventory-upload
-operation, authentication, or billing surface. Synthetic examples under
-`fixtures/registry-api/` are validated against the component schemas without
-making a network request.
+The contract identifies `https://www.develra.dev/api` and has no security
+scheme, request body, inventory-upload operation, authentication, billing, or
+mutation surface. Provider metadata/state schemas remain available to the
+reusable client boundary, but the public service reports `provider_state:
+false` and does not expose those routes. Synthetic examples under
+`fixtures/registry-api/` are validated without making a network request.
 
 `HttpRegistry` uses the Node.js built-in `fetch` implementation only after an
 explicit `check --registry` option. It accepts HTTPS URLs, with loopback HTTP
@@ -420,6 +421,12 @@ and opaque-cursor pagination are bounded, repeated cursors and duplicate change
 IDs are rejected, and remote failures are typed as exit code 4. The CLI sends
 only detected provider IDs, maps returned changes locally, and never uploads
 source, lockfile contents, or evidence paths.
+
+The deployed handler is a dependency-free Vercel Function beside the static
+website. It reads a bounded, reviewed JSON file in the repository and has no
+database, background poller, user account, inventory store, or source upload.
+Each record links to an official HTTPS source and must use bundled provider and
+operation IDs. Updating the feed is an ordinary reviewed repository change.
 
 ## Configuration layers
 

@@ -1,11 +1,13 @@
 # Website
 
 The Develra website is a static, local-first companion to the repository. It
-has no framework, package install, cookies, hosted fonts, forms, or hosted
-backend. Production uses Vercel's first-party Web Analytics route for aggregate
-page views and acquisition reporting; it does not add custom events or CLI
-telemetry. Product claims should remain limited to behavior validated by the
-CLI and bundled GitHub Action.
+has no framework, package install, cookies, hosted fonts, or forms. Two
+same-project Vercel Functions serve the optional public registry's read-only
+capabilities and change feed; they have no accounts, source upload, inventory
+storage, or database. Production uses Vercel's first-party Web Analytics route
+for aggregate page views and acquisition reporting; it does not add custom
+events or CLI telemetry. Product claims should remain limited to behavior
+validated by the CLI and bundled GitHub Action.
 
 The visual direction adapts the dark canvas, bright action color, rounded
 surfaces, and generous spacing described in the supplied
@@ -51,8 +53,9 @@ port. Website validation is also part of `pnpm verify`.
 
 The root `vercel.json` makes the repository ready to import as a framework-free
 Vercel project. Vercel skips dependency installation, runs the zero-dependency
-site validator as its build check, and deploys only `site/`. The configuration
-also applies restrictive response security headers. Git pushes will receive
+site and registry validator as its build check, deploys `site/`, and bundles
+the root `api/` functions. The configuration also applies restrictive response
+security headers. Git pushes will receive
 preview deployments after the repository is connected to Vercel; pushes to the
 Vercel production branch will receive production deployments.
 
@@ -80,4 +83,5 @@ Action tag used by the page are publicly available. Update the repository
 website field as part of the visibility launch.
 
 Do not add custom analytics events, advertising trackers, forms, external
-scripts, or a hosted backend without an explicit privacy and product decision.
+scripts, inventory upload, accounts, or broader hosted behavior without an
+explicit privacy and product decision.

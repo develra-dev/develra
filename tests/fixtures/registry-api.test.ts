@@ -110,15 +110,17 @@ describe("public registry OpenAPI contract", () => {
   it("exposes only the bounded unauthenticated read API", () => {
     expect(contract.openapi).toBe("3.1.0");
     expect(contract.security).toEqual([]);
-    expect(contract).not.toHaveProperty("servers");
+    expect(contract.servers).toEqual([
+      {
+        url: "https://www.develra.dev/api",
+        description: "Develra public registry",
+      },
+    ]);
 
     const paths = record(contract.paths, "paths");
     expect(Object.keys(paths).sort()).toEqual([
       "/v1/capabilities",
       "/v1/changes",
-      "/v1/providers",
-      "/v1/providers/{provider_id}",
-      "/v1/providers/{provider_id}/state",
     ]);
     const operationIds = new Set<string>();
     for (const [path, item] of Object.entries(paths)) {
@@ -172,13 +174,13 @@ describe("public registry OpenAPI contract", () => {
         record(headers.StableCacheControl, "stable cache").schema,
         "schema",
       ).const,
-    ).toBe("public, max-age=300, stale-while-revalidate=60");
+    ).toBe("public, max-age=300");
     expect(
       record(
         record(headers.ChangeCacheControl, "change cache").schema,
         "schema",
       ).const,
-    ).toBe("public, max-age=60, stale-while-revalidate=60");
+    ).toBe("public, max-age=60");
     expect(
       record(
         record(headers.NoStoreCacheControl, "error cache").schema,

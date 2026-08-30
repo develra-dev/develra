@@ -2,7 +2,8 @@
 
 ## Status
 
-Deferred until the open-source scanner, lockfile, and Action are useful.
+The personalized hosted product remains deferred. A minimal public, read-only
+registry feed is deployed for the explicit CLI client.
 
 This document prevents early implementation from closing off the hosted path. It is not authorization to build the hosted service during milestones M0–M5.
 
@@ -68,29 +69,27 @@ Do not use display names as foreign keys.
 
 ## Registry protocol and optional client
 
-The CLI depends on an abstract interface. The transport contract for a future
-public HTTP registry is checked in at `schemas/registry.openapi.yaml` and
-exposes only:
+The CLI depends on an abstract interface. The deployed public HTTP registry is
+specified by `schemas/registry.openapi.yaml` and exposes only:
 
 ```text
 GET /v1/capabilities
-GET /v1/providers
-GET /v1/providers/{provider_id}
-GET /v1/providers/{provider_id}/state
 GET /v1/changes?provider_id=...&since=...
 ```
 
-All five operations are public, read-only, cacheable `GET` requests with
-versioned envelopes, ETag revalidation, bounded pagination, and structured
-errors. The contract identifies no deployed server. Authentication, billing,
-mutation endpoints, and inventory upload are deliberately absent.
+Both operations are public, read-only, cacheable `GET` requests with versioned
+envelopes, ETag revalidation, bounded pagination where applicable, and
+structured errors. Authentication, billing, mutation endpoints, and inventory
+upload are deliberately absent. The service is a reviewed static dataset with
+no account system, database, automated polling, or AI classification.
 
 The open-source CLI implements only the capabilities, provider-state, and
 change-query client methods. `check --registry <url>` must be explicit and
 sends only detected provider IDs; it does not send the normalized inventory,
-source, evidence paths, or credentials. The repository still identifies no
-default deployed server. Remote findings are informational and carry source
-provenance rather than claiming guaranteed impact.
+source, evidence paths, or credentials. The CLI does not configure or contact a
+default endpoint; users opt into `https://www.develra.dev/api` explicitly.
+Remote findings are informational and carry official source provenance rather
+than claiming guaranteed impact.
 
 Uploading an inventory requires explicit user action and a privacy contract. It
 must not be added to the public protocol merely because the normalized

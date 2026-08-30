@@ -5,6 +5,12 @@ import path from "node:path";
 const projectRoot = path.resolve(import.meta.dirname, "..");
 const siteRoot = path.join(projectRoot, "site");
 const deploymentConfigPath = path.join(projectRoot, "vercel.json");
+const registryFiles = [
+  "api/v1/capabilities.ts",
+  "api/v1/changes.ts",
+  "registry-server/index.ts",
+  "registry-server/data/changes.json",
+];
 const requiredFiles = [
   "index.html",
   "styles.css",
@@ -77,6 +83,37 @@ async function inspectRequiredFiles() {
     } catch {
       failures.push(`${relativePath} is missing`);
     }
+  }
+}
+
+async function inspectRegistryFiles() {
+  for (const relativePath of registryFiles) {
+    try {
+      const details = await stat(path.join(projectRoot, relativePath));
+      if (!details.isFile()) failures.push(`${relativePath} must be a file`);
+      if (details.size > 128 * 1024)
+        failures.push(`${relativePath} exceeds its 131072-byte budget`);
+    } catch {
+      failures.push(`${relativePath} is missing`);
+    }
+  }
+
+  try {
+    const registryData = JSON.parse(
+      await readFile(
+        path.join(projectRoot, "registry-server/data/changes.json"),
+        "utf8",
+      ),
+    );
+    if (registryData?.version !== 1 || !Array.isArray(registryData?.changes)) {
+      failures.push("registry change data must use the version 1 envelope");
+    }
+  } catch (error) {
+    failures.push(
+      `registry change data must be valid JSON: ${
+        error instanceof Error ? error.message : "unknown error"
+      }`,
+    );
   }
 }
 
@@ -440,6 +477,7 @@ async function inspectDiscoveryFiles() {
 }
 
 await inspectRequiredFiles();
+await inspectRegistryFiles();
 
 const html = await readFile(path.join(siteRoot, "index.html"), "utf8");
 const script = await readFile(path.join(siteRoot, "script.js"), "utf8");
@@ -467,6 +505,6 @@ if (failures.length > 0) {
   process.exitCode = 1;
 } else {
   console.log(
-    `Website validation passed (${requiredFiles.length} required files, Vercel deployment configured, no remote runtime assets).`,
+    `Website validation passed (${requiredFiles.length} static files, ${registryFiles.length} registry files, Vercel deployment configured, no remote runtime assets).`,
   );
 }

@@ -10,5 +10,10 @@
       "develra": ["apps/cli/src/index.ts"]
     }
   },
-  "include": ["tests/**/*.ts", "vitest.config.ts"]
+  "include": [
+    "api/**/*.ts",
+    "registry-server/**/*.ts",
+    "tests/**/*.ts",
+    "vitest.config.ts"
+  ]
 }

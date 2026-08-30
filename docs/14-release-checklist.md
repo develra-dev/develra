@@ -149,6 +149,18 @@ has passed release validation. Never move an exact version tag.
 - [x] Rerun the published npm and Action smoke workflow and verify the fixture
       Dependabot alerts close.
 
+## v0.2.0 optional registry release
+
+- [x] Deploy and smoke-test `https://www.develra.dev/api/v1/capabilities` and
+      the bounded changes query.
+- [x] Run full local release validation, including the packaged CLI
+      against a loopback registry.
+- [ ] Create immutable `v0.2.0` from the reviewed release commit.
+- [ ] Publish `develra@0.2.0` through npm trusted publishing.
+- [ ] Move `v0` to the same reviewed commit and create the GitHub release from
+      `docs/releases/v0.2.0.md`.
+- [ ] Verify the published npm package, Action channel, and live public registry.
+
 ## Post-release verification
 
 - [x] `npx develra@0.1.0 scan` works without a Develra account.

@@ -8,6 +8,7 @@ export default tseslint.config(
       "**/dist/**",
       "**/coverage/**",
       "**/lib/**",
+      ".vercel/**",
       "develra-codex-handoff/**",
       "fixtures/**",
       "examples/**",

@@ -5,6 +5,23 @@ All notable changes to Develra will be documented here. The project follows
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-08-29
+
+### Added
+
+- Add an explicit `check --registry <url>` mode with bounded remote response
+  validation, pagination, provenance reporting, and a dedicated exit code for
+  unavailable or invalid registry responses.
+- Deploy a minimal public change feed at `https://www.develra.dev/api`, backed
+  by manually reviewed official sources and only the capabilities and changes
+  routes required by the CLI.
+
+### Privacy
+
+- Keep `scan` and ordinary `check` offline. The optional registry request sends
+  only detected provider IDs and never sends source, lockfile contents,
+  repository names, evidence paths, credentials, or authorization headers.
+
 ## [0.1.2] - 2026-08-29
 
 ### Added

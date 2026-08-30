@@ -753,3 +753,34 @@ Add entries in this format:
   Provider-state support is exposed by the reusable client but is not required
   by the current CLI relevance query.
 - Follow-up ticket: None; M6's optional public registry boundary is complete.
+
+## 2026-08-29 — DVL-064 — Minimal deployed public registry
+
+- Decision or implementation summary: Added two dependency-free Vercel
+  Functions beside the existing static site: `GET /api/v1/capabilities` and
+  `GET /api/v1/changes`. The feed is a canonically sorted, manually reviewed
+  JSON file containing normalized changes from official Stripe, OpenAI,
+  GitHub, and Anthropic sources. Requests require one or more bounded provider
+  IDs; responses are schema validated, paginated, cacheable, and ETag-aware.
+- Alternatives considered: A second Vercel project, custom domain, database,
+  ingestion worker, provider directory/state endpoints, user accounts, and AI
+  classification were rejected because none is needed for a useful first feed.
+  Automatically configuring the endpoint in the CLI was rejected to preserve
+  explicit network consent and the offline default.
+- Privacy and safety: The endpoint receives only provider IDs and optional
+  pagination/time filters. It has no request body and receives no source,
+  lockfile, repository name, evidence path, credential, or authorization
+  header from the CLI. Error messages do not reflect query values. Hosting
+  access logs may contain requested provider IDs.
+- Validation run: Public data is checked against bundled provider/operation IDs
+  and the runtime response schema. Unit tests cover capabilities, ETags,
+  filters, exclusive timestamps, pagination, malformed queries, official
+  provenance, and private-data patterns. The complete `pnpm release:validate`
+  gate, production dependency audit, Vercel production build, live response
+  checks, and built CLI-to-production smoke test pass.
+- Known limitation: The feed is intentionally small and updated through
+  reviewed repository changes. It is not comprehensive or continuously
+  monitored, and findings remain informational evidence rather than guaranteed
+  repository impact.
+- Follow-up ticket: Gather usage feedback before considering automated
+  ingestion, state snapshots, or any hosted account feature.

@@ -1,0 +1,87 @@
+{
+  "version": 1,
+  "changes": [
+    {
+      "id": "stripe-basil-checkout-shipping-details-removal",
+      "provider_id": "stripe",
+      "observed_at": "2025-03-31T00:00:00Z",
+      "severity": "breaking",
+      "operations": ["checkout.sessions.create"],
+      "endpoints": [
+        {
+          "method": "POST",
+          "host": "api.stripe.com",
+          "path": "/v1/checkout/sessions"
+        }
+      ],
+      "summary": "Stripe's 2025-03-31 Basil API version removes shipping_details from Checkout Session responses in favor of collected_information.shipping_details.",
+      "confidence": "confirmed",
+      "provenance": {
+        "kind": "remote",
+        "source_id": "stripe:api-changelog",
+        "retrieved_at": "2026-08-29T23:30:00Z",
+        "source_url": "https://docs.stripe.com/changelog/basil/2025-03-31/checkout-session-remove-shipping-details"
+      }
+    },
+    {
+      "id": "openai-responses-phase-field",
+      "provider_id": "openai",
+      "observed_at": "2026-02-24T00:00:00Z",
+      "severity": "informational",
+      "operations": ["responses.create"],
+      "endpoints": [
+        {
+          "method": "POST",
+          "host": "api.openai.com",
+          "path": "/v1/responses"
+        }
+      ],
+      "summary": "OpenAI added the phase field to Responses API assistant messages to distinguish commentary from final answers.",
+      "confidence": "confirmed",
+      "provenance": {
+        "kind": "remote",
+        "source_id": "openai:api-changelog",
+        "retrieved_at": "2026-08-29T23:30:00Z",
+        "source_url": "https://developers.openai.com/api/docs/changelog"
+      }
+    },
+    {
+      "id": "github-rest-api-version-2026-03-10",
+      "provider_id": "github",
+      "observed_at": "2026-03-12T00:00:00Z",
+      "severity": "warning",
+      "operations": [],
+      "endpoints": [],
+      "summary": "GitHub released REST API version 2026-03-10 with breaking changes that apply when an integration opts into the new version header.",
+      "confidence": "confirmed",
+      "provenance": {
+        "kind": "remote",
+        "source_id": "github:changelog",
+        "retrieved_at": "2026-08-29T23:30:00Z",
+        "source_url": "https://github.blog/changelog/2026-03-12-rest-api-version-2026-03-10-is-now-available/"
+      }
+    },
+    {
+      "id": "anthropic-messages-thinking-token-usage",
+      "provider_id": "anthropic",
+      "observed_at": "2026-05-27T00:00:00Z",
+      "severity": "informational",
+      "operations": ["messages.create"],
+      "endpoints": [
+        {
+          "method": "POST",
+          "host": "api.anthropic.com",
+          "path": "/v1/messages"
+        }
+      ],
+      "summary": "Anthropic added usage.output_tokens_details.thinking_tokens to Messages API responses and final streaming message_delta events.",
+      "confidence": "confirmed",
+      "provenance": {
+        "kind": "remote",
+        "source_id": "anthropic:platform-release-notes",
+        "retrieved_at": "2026-08-29T23:30:00Z",
+        "source_url": "https://platform.claude.com/docs/en/release-notes/overview"
+      }
+    }
+  ]
+}

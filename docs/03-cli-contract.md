@@ -164,6 +164,10 @@ offline. With an explicit registry URL, it sends only the detected provider IDs
 to the registry capabilities and changes endpoints. It does not send source,
 lockfile contents, credentials, file paths, or authorization headers.
 
+The Develra-operated endpoint is `https://www.develra.dev/api`; it is not used
+implicitly. Its current capabilities expose a manually curated change feed and
+do not expose provider-state lookup.
+
 Registry URLs must use HTTPS; HTTP is accepted only for loopback development.
 Responses must be JSON matching `schemas/registry-response.schema.json`, are
 limited to 512 KiB each, time out after five seconds, and use bounded

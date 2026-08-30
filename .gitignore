@@ -12,6 +12,7 @@ develra.sarif
 develra-codex-handoff.zip
 develra-codex-handoff/
 release-artifacts/
+.vercel/
 
 # Local research and handoff notes may contain private product context.
 /sources/

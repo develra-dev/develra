@@ -48,7 +48,7 @@ describe("launch artifacts", () => {
     }
     expect(launch).toContain("Develra External Contract Check");
     expect(action).toContain("name: Develra External Contract Check");
-    expect(launch).toContain("does not monitor vendors");
+    expect(launch).toContain("does not continuously monitor");
     expect(launch).not.toMatch(/(?:sign up|free trial|pricing plan)/iu);
     expect(issues.match(/^- /gmu)).toHaveLength(10);
 
@@ -58,6 +58,7 @@ describe("launch artifacts", () => {
         "docs/releases/v0.1.0.md",
         "docs/releases/v0.1.1.md",
         "docs/releases/v0.1.2.md",
+        "docs/releases/v0.2.0.md",
       ].map((relative) => access(nodePath.join(repositoryRoot, relative))),
     );
   });
