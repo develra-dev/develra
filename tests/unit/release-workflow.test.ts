@@ -30,6 +30,22 @@ describe("trusted npm publishing", () => {
 
     expect(result.status).toBe(0);
     expect(result.stdout).toContain(`develra@${metadata.version}`);
+
+    const smokeWorkflow = await readFile(
+      nodePath.join(
+        repositoryRoot,
+        ".github",
+        "workflows",
+        "published-release-smoke.yml",
+      ),
+      "utf8",
+    );
+    expect(smokeWorkflow).toContain(
+      `npx --yes develra@${metadata.version} --version`,
+    );
+    expect(smokeWorkflow).toContain(
+      `npx --yes develra@${metadata.version} scan --no-write`,
+    );
   });
 
   it("rejects a tag that differs from the package version", () => {
