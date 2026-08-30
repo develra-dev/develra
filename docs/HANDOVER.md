@@ -5,9 +5,10 @@
 - Develra is a public Apache-2.0, local-first external-contract scanner and
   deterministic lockfile for JavaScript, TypeScript, Python, raw HTTP usage,
   webhook-like URLs, and project-level MCP configuration.
-- The current public CLI is `develra@0.1.2`. A validated `0.2.0` release
-  candidate is prepared; do not describe it as published until the immutable
-  tag, npm package, GitHub release, and moving `v0` channel are verified.
+- The current public CLI is `develra@0.2.0`. Exact tag `v0.2.0` and the moving
+  `v0` GitHub Action channel point to reviewed commit `797572b`; npm, the GitHub
+  release, the Action channel, and the published-release smoke workflow are
+  verified.
 - The npm package, GitHub repository, Marketplace Action, and static website are
   live. M0–M5 and the first-release audit are complete.
 - The CLI supports `scan`, `check`, `graph`, `providers list`,
@@ -23,7 +24,8 @@
 
 - No scanner implementation ticket is currently in flight. DVL-015 is complete
   and shipped in `develra@0.1.2`.
-- npm trusted publishing has been proven end to end with the `v0.1.2` release.
+- npm trusted publishing has been proven end to end through the `v0.2.0`
+  release.
 - npm account writes require 2FA, the `develra` package disallows traditional
   publishing tokens, and the account token inventory is empty.
 - DVL-062 adds the explicit `check --registry <url>` mode and a bounded,
@@ -33,13 +35,12 @@
 
 ## Next 3
 
-1. **Release:** After hosted CI passes on the reviewed release commit, create
-   immutable `v0.2.0`, publish through npm trusted publishing, create the GitHub
-   release, and move `v0` to that exact commit.
-2. **Verify:** Smoke-test `npx develra@0.2.0`, the `v0` Action, and the live
-   registry before marking the release checklist complete.
-3. **Observe:** Gather real usage feedback before adding ingestion automation,
-   credentials, or an upstream-change failure policy.
+1. **Observe:** Gather real usage feedback on optional registry relevance and
+   false positives before changing the feed or failure policy.
+2. **Curate:** Add public changes only through reviewed repository updates with
+   official provenance; keep the feed small and defensible.
+3. **Defer:** Do not add ingestion automation, accounts, uploads, credentials,
+   or a database until usage demonstrates a concrete need.
 
 ## Recent decisions
 
@@ -56,6 +57,9 @@
 - DVL-064 narrows the deployed contract to capabilities and changes, using the
   existing Vercel project and a reviewed JSON feed instead of a second project,
   database, accounts, poller, or AI classifier.
+- `develra@0.2.0` shipped the explicit registry client and minimal public feed;
+  the immutable tag, npm OIDC publish, GitHub release, moving `v0` channel, and
+  clean published npm/Action smoke tests all passed.
 - DVL-062 implements only the explicit read-only client path: no configured
   endpoint, authentication, upload, caching, or upstream-change failure policy.
 - npm publishing is hardened around OIDC: account writes require 2FA, package

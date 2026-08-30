@@ -784,3 +784,19 @@ Add entries in this format:
   repository impact.
 - Follow-up ticket: Gather usage feedback before considering automated
   ingestion, state snapshots, or any hosted account feature.
+
+## 2026-08-29 — v0.2.0 optional registry release
+
+- Decision or implementation summary: Published `develra@0.2.0` from immutable
+  tag `v0.2.0` through npm OIDC trusted publishing, created the matching GitHub
+  release, and moved the compatible `v0` Action channel to reviewed commit
+  `797572b`. The public registry is live at `https://www.develra.dev/api`.
+- Validation run: Local `pnpm release:validate`, the production dependency
+  audit, Vercel build and production smoke tests, six-platform hosted CI,
+  external-contract CI, trusted-publish revalidation, npm metadata checks, and
+  the published npm plus `v0` Action smoke workflow all pass.
+- Known limitation: The manually curated feed is intentionally not complete or
+  continuously monitored. Default scans/checks remain offline, and registry
+  findings remain informational.
+- Follow-up ticket: None. Gather usage evidence before expanding registry or
+  hosted scope.

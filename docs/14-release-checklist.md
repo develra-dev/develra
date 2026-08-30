@@ -155,11 +155,11 @@ has passed release validation. Never move an exact version tag.
       the bounded changes query.
 - [x] Run full local release validation, including the packaged CLI
       against a loopback registry.
-- [ ] Create immutable `v0.2.0` from the reviewed release commit.
-- [ ] Publish `develra@0.2.0` through npm trusted publishing.
-- [ ] Move `v0` to the same reviewed commit and create the GitHub release from
+- [x] Create immutable `v0.2.0` from the reviewed release commit.
+- [x] Publish `develra@0.2.0` through npm trusted publishing.
+- [x] Move `v0` to the same reviewed commit and create the GitHub release from
       `docs/releases/v0.2.0.md`.
-- [ ] Verify the published npm package, Action channel, and live public registry.
+- [x] Verify the published npm package, Action channel, and live public registry.
 
 ## Post-release verification
 
